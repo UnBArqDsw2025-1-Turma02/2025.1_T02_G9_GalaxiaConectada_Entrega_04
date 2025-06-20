@@ -559,3 +559,12 @@ Esta seção detalha como a arquitetura de software do Galáxia Conectada contri
     * **Separação de Preocupações:** Cada camada e módulo tem responsabilidades bem definidas, isolando alterações e simplificando a depuração e o desenvolvimento de novas funcionalidades.
 * **Usabilidade (RNF06):**
     * A clareza da **Visão de Casos de Uso** e o foco no usuário durante o *Design Sprint* (prototipagem) se traduzem em uma arquitetura que suporta a criação de uma experiência de usuário intuitiva e agradável.
+
+
+## Histórico de Versões
+
+| Versão | Alteração | Responsável | Data |
+| - | - | - | - |
+| 1.0 | Elaboração do documento| Larissa Stéfane | 19/06/2025 |
+| 1.1 | Adição do escopo | Larissa Stéfane | 19/06/2025 |
+
