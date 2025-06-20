@@ -1,11 +1,11 @@
 # Documento de Arquitetura de Software - Lógica
 
 
-### Sumário
+## Sumário
 
-1.  [Introdução](#1-introdução)
-    1.1 [Propósito](#11-propósito)
-    1.2 [Escopo](#12-escopo)
+-  [Introdução](#Introdução)
+-  [Propósito](#Propósito)
+-  [Escopo](#12-escopo)
     1.3 [Definições, Acrônimos e Abreviações](#13-definições-acrônimos-e-abreviações)
     1.4 [Referências](#14-referências)
     1.5 [Visão Geral](#15-visão-geral)
@@ -30,7 +30,7 @@
 13. [Tamanho e Performance](#13-tamanho-e-performance)
 14. [Qualidade](#14-qualidade)
 
----
+
 
 ### 1. Introdução
 
