@@ -198,13 +198,11 @@ Tabela 4: Léxicos do Tipo Estado
 
 ## Visão Geral
 
-O restante deste Documento de Arquitetura de Software - Visão Lógica está organizado nas seguintes seções:
+A **Visão Lógica** da arquitetura do Galáxia Conectada é o [blueprint](https://www.rdstation.com/blog/agencias/blueprint/) conceitual do sistema, pois foca em como as funcionalidades são organizadas e como as partes do software interagem para entregar valor ao usuário final. Com isso, como já foi explicado, ela contém as **classes de design mais importantes** do projeto, que representam as entidades e regras de negócio centrais, como `Usuário`, `TrilhaEducacional` e `Jogo`. Essas classes são a base para a funcionalidade do sistema e são essenciais para entender o "o quê" o sistema faz, e como ele lida com os dados e processos internos.
 
-* **Seção 2: Metas e Restrições Arquiteturais** – Detalha os requisitos e objetivos que impactam significativamente a arquitetura lógica do sistema.
-* **Seção 3: Visão Lógica** – Apresenta a decomposição do modelo de design em subsistemas e pacotes, as classes mais importantes e as realizações de casos de uso significativas.
-* **Seção 4: Qualidade** – Descreve como a arquitetura lógica contribui para as qualidades do sistema (extensibilidade, manutenibilidade, etc.).
+Para estruturar essas classes de forma clara e escalável, o sistema foi organizado em **pacotes e subsistemas**. Consequentemente, essa organização modular foi fundamental para a manutenibilidade e extensibilidade do projeto ao permitir que diferentes partes do sistema fossem desenvolvidas e mantidas de forma independente. Por exemplo, o pacote de `Servidor.Dominio.Aprendizagem` agrupa todas as classes e regras relacionadas às trilhas e aos jogos, enquanto o pacote de `Servidor.Dominio.Comunidade` cuida do fórum e da gamificação. Essa divisão espelha as áreas de funcionalidade do projeto ao facilitar a navegação no código e a atribuição de responsabilidades.
 
----
+Finalmente, a organização desses pacotes e subsistemas se deu em **camadas**, como a camada de `Apresentação`, `Aplicação`, `Domínio`, `Infraestrutura` e `Serviços Compartilhados`. Essa estrutura em camadas promoveu uma separação das preocupações, onde cada camada tem um papel bem definido e interage com as outras de maneira controlada. Por exemplo, a camada de `Apresentação` se preocupa apenas com a interface do usuário, enquanto a camada de `Domínio` foca nas regras de negócio, e a `Infraestrutura` lida com o banco de dados. Essa abordagem em camadas não só facilitou o desenvolvimento, mas também garantiu que o sistema fosse robusto e adaptável a futuras mudanças e evoluções.
 
 ### 2. Metas e Restrições Arquiteturais
 
@@ -326,6 +324,8 @@ Esta seção detalha como a **arquitetura lógica** do Galáxia Conectada contri
  - [1] INFNET. **O que é o documento de Arquitetura de Software?**. Disponível em: <https://blog.infnet.com.br/arquitetura_software/documento-de-arquitetura-de-software/>. Acesso em: 19 jun. 2025.
  - [2] ELEMAR JR. **Documentação Arquitetural na Medida Certa**. Disponível em: <https://elemarjr.com/livros/arquiteturadesoftware/volume-1/documentacao-arquitetural-na-medida-certa/>. Acesso em: 19 jun. 2025.
  - [3] IBM. **Diagramas de classe**. Disponível em: <https://www.ibm.com/docs/pt-br/rsm/7.5.0?topic=uml-class-diagrams>. Acesso em: 19 jun. 2025.
+ - [4] RD STATION. **Blueprint: o que é, para que serve e como construir o seu**. Disponível em: <https://www.rdstation.com/blog/agencias/blueprint/>. Acesso em: 19 jun. 2025.
+
 
 ## Histórico de Versões
 
