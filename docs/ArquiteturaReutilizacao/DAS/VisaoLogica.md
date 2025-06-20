@@ -6,7 +6,7 @@
 - [Propósito](#Propósito)
 - [Escopo](#Escopo)
 - [Definições, Acrônimos e Abreviações](#Definições-Acrônimos-e-Abreviações)
-- [Referências](#Referências)
+- [Documentação Lógica do Projeto Galáxia Conectada](#Documentação-Lógica-do-Projeto-Galáxia-Conectada)
 - [Visão Geral do Documento](#Visão-Geral-do-Documento)
 - [Metas e Restrições Arquiteturais](#Metas-e-Restrições-Arquiteturais)
 - [Visão Lógica](#Visão-Lógica)
@@ -174,25 +174,29 @@ Tabela 4: Léxicos do Tipo Estado
 
 
 
-* **Documentação do Projeto Galáxia Conectada:**
-    * [Design Sprint: Entender (Unpack)](https://unbarqdsw2025-1-turma02.github.io/2025.1-T02-_G9_GalaxiaConectada_Entre01/#/Base/DesignSprint/Entender)
-    * [Design Sprint: Esboçar (Sketch)](https://unbarqdsw2025-1-turma02.github.io/2025.1-T02-_G9_GalaxiaConectada_Entre01/#/Base/DesignSprint/Esbo%C3%A7ar)
-    * [Design Sprint: Decidir (Decision)](https://unbarqdsw2025-1-turma02.github.io/2025.1-T02-_G9_GalaxiaConectada_Entre01/#/Base/DesignSprint/Decidir)
-    * [Design Sprint: Prototipação (Prototype)](https://unbarqdsw2025-1-turma02.github.io/2025.1-T02-_G9_GalaxiaConectada_Entre01/#/Base/DesignSprint/Prototipo)
-    * [5W+2H](https://unbarqdsw2025-1-turma02.github.io/2025.1-T02-_G9_GalaxiaConectada_Entre01/#/Base/ArtefatoGeneralista/5W2H)
-    * [Brainstorming](https://unbarqdsw2025-1-turma02.github.io/2025.1-T02-_G9_GalaxiaConectada_Entre01/#/Base/ArtefatoGeneralista/BrainStorm)
-    * [Rich Picture](https://unbarqdsw2025-1-turma02.github.io/2025.1-T02-_G9_GalaxiaConectada_Entre01/#/Base/ArtefatoGeneralista/RichPicture)
-    * [Diagrama de Classes](https://unbarqdsw2025-1-turma02.github.io/2025.1_T02_G9_GalaxiaConectada_Entre02/#/Modelagem/ModelagemEstatica/DiagramaClasses)
-    * [Diagrama de Componentes](https://unbarqdsw2025-1-turma02.github.io/2025.1_T02_G9_GalaxiaConectada_Entre02/#/Modelagem/ModelagemEstatica/DiagramaComponentes)
-    * [Diagrama de Implantação](https://unbarqdsw2025-1-turma02.github.io/2025.1_T02_G9_GalaxiaConectada_Entre02/#/Modelagem/ModelagemEstatica/DiagramaImplantacao)
-    * [Diagrama de Atividades](https://unbarqdsw2025-1-turma02.github.io/2025.1_T02_G9_GalaxiaConectada_Entre02/#/Modelagem/ModelagemDinamica/DiagramaAtividades)
-    * [Diagrama de Comunicação ou Colaboração](https://unbarqdsw2025-1-turma02.github.io/2025.1_T02_G9_GalaxiaConectada_Entre02/#/Modelagem/ModelagemDinamica/DiagramaComunica%C3%A7%C3%A3o)
-    * [Diagrama de Estados](https://unbarqdsw2025-1-turma02.github.io/2025.1_T02_G9_GalaxiaConectada_Entre02/#/Modelagem/ModelagemDinamica/DiagramaEstados)
-    * [Diagrama de Casos de Uso](https://unbarqdsw2025-1-turma02.github.io/2025.1_T02_G9_GalaxiaConectada_Entre02/#/Modelagem/ModelagemOrganizacional/DiagramaCasosUso)
-    * [Diagrama de Pacotes](https://unbarqdsw2025-1-turma02.github.io/2025.1_T02_G9_GalaxiaConectada_Entre02/#/Modelagem/ModelagemOrganizacional/DiagramaPacotes)
-    * [Estimativas: Risco, Custo e Tempo](https://unbarqdsw2025-1-turma02.github.io/2025.1-T02-_G9_GalaxiaConectada_Entre01/#/Base/ArtefatoGeneralista/Estimativas)
+## Documentação Lógica do Projeto Galáxia Conectada
 
-#### 1.5 Visão Geral
+* [Design Sprint: Entender (Unpack)](https://unbarqdsw2025-1-turma02.github.io/2025.1-T02-_G9_GalaxiaConectada_Entrega01/#/Base/DesignSprint/Entender)
+* [Design Sprint: Esboçar (Sketch)](https://unbarqdsw2025-1-turma02.github.io/2025.1-T02-_G9_GalaxiaConectada_Entrega01/#/Base/DesignSprint/Esbo%C3%A7ar)
+* [Design Sprint: Decidir (Decision)](https://unbarqdsw2025-1-turma02.github.io/2025.1-T02-_G9_GalaxiaConectada_Entrega01/#/Base/DesignSprint/Decidir)
+* [Design Sprint: Prototipação (Prototype)](https://unbarqdsw2025-1-turma02.github.io/2025.1-T02-_G9_GalaxiaConectada_Entrega01/#/Base/DesignSprint/Prototipo)
+* [5W+2H](https://unbarqdsw2025-1-turma02.github.io/2025.1-T02-_G9_GalaxiaConectada_Entrega01/#/Base/ArtefatoGeneralista/5W2H)
+* [Brainstorming](https://unbarqdsw2025-1-turma02.github.io/2025.1-T02-_G9_GalaxiaConectada_Entrega01/#/Base/ArtefatoGeneralista/BrainStorm)
+* [Rich Picture](https://unbarqdsw2025-1-turma02.github.io/2025.1-T02-_G9_GalaxiaConectada_Entrega01/#/Base/ArtefatoGeneralista/RichPicture)
+* [Diagrama de Ishikawa](https://unbarqdsw2025-1-turma02.github.io/2025.1-T02-_G9_GalaxiaConectada_Entrega01/#/Base/ArtefatoGeneralista/DiagramaIshikawa)
+* [Estimativas: Risco, Custo e Tempo](https://unbarqdsw2025-1-turma02.github.io/2025.1-T02-_G9_GalaxiaConectada_Entrega01/#/Base/ArtefatoGeneralista/Estimativas)
+* [Diagrama de Classes](https://unbarqdsw2025-1-turma02.github.io/2025.1_T02_G9_GalaxiaConectada_Entrega02/#/Modelagem/ModelagemEstatica/DiagramaClasses)
+* [Diagrama de Componentes](https://unbarqdsw2025-1-turma02.github.io/2025.1_T02_G9_GalaxiaConectada_Entrega02/#/Modelagem/ModelagemEstatica/DiagramaComponentes)
+* [Diagrama de Implantação](https://unbarqdsw2025-1-turma02.github.io/2025.1_T02_G9_GalaxiaConectada_Entrega02/#/Modelagem/ModelagemEstatica/DiagramaImplantacao)
+* [Diagrama de Atividades](https://unbarqdsw2025-1-turma02.github.io/2025.1_T02_G9_GalaxiaConectada_Entrega02/#/Modelagem/ModelagemDinamica/DiagramaAtividades)
+* [Diagrama de Comunicação ou Colaboração](https://unbarqdsw2025-1-turma02.github.io/2025.1_T02_G9_GalaxiaConectada_Entrega02/#/Modelagem/ModelagemDinamica/DiagramaComunicacao)
+* [Diagrama de Estados](https://unbarqdsw2025-1-turma02.github.io/2025.1_T02_G9_GalaxiaConectada_Entrega02/#/Modelagem/ModelagemDinamica/DiagramaEstados)
+* [Diagrama de Sequência](https://unbarqdsw2025-1-turma02.github.io/2025.1_T02_G9_GalaxiaConectada_Entrega02/#/Modelagem/ModelagemDinamica/DiagramaSequencia)
+* [Diagrama de Casos de Uso](https://unbarqdsw2025-1-turma02.github.io/2025.1_T02_G9_GalaxiaConectada_Entrega02/#/Modelagem/ModelagemOrganizacional/DiagramaCasosUso)
+* [Diagrama de Pacotes](https://unbarqdsw2025-1-turma02.github.io/2025.1_T02_G9_GalaxiaConectada_Entrega02/#/Modelagem/ModelagemOrganizacional/DiagramaPacotes)
+
+
+## Visão Geral
 
 O restante deste Documento de Arquitetura de Software - Visão Lógica está organizado nas seguintes seções:
 
@@ -331,4 +335,4 @@ Esta seção detalha como a **arquitetura lógica** do Galáxia Conectada contri
 | 1.1 | Adição do escopo | Larissa Stéfane | 19/06/2025 |
 | 1.2 | Reformulação do Escopo | Larissa Stéfane | 19/06/2025 |
 | 1.3 | Reestruturação do glossário | Larissa Stéfane | 19/06/2025 |
-
+| 1.4 | Adição dos links das documentações | Larissa Stéfane | 19/06/2025 |
