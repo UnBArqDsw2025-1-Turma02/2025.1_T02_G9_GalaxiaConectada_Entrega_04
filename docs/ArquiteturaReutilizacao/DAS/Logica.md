@@ -30,15 +30,15 @@
 
 
 
-### 1. Introdução
+### Introdução
 
-Este documento oferece uma visão arquitetural abrangente do sistema **Galáxia Conectada**, utilizando diferentes perspectivas arquiteturais para ilustrar seus diversos aspectos. Ele tem como objetivo principal capturar e comunicar as decisões arquiteturais significativas tomadas para o sistema.
+A Visão Lógica do **Galáxia Conectada** descreve a decomposição funcional do sistema sob uma perspectiva de design ao focar nas suas classes mais importantes, na sua organização em pacotes e nos seus subsistemas, além da hierarquia desses elementos em camadas, como pode ser observado em [O que é o documento de Arquitetura de Software?](https://blog.infnet.com.br/arquitetura_software/documento-de-arquitetura-de-software/). Sendo assim, este documento se preocupa em detalhar as funcionalidades suportadas e a lógica geral no sistema. 
 
-#### 1.1 Propósito
+#### Propósito
 
 Este documento tem como propósito servir como um **guia técnico e de referência** para todos os envolvidos no projeto Galáxia Conectada, incluindo desenvolvedores, designers, gerentes de projeto e futuros contribuidores. Ele formaliza as escolhas de design que impactam a estrutura, o comportamento e a implantação do sistema, garantindo **alinhamento e consistência** durante o desenvolvimento e a manutenção.
 
-#### 1.2 Escopo
+#### Escopo
 
 Este Documento de Arquitetura de Software (DAS) aplica-se à totalidade da plataforma **Galáxia Conectada**, abrangendo suas funcionalidades de trilhas de aprendizado, jogos educativos, fórum de discussões, aba de notícias, calendário de eventos e monitoramento de promoções. O escopo definido influencia diretamente as estratégias de design, implementação, testes e implantação, garantindo que o sistema seja construído de forma **coesa e escalável** para seus objetivos educacionais e interativos.
 
@@ -565,4 +565,5 @@ Esta seção detalha como a arquitetura de software do Galáxia Conectada contri
 | - | - | - | - |
 | 1.0 | Elaboração do documento| Larissa Stéfane | 19/06/2025 |
 | 1.1 | Adição do escopo | Larissa Stéfane | 19/06/2025 |
+| 1.2 | Reformulação do Escopo | Larissa Stéfane | 19/06/2025 |
 
