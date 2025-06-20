@@ -173,14 +173,6 @@ Tabela 4: Léxicos do Tipo Estado
 </details>
 
 
-## Referências
-
-A elaboração deste documento baseou-se nos seguintes artefatos e referências:
-
-* **Referências de Fundamentação:**
-    * [1] INFNET. **O que é o documento de Arquitetura de Software?**. Disponível em: <https://blog.infnet.com.br/arquitetura_software/documento-de-arquitetura-de-software/>. Acesso em: 20 jun. 2025.
-    * [2] ELEMAR JR. **Documentação Arquitetural na Medida Certa**. Disponível em: <https://elemarjr.com/livros/arquiteturadesoftware/volume-1/documentacao-arquitetural-na-medida-certa/>. Acesso em: 20 jun. 2025.
-    * [3] IBM. **Diagramas de classe**. Disponível em: <https://www.ibm.com/docs/pt-br/rsm/7.5.0?topic=uml-class-diagrams>. Acesso em: 20 jun. 2025.
 
 * **Documentação do Projeto Galáxia Conectada:**
     * [Design Sprint: Entender (Unpack)](https://unbarqdsw2025-1-turma02.github.io/2025.1-T02-_G9_GalaxiaConectada_Entre01/#/Base/DesignSprint/Entender)
@@ -325,6 +317,11 @@ Esta seção detalha como a **arquitetura lógica** do Galáxia Conectada contri
     * **Separação de Responsabilidades:** Facilita a escrita de testes unitários para as classes da camada de `Domínio` (regras de negócio) e testes de integração para os serviços da camada de `Aplicacao`, pois as dependências são controladas.
 
 ---
+## Referências
+
+ - [1] INFNET. **O que é o documento de Arquitetura de Software?**. Disponível em: <https://blog.infnet.com.br/arquitetura_software/documento-de-arquitetura-de-software/>. Acesso em: 19 jun. 2025.
+ - [2] ELEMAR JR. **Documentação Arquitetural na Medida Certa**. Disponível em: <https://elemarjr.com/livros/arquiteturadesoftware/volume-1/documentacao-arquitetural-na-medida-certa/>. Acesso em: 19 jun. 2025.
+ - [3] IBM. **Diagramas de classe**. Disponível em: <https://www.ibm.com/docs/pt-br/rsm/7.5.0?topic=uml-class-diagrams>. Acesso em: 19 jun. 2025.
 
 ## Histórico de Versões
 
