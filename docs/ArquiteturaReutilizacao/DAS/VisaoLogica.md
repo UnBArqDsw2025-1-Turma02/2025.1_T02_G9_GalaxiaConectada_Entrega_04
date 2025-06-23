@@ -7,7 +7,7 @@
 - [Escopo](#Escopo)
 - [Definições, Acrônimos e Abreviações](#Definições-Acrônimos-e-Abreviações)
 - [Documentação Lógica do Projeto Galáxia Conectada](#Documentação-Lógica-do-Projeto-Galáxia-Conectada)
-- [Visão Geral do Documento](#Visão-Geral-do-Documento)
+- [Visão Geral do Sistema](#Visão-Geral-do-Sistema)
 - [Metas e Restrições Arquiteturais](#Metas-e-Restrições-Arquiteturais)
 - [Visão Lógica](#Visão-Lógica)
 - [Visão Geral da Visão Lógica](#Visão-Geral-da-Visão-Lógica)
