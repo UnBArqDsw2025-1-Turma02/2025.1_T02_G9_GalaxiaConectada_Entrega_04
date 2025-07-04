@@ -174,7 +174,7 @@ Tabela 4: Léxicos do Tipo Estado
 
 
 
-## Documentação Lógica do Projeto Galáxia Conectada
+## Documentação do Projeto Galáxia Conectada
 
 * [Design Sprint: Entender (Unpack)](https://unbarqdsw2025-1-turma02.github.io/2025.1-T02-_G9_GalaxiaConectada_Entrega01/#/Base/DesignSprint/Entender)
 * [Design Sprint: Esboçar (Sketch)](https://unbarqdsw2025-1-turma02.github.io/2025.1-T02-_G9_GalaxiaConectada_Entrega01/#/Base/DesignSprint/Esbo%C3%A7ar)
@@ -204,7 +204,7 @@ Para estruturar essas classes de forma clara e escalável, o sistema foi organiz
 
 Finalmente, a organização desses pacotes e subsistemas se deu em **camadas**, como a camada de `Apresentação`, `Aplicação`, `Domínio`, `Infraestrutura` e `Serviços Compartilhados`. Essa estrutura em camadas promoveu uma separação das preocupações, onde cada camada tem um papel bem definido e interage com as outras de maneira controlada. Por exemplo, a camada de `Apresentação` se preocupa apenas com a interface do usuário, enquanto a camada de `Domínio` foca nas regras de negócio, e a `Infraestrutura` lida com o banco de dados. Essa abordagem em camadas não só facilitou o desenvolvimento, mas também garantiu que o sistema fosse robusto e adaptável a futuras mudanças e evoluções.
 
-### 2. Metas e Restrições Arquiteturais
+### Metas e Restrições Arquiteturais
 
 As metas e restrições arquiteturais guiam as decisões de design do Galáxia Conectada, garantindo que o sistema não apenas atenda aos requisitos funcionais, mas também às qualidades essenciais para sua operação e evolução.
 
@@ -279,7 +279,19 @@ Os pacotes de design a seguir representam os agrupamentos lógicos mais signific
             * **Classes/Responsabilidades Chave (ex):** Classes que representam `BancoDeDados`, `BotImportadorNoticias`, `BotImportadorPromocoes`.
             * **Relacionamentos:** Fornece serviços à camada de `Aplicacao` e `ServicosCompartilhados`.
 
-#### 3.3 Realizações de Casos de Uso Significativas
+
+### Representação Arquitetural
+
+Para o sistema **Galáxia Conectada**, a arquitetura de software é concebida como uma estrutura em camadas, baseada em um design modular que promove a separação de preocupações e a manutenibilidade. A arquitetura é representada através de múltiplas **visões arquiteturais da UML**, cada uma fornecendo uma perspectiva específica do sistema. Para este documento, as visões apresentadas são a **Visão de Casos de Uso** e a **Visão Lógica**, conforme solicitado.
+
+* **Visão de Casos de Uso:** Essencial para descrever a funcionalidade do sistema do ponto de vista do usuário final e de outros sistemas externos. Ela contém os **Atores** (usuários e sistemas) e os **Casos de Uso** (funcionalidades), ilustrando o que o sistema faz.
+    * **Artefato Visual:** [Diagrama de Casos de Uso](https://unbarqdsw2025-1-turma02.github.io/2025.1_T02_G9_GalaxiaConectada_Entre02/#/Modelagem/ModelagemOrganizacional/DiagramaCasosUso)
+* **Visão Lógica:** Descreve a decomposição funcional do sistema em módulos, subsistemas e pacotes de design, bem como suas classes e relacionamentos mais importantes. Foca na organização do código em um nível conceitual, como as funcionalidades são agrupadas.
+    * **Artefatos Visuais:** [Diagrama de Classes](https://unbarqdsw2025-1-turma02.github.io/2025.1_T02_G9_GalaxiaConectada_Entre02/#/Modelagem/ModelagemEstatica/DiagramaClasses), [Diagrama de Pacotes](https://unbarqdsw2025-1-turma02.github.io/2025.1_T02_G9_GalaxiaConectada_Entre02/#/Modelagem/ModelagemOrganizacional/DiagramaPacotes)
+
+As demais visões (Processo, Implementação, Implantação e Dados) serão detalhadas em documentos específicos, mas suas contribuições para a arquitetura geral são consideradas ao longo deste DAS.
+
+### Visão de Casos de Uso
 
 As realizações de casos de uso ilustram como os elementos do modelo de design da Visão Lógica colaboram para entregar as funcionalidades mais importantes do sistema. Elas servem como cenários concretos que demonstram a interação entre classes e pacotes.
 
@@ -300,9 +312,9 @@ Dois cenários arquiteturalmente representativos são:
     * **Fluxo Lógico:** A `Apresentacao` envia a requisição de criação de tópico para o `GatewayAPI`. O `GatewayAPI` roteia para `Servidor.Aplicacao.Comunidade`, que interage com `Servidor.GerenciamentoUsuarios` para verificar permissões do `Usuario`. `Servidor.Aplicacao.Comunidade` manipula entidades de `Servidor.Dominio.Comunidade` (`Topico`, `Postagem`) e utiliza `Servidor.Infraestrutura.Persistencia` para gravar no `BancoDeDados`. A reputação do `Usuario` é atualizada (`Servidor.Dominio.Usuario`). O novo conteúdo é indexado pelo `Servidor.ServicosCompartilhados.Busca` e o `Servidor.ServicosCompartilhados.Notificacoes` envia alertas. O `Servidor.ServicosCompartilhados.Monitoramento` registra o evento.
     * **Artefatos de Suporte:** Detalhes do fluxo podem ser visualizados nos **Diagramas de Atividades - Aba Fórum** (implícito na criação) e **Diagrama de Comunicação - Fórum** (presentes no documento de Visão de Processo).
 
----
 
-### 4. Qualidade
+
+###  Qualidade
 
 Esta seção detalha como a **arquitetura lógica** do Galáxia Conectada contribui para as diversas qualidades (não funcionais) do sistema, essenciais para sua usabilidade, confiabilidade e longevidade.
 
@@ -318,7 +330,10 @@ Esta seção detalha como a **arquitetura lógica** do Galáxia Conectada contri
 * **Testabilidade:**
     * **Separação de Responsabilidades:** Facilita a escrita de testes unitários para as classes da camada de `Domínio` (regras de negócio) e testes de integração para os serviços da camada de `Aplicacao`, pois as dependências são controladas.
 
----
+
+### 
+
+
 ## Referências
 
  - [1] INFNET. **O que é o documento de Arquitetura de Software?**. Disponível em: <https://blog.infnet.com.br/arquitetura_software/documento-de-arquitetura-de-software/>. Acesso em: 19 jun. 2025.
