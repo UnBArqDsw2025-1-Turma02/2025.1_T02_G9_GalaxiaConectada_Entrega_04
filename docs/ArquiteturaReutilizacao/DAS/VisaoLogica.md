@@ -312,6 +312,151 @@ Dois cenários arquiteturalmente representativos são:
     * **Fluxo Lógico:** A `Apresentacao` envia a requisição de criação de tópico para o `GatewayAPI`. O `GatewayAPI` roteia para `Servidor.Aplicacao.Comunidade`, que interage com `Servidor.GerenciamentoUsuarios` para verificar permissões do `Usuario`. `Servidor.Aplicacao.Comunidade` manipula entidades de `Servidor.Dominio.Comunidade` (`Topico`, `Postagem`) e utiliza `Servidor.Infraestrutura.Persistencia` para gravar no `BancoDeDados`. A reputação do `Usuario` é atualizada (`Servidor.Dominio.Usuario`). O novo conteúdo é indexado pelo `Servidor.ServicosCompartilhados.Busca` e o `Servidor.ServicosCompartilhados.Notificacoes` envia alertas. O `Servidor.ServicosCompartilhados.Monitoramento` registra o evento.
     * **Artefatos de Suporte:** Detalhes do fluxo podem ser visualizados nos **Diagramas de Atividades - Aba Fórum** (implícito na criação) e **Diagrama de Comunicação - Fórum** (presentes no documento de Visão de Processo).
 
+#### Atores e Casos de Uso Arquiteturalmente Significativos
+
+Os principais atores que interagem com o sistema e os casos de uso arquiteturalmente significativos são:
+
+* **Atores:**
+    * `Visitante` (usuário não autenticado)
+    * `Entusiasta/Aluno` (usuário autenticado com perfil de aprendizado)
+    * `Instrutor` (usuário que cria conteúdo educacional)
+    * `Professor Voluntário` (usuário que contribui/revisa conteúdo científico)
+    * `Moderador` (usuário que gerencia a comunidade no fórum)
+    * `Administrador` (usuário com controle total sobre o sistema)
+    * `Bot Importador de Conteúdo` (sistema externo automatizado)
+    * `APIs/Sites Externos` (sistemas externos que fornecem dados)
+
+Para uma representação visual detalhada dos casos de uso e seus atores, consulte o **Diagrama de Casos de Uso** completo do projeto, disponível em [Diagrama de Casos de Uso](https://unbarqdsw2025-1-turma02.github.io/2025.1_T02_G9_GalaxiaConectada_Entre02/#/Modelagem/ModelagemOrganizacional/DiagramaCasosUso).
+
+Alguns dos casos de uso arquiteturalmente significativos incluem:
+
+* **Autenticação e Perfil:**
+    * `Realizar Cadastro` (RF04)
+    * `Realizar Login` (RF04)
+    * `Visualizar/Editar Perfil` (RF23)
+* **Aprendizado e Gamificação:**
+    * `Navegar em Trilhas de Aprendizado` (RF01, RF02, RF03, RF08)
+    * `Marcar Progresso em Trilhas` (RF04)
+    * `Realizar Jogos/Quizzes` (RF08, RF10, RF21, RF22)
+    * `Receber Recompensas/Conquistas` (RF05)
+    * `Visualizar Ranking/Reputação` (RF07, RF23)
+* **Comunicação e Comunidade:**
+    * `Criar/Postar em Tópico no Fórum` (RF09)
+    * `Comentar em Conteúdo/Postagem` (RF09, RF24)
+    * `Moderar Conteúdo do Fórum` (RF09)
+* **Conteúdo e Informações:**
+    * `Consultar Notícias/Artigos` (RF13, RF14)
+    * `Pesquisar Conteúdo` (RF10)
+    * `Visualizar Calendário de Eventos Astronômicos` (RF11)
+    * `Visualizar Promoções` (RF19)
+    * `Enviar Sugestões/Conteúdos` (RF15)
+* **Integrações (Sistema-a-Sistema):**
+    * `Importar Notícias de Fontes Externas` (RF14, RF20)
+    * `Monitorar e Importar Promoções Externas` (RF19, RF20)
+    * `Enviar Notificações` (RF12)
+
+#### Realizações de Casos de Uso
+
+As realizações dos casos de uso ilustram como os elementos do modelo de design (classes, pacotes, subsistemas) colaboram para entregar as funcionalidades do sistema. Elas descrevem o fluxo de interação e as responsabilidades dos elementos.
+
+**Tabela: Realizações de Casos de Uso Arquiteturalmente Significativas**
+
+| Caso de Uso                          | Descrição da Realização (Foco Lógico)                                                                                                                                                                                                                                                        | Elementos da Visão Lógica Envolvidos                                                                                                                                                                                                                                              | Artefatos de Suporte Visual (Exemplos)                                                                                                                                                                                                                                |
+| :----------------------------------- | :--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | :-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `Navegar em Trilhas de Aprendizado`  | O usuário autenticado, através da camada de Apresentação, requisita e visualiza trilhas e módulos da camada de Aplicação. A camada de Aplicação, por sua vez, interage com o Domínio para obter os dados de `TrilhaEducacional`, `Modulo` e `Conteúdo`, persistidos via Infraestrutura, e coordena a atualização do `ProgressoUsuarioTrilha` e `Perfil` do `Usuário` junto aos Serviços Compartilhados de Monitoramento e Gamificação. | **Pacotes:** `Apresentacao`, `Servidor.GatewayAPI`, `Servidor.Aplicacao.Aprendizagem`, `Servidor.Dominio.Aprendizagem`, `Servidor.Dominio.Usuario`, `Servidor.Infraestrutura.Persistencia`, `Servidor.ServicosCompartilhados.Monitoramento`, `Servidor.ServicosCompartilhados.Cache`.<br>**Classes:** `Usuario`, `TrilhaEducacional`, `Modulo`, `Conteudo` (e subclasses), `ProgressoUsuarioTrilha`, `Perfil`. | [Diagrama de Atividades - Aba Conhecimento](https://unbarqdsw2025-1-turma02.github.io/2025.1_T02_G9_GalaxiaConectada_Entre02/#/Modelagem/ModelagemDinamica/DiagramaAtividades)<br>[Diagrama de Sequência - Trilhas de Aprendizado](https://unbarqdsw2025-1-turma02.github.io/2025.1_T02_G9_GalaxiaConectada_Entre02/#/Modelagem/ModelagemDinamica/DiagramaSequencia)<br>[Diagrama de Classes](https://unbarqdsw2025-1-turma02.github.io/2025.1_T02_G9_GalaxiaConectada_Entre02/#/Modelagem/ModelagemEstatica/DiagramaClasses) |
+| `Criar/Postar em Tópico no Fórum`    | Um usuário, via camada de Apresentação, submete um novo tópico ou postagem. A camada de Aplicação (Módulo Comunidade) verifica as permissões do `Usuário` (`Servidor.GerenciamentoUsuarios`), manipula as entidades de `Domínio` (`Topico`, `Postagem`), persiste os dados via Infraestrutura, atualiza a `Reputação` do `Usuário` e notifica moderadores, usando os Serviços Compartilhados de Busca e Notificações para indexar e alertar. | **Pacotes:** `Apresentacao`, `Servidor.GatewayAPI`, `Servidor.Aplicacao.Comunidade`, `Servidor.Dominio.Comunidade`, `Servidor.Dominio.Usuario`, `Servidor.Infraestrutura.Persistencia`, `Servidor.ServicosCompartilhados.Monitoramento`, `Servidor.ServicosCompartilhados.Busca`, `Servidor.ServicosCompartilhados.Notificacoes`.<br>**Classes:** `Usuario`, `Topico`, `Postagem`, `Subforum`, `Reputacao`, `Perfil`. | [Diagrama de Comunicação - Fórum](https://unbarqdsw2025-1-turma02.github.io/2025.1_T02_G9_GalaxiaConectada_Entre02/#/Modelagem/ModelagemDinamica/DiagramaComunica%C3%A7%C3%A3o)<br>[Diagrama de Estados - Fórum](https://unbarqdsw2025-1-turma02.github.io/2025.1_T02_G9_GalaxiaConectada_Entre02/#/Modelagem/ModelagemDinamica/DiagramaEstados)<br>[Diagrama de Classes](https://unbarqdsw2025-1-turma02.github.io/2025.1_T02_G9_GalaxiaConectada_Entre02/#/Modelagem/ModelagemEstatica/DiagramaClasses) |
+| `Realizar Login`                     | O usuário tenta autenticar-se fornecendo credenciais à camada de Apresentação. A requisição passa pelo GatewayAPI e é processada pelo Gerenciamento de Usuários na camada de Aplicação. Este serviço consulta a Infraestrutura (persistência) para validar as credenciais do `Usuário` no banco de dados. Em caso de sucesso, uma sessão é criada, seu `Perfil` e `Permissões` são carregados, e o usuário é redirecionado; caso contrário, uma mensagem de erro é retornada. | **Pacotes:** `Apresentacao`, `Servidor.GatewayAPI`, `Servidor.GerenciamentoUsuarios`, `Servidor.Dominio.Usuario`, `Servidor.Infraestrutura.Persistencia`, `Servidor.ServicosCompartilhados.Monitoramento`.<br>**Classes:** `Usuario`, `Perfil`. | [Diagrama de Sequência - Login/Autenticação (a ser criado no documento de Visão de Processo ou Implementação)]<br>[Diagrama de Classes](https://unbarqdsw2025-1-turma02.github.io/2025.1_T02_G9_GalaxiaConectada_Entre02/#/Modelagem/ModelagemEstatica/DiagramaClasses) |
+| `Importar Notícias de Fontes Externas` | Um `Bot Importador de Conteúdo` (na camada de Infraestrutura) opera em background, acessando `APIs/Sites Externos`. Ele extrai os dados, que são então validados e processados pela camada de Aplicação (Módulo Integração e Conteúdo), para serem finalmente persistidos no banco de dados através da camada de Infraestrutura, resultando na criação de novas `Notícias` no `Domínio.ConteudoInfo`. | **Pacotes:** `Servidor.Aplicacao.Integracao`, `Servidor.Dominio.ConteudoInfo`, `Servidor.Infraestrutura.ClientesExternos`, `Servidor.Infraestrutura.Persistencia`, `Servidor.ServicosCompartilhados.Configuracao`, `Servidor.ServicosCompartilhados.Monitoramento`.<br>**Classes:** `BotImportadorNoticias`, `Noticia`, `FonteDeNoticias`. | [Diagrama de Atividades - Importação de Notícias (a ser criado no documento de Visão de Processo)]<br>[Diagrama de Componentes](https://unbarqdsw2025-1-turma02.github.io/2025.1_T02_G9_GalaxiaConectada_Entre02/#/Modelagem/ModelagemEstatica/DiagramaComponentes) |
+
+
+### Visão de Processo
+
+A **Visão de Processo** descreve a decomposição do sistema em unidades de controle de execução (processos e *threads*) e como elas interagem. Esta visão é crucial para sistemas com concorrência significativa, focando nas dependências de tempo, sincronização e comunicação entre as partes ativas do sistema. Embora o Galáxia Conectada seja inicialmente implementado como uma aplicação monolítica, as responsabilidades de processo já estão bem delineadas, permitindo escalabilidade futura para um modelo distribuído.
+
+Os processos e *threads* no Galáxia Conectada podem ser agrupados e descritos da seguinte forma:
+
+* **Processo Principal da Aplicação Web:**
+    * **Descrição:** O processo *heavyweight* que hospeda a maior parte da lógica de *backend*. Ele gerencia as rotas da API, a autenticação de usuários e a orquestração das funcionalidades de conteúdo interativo e comunidade.
+    * **Sub-unidades de Controle (Threads):** Múltiplas *threads* são criadas para lidar com as requisições HTTP concorrentes dos usuários (ex: uma *thread* para cada requisição de página, login, postagem no fórum).
+    * **Alocação de Classes/Pacotes Lógicos:** Praticamente todos os pacotes das camadas de `Aplicação`, `Domínio` e `Serviços Compartilhados` são executados dentro deste processo.
+    * **Modos de Comunicação:** Principalmente chamadas de procedimento/método interno e acesso a banco de dados via `Infraestrutura.Persistencia`.
+    * **Artefatos Visuais de Suporte:** [Diagrama de Atividades](https://unbarqdsw2025-1-turma02.github.io/2025.1_T02_G9_GalaxiaConectada_Entre02/#/Modelagem/ModelagemDinamica/DiagramaAtividades) (para fluxos sequenciais de ações), [Diagrama de Comunicação](https://unbarqdsw2025-1-turma02.github.io/2025.1_T02_G9_GalaxiaConectada_Entre02/#/Modelagem/ModelagemDinamica/DiagramaComunica%C3%A7%C3%A3o) (para interações entre objetos em cenários).
+* **Processos de Bots de Integração:**
+    * **Descrição:** Processos ou *jobs* em *background* dedicados a interagir com sistemas externos para coletar e importar dados (notícias, promoções). Eles operam de forma assíncrona ao processo principal da web.
+    * **Alocação de Classes/Pacotes Lógicos:** Principalmente os componentes `BotImportadorNoticias` e `BotImportadorPromocoes` (do pacote `Servidor.Infraestrutura.ClientesExternos`) e partes da `Servidor.Aplicacao.Integracao`.
+    * **Modos de Comunicação:** Chamadas HTTP/API para serviços externos, e acesso a banco de dados para persistir dados. Podem usar filas de mensagens internamente para desacoplar a ingestão do processamento principal.
+    * **Artefatos Visuais de Suporte:** [Diagrama de Atividades - Importação de Notícias (a ser criado)], [Diagrama de Estados - Promoção](https://unbarqdsw2025-1-turma02.github.io/2025.1_T02_G9_GalaxiaConectada_Entre02/#/Modelagem/ModelagemDinamica/DiagramaEstados) (para o ciclo de vida de uma promoção importada).
+* **Processo do Sistema de Banco de Dados:**
+    * **Descrição:** O processo dedicado do SGBD (SQLite localmente, mas pode ser PostgreSQL em produção) que gerencia a persistência, recuperação e integridade dos dados.
+    * **Alocação de Classes/Pacotes Lógicos:** A interface `Infraestrutura.Persistencia` é quem se comunica com este processo.
+    * **Modos de Comunicação:** Protocolos de banco de dados (ex: via *drivers* SQLite/SQL) para operações de leitura e escrita.
+
+### Visão de Implantação
+
+A **Visão de Implantação** do Galáxia Conectada descreve a configuração física de hardware e software sobre a qual o sistema será implantado e executado. Ela mostra os nós físicos (computadores, servidores, dispositivos) e suas interconexões, e como os processos da Visão de Processo são alocados a esses nós. Embora o ambiente de desenvolvimento seja local, esta visão projeta uma configuração mais realista para um ambiente de produção.
+
+Para uma representação visual detalhada dos nós físicos e o mapeamento dos componentes, consulte o **Diagrama de Implantação** completo do projeto, disponível em [Diagrama de Implantação](https://unbarqdsw2025-1-turma02.github.io/2025.1_T02_G9_GalaxiaConectada_Entre02/#/Modelagem/ModelagemEstatica/DiagramaImplantacao).
+
+Os principais nós físicos e seus artefatos/processos implantados incluem:
+
+* **Dispositivo do Usuário (`<<device>> Navegador Web`):**
+    * **Descrição:** PCs, laptops, tablets, smartphones que acessam o site.
+    * **Artefatos/Processos Implantados:** O Frontend da aplicação (`index.html`, `entrar.html`, `cadastrar.html`, `style.css`, `script.js`, imagens) é carregado e executado pelo navegador do usuário.
+    * **Conexões:** Comunica-se com o `Servidor Web` via HTTP/HTTPS.
+* **Servidor Web (`<<server>> Servidor Web`):**
+    * **Descrição:** Servidor que recebe as requisições HTTP/HTTPS dos clientes, serve os arquivos estáticos (HTML, CSS, JS, imagens) e atua como um *proxy reverso* para o servidor de aplicação.
+    * **Artefatos/Processos Implantados:** Arquivos estáticos do frontend (`frontend/css/`, `frontend/js/`, `frontend/img/`, `frontend/*.html`), e configuração de um servidor como Nginx/Apache.
+    * **Conexões:** HTTP/HTTPS com `Navegador Web`; TCP/IP com `Firewall`.
+* **Firewall (`<<firewall>> Firewall`):**
+    * **Descrição:** Dispositivo de segurança que controla o tráfego de rede entre a camada web pública e os servidores internos da aplicação e do banco de dados.
+    * **Conexões:** TCP/IP com `Servidor Web`, `Servidor de Aplicação` e `Sistema Gerenciador de Banco de Dados`.
+* **Servidor de Aplicação (`<<server>> Servidor de Aplicação`):**
+    * **Descrição:** Servidor onde a lógica de *backend* da aplicação Galáxia Conectada é executada. Em um ambiente distribuído, pode ser um cluster de servidores.
+    * **Artefatos/Processos Implantados:** O processo principal da aplicação Flask (`app.py`), módulos Python (`models.py`, `database.py`), e suas bibliotecas (`Flask`, `Werkzeug`, `sqlite3`). Este nó executa a lógica de `GatewayAPI`, `GestaoUsuarios`, `ModuloEducacional`, `ModuloDivulgacao`, `ModuloJogos`, `ModuloForum`, `ModuloRecursosPraticos`, `ModuloEventos`, `ModuloPromocoes`, `ServicoNotificacoes`, `ServicoBusca`, `ServicoRecomendacoes`, `ServicoCertificados`, `ServicoLocalizacao`, `ServicoConfiguracao`, `ServicoMonitoramento`, `ServicoCache`. Os `Bots de Integração` também podem ser executados aqui como *jobs*.
+    * **Conexões:** TCP/IP com `Firewall`; TCP/IP com `Sistema Gerenciador de Banco de Dados`; HTTPS/API com `Serviços Externos`.
+* **Sistema Gerenciador de Banco de Dados (`<<database>> SGBD`):**
+    * **Descrição:** Servidor dedicado ao banco de dados relacional (ex: PostgreSQL em produção, SQLite localmente) que armazena todos os dados persistentes do sistema.
+    * **Artefatos/Processos Implantados:** O arquivo `galaxia.db` (SQLite) ou a instância do servidor PostgreSQL, e o *schema* do banco de dados.
+    * **Conexões:** TCP/IP com `Servidor de Aplicação` (geralmente através do `Firewall`).
+* **Serviços Externos (`<<system>> APIs/Sites Externos`):**
+    * **Descrição:** Sistemas de terceiros (como APIs da NASA, sites de *e-commerce*, serviços de *e-mail*/push notification) com os quais o Galáxia Conectada se integra.
+    * **Conexões:** HTTPS/API com o `Servidor de Aplicação` (via módulos de integração).
+
+
+### Visão de Implementação
+
+A estrutura de camadas de implementação do Galáxia Conectada segue o modelo de camadas, com uma clara separação de responsabilidades. Os principais subsistemas e componentes lógicos são mapeados para essas camadas.
+
+* **Camada de Apresentação (`frontend/`):**
+    * **Descrição:** Contém todo o código relacionado à interface do usuário (UI), incluindo arquivos HTML, folhas de estilo CSS e scripts JavaScript.
+    * **Sub-Componentes Implementados:**
+        * `index.html`, `entrar.html`, `cadastrar.html` (estrutura das páginas)
+        * `css/style.css` (estilos visuais)
+        * `js/script.js` (interatividade frontend)
+    * **Artefato Visual de Suporte:** [Diagrama de Componentes](https://unbarqdsw2025-1-turma02.github.io/2025.1_T02_G9_GalaxiaConectada_Entre02/#/Modelagem/ModelagemEstatica/DiagramaComponentes) (representa `WebUI`).
+* **Camada de Aplicação (`backend/` - lógica de negócio principal):**
+    * **Descrição:** Abriga a lógica de negócio principal da aplicação, orquestrando as operações que implementam os casos de uso.
+    * **Sub-Componentes Implementados:**
+        * `backend/app.py` (rotas da API, orquestração de requisições)
+        * Pacotes/Módulos implícitos para: `Gerenciamento de Usuários`, `Conteúdo Interativo`, `Comunidade`, `Integrações`.
+    * **Artefato Visual de Suporte:** [Diagrama de Componentes](https://unbarqdsw2025-1-turma02.github.io/2025.1_T02_G9_GalaxiaConectada_Entre02/#/Modelagem/ModelagemEstatica/DiagramaComponentes) (representa `APIGateway` e os módulos `ModuloEducacional`, `ModuloDivulgacao`, etc.).
+* **Camada de Domínio (`backend/models.py` e estruturas de dados):**
+    * **Descrição:** Contém as classes que representam as entidades do negócio (`Usuario`, `Trilha`, `Topico`, etc.) e as regras de negócio puras, independentes de tecnologia.
+    * **Sub-Componentes Implementados:**
+        * `backend/models.py` (definição das classes de modelo)
+    * **Artefato Visual de Suporte:** [Diagrama de Classes](https://unbarqdsw2025-1-turma02.github.io/2025.1_T02_G9_GalaxiaConectada_Entre02/#/Modelagem/ModelagemEstatica/DiagramaClasses).
+* **Camada de Serviços Compartilhados/Transversais (integrados ao `backend/app.py` ou módulos específicos):**
+    * **Descrição:** Serviços que fornecem funcionalidades reutilizáveis e genéricas, como notificações, busca, *cache*, monitoramento e configurações.
+    * **Sub-Componentes Implementados:**
+        * Classes de serviço (ex: `ServicoNotificacoes` em `backend/servicos_compartilhados/`) que podem ser importadas e utilizadas por outros módulos.
+    * **Artefato Visual de Suporte:** [Diagrama de Componentes](https://unbarqdsw2025-1-turma02.github.io/2025.1_T02_G9_GalaxiaConectada_Entre02/#/Modelagem/ModelagemEstatica/DiagramaComponentes) (representa `ServicoNotificacoes`, `ServicoBusca`, etc.).
+* **Camada de Infraestrutura (`backend/database.py`, `backend/db_data/`, dependências externas):**
+    * **Descrição:** Contém as implementações concretas e os detalhes técnicos de baixo nível, como acesso a banco de dados e comunicação com serviços externos.
+    * **Sub-Componentes Implementados:**
+        * `backend/database.py` (criação e manipulação do DB)
+        * `backend/db_data/galaxia.db` (arquivo físico do banco de dados)
+        * Módulos de clientes HTTP para APIs externas, *drivers* de banco de dados (bibliotecas como `sqlite3`, `Flask-SQLAlchemy` se usar).
+    * **Artefato Visual de Suporte:** [Diagrama de Implantação](https://unbarqdsw2025-1-turma02.github.io/2025.1_T02_G9_GalaxiaConectada_Entre02/#/Modelagem/ModelagemEstatica/DiagramaImplantacao) (representa `BancoDeDados`, `APIs/Sites Externos`).
 
 
 ###  Qualidade
@@ -331,8 +476,114 @@ Esta seção detalha como a **arquitetura lógica** do Galáxia Conectada contri
     * **Separação de Responsabilidades:** Facilita a escrita de testes unitários para as classes da camada de `Domínio` (regras de negócio) e testes de integração para os serviços da camada de `Aplicacao`, pois as dependências são controladas.
 
 
-### 
+### Padrões e Estilos Arquiteturais em Código
 
+
+Esta seção demonstra como os padrões e estilos arquiteturais são aplicados no código-fonte do Galáxia Conectada ao evidenciar a reutilização de camadas e componentes.
+
+####  Reutilização de Camadas e Componentes
+
+A arquitetura em N-Camadas do Galáxia Conectada promove a reutilização de componentes e serviços, especialmente aqueles que são transversais e agnósticos à lógica de negócio específica.
+
+Um exemplo claro de **reutilização e aplicação de um padrão arquitetural** é o **Serviço de Notificações (`ServicoNotificacoes`)**. Este serviço reside na camada de `Serviços Compartilhados` e é responsável por enviar alertas, e-mails ou notificações *push* aos usuários. Sua natureza genérica permite que ele seja reutilizado por múltiplos módulos da camada de `Aplicação` sem que cada módulo precise implementar sua própria lógica de envio de notificações.
+
+**Cenários de Reutilização do Serviço de Notificações:**
+
+* **Módulo de Aprendizagem (`Servidor.Aplicacao.Aprendizagem`):** Após a conclusão de uma `TrilhaEducacional` ou o desbloqueio de uma `Conquista`, este módulo pode chamar o `ServicoNotificacoes` para informar o `Usuário` sobre seu progresso ou prêmio.
+* **Módulo de Comunidade (`Servidor.Aplicacao.Comunidade`):** Quando há uma nova resposta em um `Tópico` que o `Usuário` está seguindo, ou se um `Comentário` é denunciado para moderação, o `ModuloForum` pode usar o `ServicoNotificacoes` para alertar os `Usuários` ou `Moderadores`.
+* **Módulo de Integrações (`Servidor.Aplicacao.Integracao`):** Após a descoberta de uma `Promoção Externa` relevante por um `Bot Importador`, este módulo pode utilizar o `ServicoNotificacoes` para enviar um alerta personalizado ao `Usuário`.
+
+Essa reutilização reduz a duplicação de código, centraliza a lógica de notificações e facilita a manutenção, pois qualquer mudança na forma como as notificações são enviadas (ex: mudança de provedor de e-mail) precisa ser feita apenas em um único lugar.
+
+#### 12.2 Código Comprobatório e Execução
+
+Para evidenciar a aplicação do padrão de **Reutilização de Camadas e o estilo arquitetural N-Camadas**, demonstraremos um trecho de código Python que simula o uso do `ServicoNotificacoes` por diferentes partes da aplicação.
+
+**Exemplo de Aplicação**
+
+Assumindo a estrutura de classes e pacotes definida na Visão Lógica e modelada no [Diagrama de Classes](https://unbarqdsw2025-1-turma02.github.io/2025.1_T02_G9_GalaxiaConectada_Entre02/#/Modelagem/ModelagemEstatica/DiagramaClasses) e [Diagrama de Pacotes](https://unbarqdsw2025-1-turma02.github.io/2025.1_T02_G9_GalaxiaConectada_Entre02/#/Modelagem/ModelagemOrganizacional/DiagramaPacotes):
+
+```python
+# backend/servicos_compartilhados/notificacoes.py (Camada de Serviços Compartilhados)
+class ServicoNotificacoes:
+    def __init__(self, db_connection_manager, email_client):
+        self.db = db_connection_manager # Exemplo de dependência da Infraestrutura
+        self.email_client = email_client # Exemplo de dependência de Cliente Externo
+        print("ServicoNotificacoes inicializado.")
+
+    def enviar_email(self, destinatario_email, assunto, corpo):
+        # Lógica para enviar email via cliente externo
+        print(f"DEBUG: Enviando email para {destinatario_email}: Assunto='{assunto}'")
+        # self.email_client.send(destinatario_email, assunto, corpo)
+        # self.db.log_notification_event("email", destinatario_email, assunto) # Loga evento na Infraestrutura
+        return True
+
+    def enviar_push(self, usuario_id, mensagem):
+        # Lógica para enviar notificação push
+        print(f"DEBUG: Enviando push para usuario {usuario_id}: '{mensagem}'")
+        # self.db.log_notification_event("push", usuario_id, mensagem)
+        return True
+
+# backend/aplicacao/aprendizagem.py (Camada de Aplicação - Módulo de Aprendizagem)
+class ModuloAprendizagem:
+    def __init__(self, servico_notificacoes):
+        self.notificacoes = servico_notificacoes
+        print("ModuloAprendizagem inicializado.")
+
+    def concluir_modulo(self, usuario_id, modulo_titulo):
+        # Lógica de negócio: marcar módulo como concluído, calcular XP, etc.
+        print(f"DEBUG: Modulo '{modulo_titulo}' concluído por usuario {usuario_id}.")
+        # Reutilizando o serviço de notificações
+        self.notificacoes.enviar_email(f"usuario_{usuario_id}@email.com", "Módulo Concluído!", f"Parabéns! Você concluiu o módulo '{modulo_titulo}'.")
+        self.notificacoes.enviar_push(usuario_id, f"Parabéns! Módulo {modulo_titulo} concluído!")
+        return True
+
+# backend/aplicacao/comunidade.py (Camada de Aplicação - Módulo de Comunidade)
+class ModuloComunidade:
+    def __init__(self, servico_notificacoes):
+        self.notificacoes = servico_notificacoes
+        print("ModuloComunidade inicializado.")
+
+    def criar_novo_topico(self, usuario_id, titulo_topico):
+        # Lógica de negócio: criar tópico, validar, persistir
+        print(f"DEBUG: Novo tópico '{titulo_topico}' criado por usuario {usuario_id}.")
+        # Reutilizando o serviço de notificações
+        self.notificacoes.enviar_email(f"moderador_admin@email.com", "Novo Tópico para Moderação", f"Usuário {usuario_id} criou o tópico: {titulo_topico}")
+        self.notificacoes.enviar_push(usuario_id, f"Seu tópico '{titulo_topico}' foi criado com sucesso!")
+        return True
+
+# --- Simulação de Configuração e Uso (exemplo em app.py ou um script de teste) ---
+if __name__ == '__main__':
+    # Simulação de dependências de infraestrutura
+    class MockDBConnection:
+        def log_notification_event(self, type, recipient, message):
+            print(f"MOCK_DB: Logged notification: {type} to {recipient}")
+
+    class MockEmailClient:
+        def send(self, to, subject, body):
+            print(f"MOCK_EMAIL: Sending email to {to}, Subject: {subject}")
+
+    mock_db_manager = MockDBConnection()
+    mock_email_client = MockEmailClient()
+
+    # 1. Instanciando o Serviço Compartilhado
+    servico_notificacoes_global = ServicoNotificacoes(mock_db_manager, mock_email_client)
+
+    # 2. Injetando o Serviço nos Módulos da Camada de Aplicação
+    modulo_aprendizagem = ModuloAprendizagem(servico_notificacoes_global)
+    modulo_comunidade = ModuloComunidade(servico_notificacoes_global)
+
+    print("\n--- Demonstração de Reutilização ---")
+
+    # Cenário de Aprendizagem: Módulo concluído
+    print("\nCenário 1: Conclusão de Módulo")
+    modulo_aprendizagem.concluir_modulo(usuario_id=101, modulo_titulo="Introdução à Cosmologia")
+
+    # Cenário de Comunidade: Novo tópico no fórum
+    print("\nCenário 2: Criação de Tópico no Fórum")
+    modulo_comunidade.criar_novo_topico(usuario_id=202, titulo_topico="Dúvidas sobre Buracos Negros")
+
+```
 
 ## Referências
 
@@ -351,3 +602,4 @@ Esta seção detalha como a **arquitetura lógica** do Galáxia Conectada contri
 | 1.2 | Reformulação do Escopo | Larissa Stéfane | 19/06/2025 |
 | 1.3 | Reestruturação do glossário | Larissa Stéfane | 19/06/2025 |
 | 1.4 | Adição dos links das documentações | Larissa Stéfane | 19/06/2025 |
+| 1.5 | Complementação do Documento | Larissa Stéfane | 03/07/2025 |
