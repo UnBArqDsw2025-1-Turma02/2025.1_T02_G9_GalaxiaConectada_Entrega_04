@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Galáxia Conectada - Criar Tópico em {{ subforum.nome }}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        /* Estilos específicos para a página de criação de tópico */
+        .create-topic-main-content {
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 30px;
+            background-color: rgba(10, 10, 42, 0.95);
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+        }
+
+        .create-topic-main-content .section-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 2.2em;
+            color: #FFD700;
+            text-align: center;
+            margin-bottom: 30px;
+            text-shadow: 0 0 15px rgba(255, 215, 0, 0.5);
+        }
+
+        .create-topic-form .form-group {
+            margin-bottom: 20px;
+        }
+
+        .create-topic-form label {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 1.1em;
+            color: #BBBBFF;
+            font-weight: bold;
+        }
+
+        .create-topic-form input[type="text"],
+        .create-topic-form textarea {
+            width: calc(100% - 20px); /* Ajusta para padding */
+            padding: 12px 10px;
+            border: 1px solid rgba(70, 70, 150, 0.7);
+            border-radius: 8px;
+            background-color: rgba(20, 20, 50, 0.9);
+            color: #E0E0E0;
+            font-size: 1em;
+            outline: none;
+            transition: border-color 0.3s ease;
+        }
+
+        .create-topic-form input[type="text"]:focus,
+        .create-topic-form textarea:focus {
+            border-color: #FFD700;
+        }
+
+        .create-topic-form textarea {
+            min-height: 200px;
+            resize: vertical;
+        }
+
+        .create-topic-form .action-btn {
+            display: block;
+            width: 100%;
+            padding: 15px;
+            margin-top: 30px;
+            font-size: 1.1em;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            background-color: #464696;
+            color: #FFFFFF;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+        .create-topic-form .action-btn:hover {
+            background-color: #5A5AC0;
+            transform: translateY(-2px);
+        }
+
+        /* Responsividade */
+        @media (max-width: 768px) {
+            .create-topic-main-content {
+                padding: 20px;
+                margin: 30px auto;
+            }
+            .create-topic-main-content .section-title {
+                font-size: 1.8em;
+            }
+            .create-topic-form input[type="text"],
+            .create-topic-form textarea {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="main-header">
+        <div class="top-bar">
+            <div class="search-bar">
+                <input type="text" placeholder="Pesquisar...">
+                <i class="fas fa-search"></i> </div>
+            <div class="logo-area">
+                <img src="{{ url_for('static', filename='img/logo_galaxia.png') }}" alt="Galáxia Conectada Logo" class="logo">
+                <h1>GALÁXIA CONECTADA</h1>
+                <p>CRIAR TÓPICO</p>
+            </div>
+            <div class="accessibility-and-user-area">
+                <div class="accessibility-bar">
+                    <a href="#" class="accessibility-link">Acessibilidade e Inclusão</a>
+                    <div class="accessibility-options">
+                        <i class="fas fa-font" title="Fonte para Dislexia"></i>
+                        <i class="fas fa-text-height" title="Ajustar Tamanho da Fonte"></i>
+                        <i class="fas fa-volume-up" title="Ativar Leitor de Tela"></i>
+                    </div>
+                </div>
+                <div class="user-actions">
+                    {% if logged_in %}
+                        <span>Olá, {{ current_user }}! ({{ user_type }})</span>
+                        <a href="{{ url_for('user_profile') }}">Perfil</a>
+                        <a href="{{ url_for('user_notifications') }}" class="notification-bell">
+                            <i class="fas fa-bell"></i>
+                            {% if unread_notifications_count > 0 %}
+                                <span class="notification-count">{{ unread_notifications_count }}</span>
+                            {% endif %}
+                        </a>
+                        <a href="/logout">Sair</a>
+                    {% else %}
+                        <a href="/entrar">Entrar</a>
+                        <a href="/cadastrar">Cadastrar</a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <nav class="main-menu">
+            <ul>
+                <li><a href="{{ url_for('home') }}"><img src="{{ url_for('static', filename='img/icon_rocket.png') }}" alt="Home"> Home</a></li>
+                <li><a href="{{ url_for('conhecimento_home') }}"><i class="fas fa-book-reader"></i> Conhecimento</a></li>
+                <li><a href="#"><i class="fas fa-gamepad"></i> Jogos</a></li>
+                <li><a href="#"><i class="fas fa-video"></i> Animações</a></li>
+                <li><a href="#"><i class="fas fa-satellite-dish"></i> Científico</a></li>
+                <li><a href="#"><i class="fas fa-calendar-alt"></i> Agenda Astronômica</a></li>
+                <li><a href="{{ url_for('forum_home') }}" class="active"><i class="fas fa-users"></i> Fórum</a></li>
+                <li><a href="#"><i class="fas fa-shopping-cart"></i> Promoções</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main class="create-topic-main-content">
+        <h2 class="section-title"><i class="fas fa-plus-circle"></i> Criar Novo Tópico em {{ subforum.nome }}</h2>
+        
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <ul class="flash-messages">
+                    {% for category, message in messages %}
+                        <li class="{{ category }}">{{ message }}</li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+        {% endwith %}
+
+        <form action="{{ url_for('create_topic', subforum_id=subforum.id) }}" method="POST" class="create-topic-form">
+            <div class="form-group">
+                <label for="titulo">Título do Tópico:</label>
+                <input type="text" id="titulo" name="titulo" required>
+            </div>
+            <div class="form-group">
+                <label for="texto">Primeira Postagem:</label>
+                <textarea id="texto" name="texto" rows="10" placeholder="Escreva o conteúdo da sua postagem inicial aqui..." required></textarea>
+            </div>
+            <button type="submit" class="action-btn">Criar Tópico</button>
+        </form>
+    </main>
+
+    <footer class="main-footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h4>Nosso github:</h4>
+                <a href="https://github.com/UnBArqDsw2025-1-Turma02?q=galaxia&type=all&language=&sort=" target="_blank" class="github-link">
+                    <img src="{{ url_for('static', filename='img/GitHub-Mark.png') }}" alt="GitHub Logo" class="github-icon">
+                </a>
+            </div>
+            <div class="footer-section">
+                <h4>Contato</h4>
+                <ul>
+                    <li><a href="#">Central de ajuda</a></li>
+                    <li><a href="#">Comunidade de apoio</a></li>
+                    <li><a href="#">Compartilhe sua história</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>Sobre</h4>
+                <ul>
+                    <li><a href="#">Nossa Equipe</a></li>
+                    <li><a href="#">Nossos especialistas em conteúdo</a></li>
+                </ul>
+            </div>
+            <div class="footer-section donate-section">
+                <p>A Galáxia Conectada é uma organização sem fins lucrativos. Faça uma <a href="#">doação</a> ou seja <a href="#">voluntário</a> hoje mesmo!</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+</body>
+</html>

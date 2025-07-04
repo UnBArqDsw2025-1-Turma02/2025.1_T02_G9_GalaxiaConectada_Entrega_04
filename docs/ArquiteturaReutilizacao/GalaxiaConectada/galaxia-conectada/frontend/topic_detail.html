@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Galáxia Conectada - Tópico: {{ topic.titulo }}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <header class="main-header">
+        <div class="top-bar">
+            <div class="search-bar">
+                <input type="text" placeholder="Pesquisar...">
+                <i class="fas fa-search"></i> </div>
+            <div class="logo-area">
+                <img src="{{ url_for('static', filename='img/logo_galaxia.png') }}" alt="Galáxia Conectada Logo" class="logo">
+                <h1>GALÁXIA CONECTADA</h1>
+                <p>TÓPICO DO FÓRUM</p>
+            </div>
+            <div class="accessibility-and-user-area">
+                <div class="accessibility-bar">
+                    <a href="#" class="accessibility-link">Acessibilidade e Inclusão</a>
+                    <div class="accessibility-options">
+                        <i class="fas fa-font" title="Fonte para Dislexia"></i>
+                        <i class="fas fa-text-height" title="Ajustar Tamanho da Fonte"></i>
+                        <i class="fas fa-volume-up" title="Ativar Leitor de Tela"></i>
+                    </div>
+                </div>
+                <div class="user-actions">
+                    {% if logged_in %}
+                        <span>Olá, {{ current_user }}! ({{ user_type }})</span>
+                        <a href="{{ url_for('user_profile') }}">Perfil</a>
+                        <a href="{{ url_for('user_notifications') }}" class="notification-bell">
+                            <i class="fas fa-bell"></i>
+                            {% if unread_notifications_count > 0 %}
+                                <span class="notification-count">{{ unread_notifications_count }}</span>
+                            {% endif %}
+                        </a>
+                        <a href="/logout">Sair</a>
+                    {% else %}
+                        <a href="/entrar">Entrar</a>
+                        <a href="/cadastrar">Cadastrar</a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <nav class="main-menu">
+            <ul>
+                <li><a href="{{ url_for('home') }}"><img src="{{ url_for('static', filename='img/icon_rocket.png') }}" alt="Home"> Home</a></li>
+                <li><a href="{{ url_for('conhecimento_home') }}"><i class="fas fa-book-reader"></i> Conhecimento</a></li>
+                <li><a href="{{ url_for('trilhas_home') }}"><i class="fas fa-route"></i> Trilhas</a></li> {# Link para a home de trilhas #}
+                <li><a href="#"><i class="fas fa-gamepad"></i> Jogos</a></li>
+                <li><a href="#"><i class="fas fa-video"></i> Animações</a></li>
+                <li><a href="#"><i class="fas fa-satellite-dish"></i> Científico</a></li>
+                <li><a href="#"><i class="fas fa-calendar-alt"></i> Agenda Astronômica</a></li>
+                <li><a href="{{ url_for('forum_home') }}" class="active"><i class="fas fa-users"></i> Fórum</a></li>
+                <li><a href="#"><i class="fas fa-shopping-cart"></i> Promoções</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main class="forum-main-content">
+        <section class="topic-header-section">
+            <p class="breadcrumb"><a href="{{ url_for('forum_home') }}">Fórum</a> &gt; <a href="{{ url_for('subforum_detail', subforum_id=topic.subforum_id) }}">{{ topic.subforum_nome }}</a></p>
+            <h2 class="section-title">
+                {% if topic.fixado %}<i class="fas fa-thumbtack"></i> {% endif %}
+                {% if topic.fechado %}<i class="fas fa-lock"></i> {% endif %}
+                {{ topic.titulo }}
+            </h2>
+            <div class="topic-meta">
+                <span><i class="fas fa-user"></i> Criado por: {{ topic.autor_nome }}</span>
+                <span><i class="fas fa-calendar-alt"></i> Em: {{ topic.data_criacao.split('T')[0] }}</span>
+                <span><i class="fas fa-sync-alt"></i> Última Postagem: {{ topic.data_ult_post.split('T')[0] }}</span>
+                <span><i class="fas fa-arrow-up"></i> Votos no Tópico: {{ topic.upvotes }}</span>
+            </div>
+            
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    <ul class="flash-messages">
+                        {% for category, message in messages %}
+                            <li class="{{ category }}">{{ message }}</li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+            {% endwith %}
+
+            {# Ações de Moderação #}
+            {% if logged_in and user_type in ['Administrador', 'Moderador'] %}
+            <div class="moderation-actions">
+                <form action="{{ url_for('toggle_topic_fixed', topic_id=topic.id) }}" method="POST" style="display:inline-block;">
+                    <button type="submit" class="action-btn small-btn {% if topic.fixado %}btn-unfix{% else %}btn-fix{% endif %}">
+                        <i class="fas fa-thumbtack"></i> {{ "Desafixar" if topic.fixado else "Fixar" }}
+                    </button>
+                </form>
+                <form action="{{ url_for('toggle_topic_closed', topic_id=topic.id) }}" method="POST" style="display:inline-block; margin-left: 10px;">
+                    <button type="submit" class="action-btn small-btn {% if topic.fechado %}btn-open{% else %}btn-close{% endif %}">
+                        <i class="fas fa-lock"></i> {{ "Abrir" if topic.fechado else "Fechar" }}
+                    </button>
+                </form>
+                {# Botão de Apagar Tópico (apenas para Admin ou Moderador) #}
+                <form action="#" method="POST" class="delete-topic-form" style="display:inline-block; margin-left: 10px;">
+                    <button type="button" class="action-btn small-btn btn-delete" data-topic-id="{{ topic.id }}">
+                        <i class="fas fa-trash-alt"></i> Apagar Tópico
+                    </button>
+                </form>
+            </div>
+            {% endif %}
+        </section>
+
+        <section class="posts-section dynamic-section">
+            <h3><i class="fas fa-comments"></i> Postagens</h3>
+            <div class="post-list">
+                {% for post in posts %}
+                <div class="post-item">
+                    <div class="post-sidebar">
+                        <form action="{{ url_for('vote_post', post_id=post.id) }}" method="POST" class="vote-form">
+                            <input type="hidden" name="vote_type" value="upvote">
+                            <button type="submit" class="vote-btn upvote-btn {% if post.user_voted_type == 'upvote' %}voted{% endif %}" {% if not logged_in or session['user_id'] == post.autor_id %}disabled{% endif %}>
+                                <i class="fas fa-arrow-up"></i>
+                            </button>
+                        </form>
+                        <span class="vote-count">{{ post.upvotes_count - post.downvotes_count }}</span> {# Exibe a diferença de upvotes e downvotes #}
+                        <form action="{{ url_for('vote_post', post_id=post.id) }}" method="POST" class="vote-form">
+                            <input type="hidden" name="vote_type" value="downvote">
+                            <button type="submit" class="vote-btn downvote-btn {% if post.user_voted_type == 'downvote' %}voted{% endif %}" {% if not logged_in or session['user_id'] == post.autor_id %}disabled{% endif %}>
+                                <i class="fas fa-arrow-down"></i>
+                            </button>
+                        </form>
+                    </div>
+                    <div class="post-content">
+                        <div class="post-header">
+                            <span class="post-author"><i class="fas fa-user"></i> {{ post.autor_nome }}</span>
+                            <span class="post-meta">Nível: {{ post.autor_nivel }} | XP: {{ post.autor_xp }}</span>
+                            <span class="post-date"><i class="fas fa-clock"></i> {{ post.data_postagem.split('T')[0] }}
+                                {% if post.editado %}(Editado em: {{ post.data_edicao.split('T')[0] }}){% endif %}
+                            </span>
+                        </div>
+                        <div class="post-text">
+                            <p>{{ post.texto }}</p>
+                        </div>
+                        <div class="post-actions">
+                            {% if logged_in and user_type in ['Administrador', 'Moderador'] %}
+                                <form action="{{ url_for('delete_post', post_id=post.id) }}" method="POST" class="delete-post-form" style="display:inline-block;">
+                                    <button type="button" class="action-btn small-btn btn-delete" data-post-id="{{ post.id }}">
+                                        <i class="fas fa-trash-alt"></i> Apagar
+                                    </button>
+                                </form>
+                            {% endif %}
+                            {# Botão de editar postagem (apenas para o autor ou admin/moderador) #}
+                            {% if logged_in and (session['user_id'] == post.autor_id or user_type in ['Administrador', 'Moderador']) %}
+                                <button class="action-btn small-btn btn-edit-post" data-post-id="{{ post.id }}" data-post-text="{{ post.texto }}"><i class="fas fa-edit"></i> Editar</button>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                {% else %}
+                <p>Nenhuma postagem neste tópico ainda. Seja o primeiro a responder!</p>
+                {% endfor %}
+            </div>
+
+            {# Formulário para nova postagem #}
+            {% if logged_in and not topic.fechado %}
+            <div class="new-post-form-container">
+                <h3><i class="fas fa-reply"></i> Responder ao Tópico</h3>
+                <form action="{{ url_for('add_post', topic_id=topic.id) }}" method="POST" class="new-post-form">
+                    <textarea name="post_text" placeholder="Escreva sua resposta aqui..." required></textarea>
+                    <button type="submit" class="action-btn">Postar Resposta</button>
+                </form>
+            </div>
+            {% elif topic.fechado %}
+                <p class="topic-closed-message"><i class="fas fa-lock"></i> Este tópico está fechado para novas postagens.</p>
+            {% else %}
+                <p>Faça login para postar uma resposta.</p>
+            {% endif %}
+        </section>
+    </main>
+
+    <footer class="main-footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h4>Nosso github:</h4>
+                <a href="https://github.com/UnBArqDsw2025-1-Turma02?q=galaxia&type=all&language=&sort=" target="_blank" class="github-link">
+                    <img src="{{ url_for('static', filename='img/GitHub-Mark.png') }}" alt="GitHub Logo" class="github-icon">
+                </a>
+            </div>
+            <div class="footer-section">
+                <h4>Contato</h4>
+                <ul>
+                    <li><a href="#">Central de ajuda</a></li>
+                    <li><a href="#">Comunidade de apoio</a></li>
+                    <li><a href="#">Compartilhe sua história</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>Sobre</h4>
+                <ul>
+                    <li><a href="#">Nossa Equipe</a></li>
+                    <li><a href="#">Nossos especialistas em conteúdo</a></li>
+                </ul>
+            </div>
+            <div class="footer-section donate-section">
+                <p>A Galáxia Conectada é uma organização sem fins lucrativos. Faça uma <a href="#">doação</a> ou seja <a href="#">voluntário</a> hoje mesmo!</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Lógica para votação de postagens (AJAX)
+            document.querySelectorAll('.vote-form').forEach(form => {
+                form.addEventListener('submit', async (e) => {
+                    e.preventDefault();
+                    const postId = form.action.split('/').slice(-2, -1)[0]; // Extrai o ID da postagem da URL
+                    const voteType = form.querySelector('input[name="vote_type"]').value;
+
+                    try {
+                        const response = await fetch(form.action, {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/x-www-form-urlencoded' // Flask espera form-urlencoded
+                            },
+                            body: `vote_type=${voteType}`
+                        });
+                        const data = await response.json();
+
+                        if (data.status === 'success') {
+                            const voteCountSpan = form.closest('.post-sidebar').querySelector('.vote-count');
+                            voteCountSpan.innerText = data.new_upvotes; // Atualiza a contagem de votos
+
+                            // Atualiza o estado dos botões de voto
+                            const upvoteBtn = form.closest('.post-sidebar').querySelector('.upvote-btn');
+                            const downvoteBtn = form.closest('.post-sidebar').querySelector('.downvote-btn');
+
+                            if (data.action === 'added') {
+                                if (voteType === 'upvote') {
+                                    upvoteBtn.classList.add('voted');
+                                } else {
+                                    downvoteBtn.classList.add('voted');
+                                }
+                            } else if (data.action === 'removed') {
+                                if (voteType === 'upvote') {
+                                    upvoteBtn.classList.remove('voted');
+                                } else {
+                                    downvoteBtn.classList.remove('voted');
+                                }
+                            } else if (data.action === 'changed') {
+                                if (voteType === 'upvote') {
+                                    upvoteBtn.classList.add('voted');
+                                    downvoteBtn.classList.remove('voted');
+                                } else {
+                                    downvoteBtn.classList.add('voted');
+                                    upvoteBtn.classList.remove('voted');
+                                }
+                            }
+                            // Flash message pode ser adicionada aqui se desejar
+                            // flash(data.message, 'success'); // Se o backend retornar uma mensagem
+                        } else {
+                            alert(data.message);
+                        }
+                    } catch (error) {
+                        console.error('Erro ao votar:', error);
+                        alert('Erro de rede ao votar. Tente novamente.');
+                    }
+                });
+            });
+
+            // Lógica para o botão de Apagar Tópico
+            document.querySelectorAll('.delete-topic-form button.btn-delete').forEach(button => {
+                button.addEventListener('click', (e) => {
+                    const topicId = e.currentTarget.dataset.topicId;
+                    if (confirm(`Tem certeza que deseja apagar este tópico (ID: ${topicId})? Esta ação é irreversível!`)) {
+                        // Crie um formulário dinâmico para enviar a requisição POST
+                        const form = document.createElement('form');
+                        form.method = 'POST';
+                        form.action = `/forum/topic/${topicId}/delete_topic`; // Nova rota para apagar tópico
+                        document.body.appendChild(form);
+                        form.submit();
+                    }
+                });
+            });
+
+            // Lógica para o botão de Apagar Postagem
+            document.querySelectorAll('.delete-post-form button.btn-delete').forEach(button => {
+                button.addEventListener('click', (e) => {
+                    const postId = e.currentTarget.dataset.postId;
+                    if (confirm(`Tem certeza que deseja apagar esta postagem (ID: ${postId})? Esta ação é irreversível!`)) {
+                        const form = document.createElement('form');
+                        form.method = 'POST';
+                        form.action = `/forum/post/${postId}/delete`; // Rota já existente
+                        document.body.appendChild(form);
+                        form.submit();
+                    }
+                });
+            });
+
+            // Lógica para o botão de Editar Postagem (apenas um prompt básico por enquanto)
+            document.querySelectorAll('.btn-edit-post').forEach(button => {
+                button.addEventListener('click', (e) => {
+                    const postId = e.currentTarget.dataset.postId;
+                    const currentText = e.currentTarget.dataset.postText;
+                    const newText = prompt("Edite sua postagem:", currentText);
+                    if (newText !== null && newText.trim() !== "") {
+                        // Implementar requisição POST/PUT para o backend para editar a postagem
+                        alert(`Funcionalidade de edição para postagem ID ${postId} com novo texto: "${newText}" será implementada.`);
+                        // Exemplo de como você enviaria para o backend (precisaria de uma nova rota no app.py)
+                        /*
+                        fetch(`/forum/post/${postId}/edit`, {
+                            method: 'POST', // Ou PUT, se preferir RESTful
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ new_text: newText })
+                        }).then(response => response.json())
+                          .then(data => {
+                              if (data.status === 'success') {
+                                  window.location.reload(); // Recarrega a página para ver a edição
+                              } else {
+                                  alert('Erro ao editar postagem: ' + data.message);
+                              }
+                          }).catch(error => console.error('Erro de rede:', error));
+                        */
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>

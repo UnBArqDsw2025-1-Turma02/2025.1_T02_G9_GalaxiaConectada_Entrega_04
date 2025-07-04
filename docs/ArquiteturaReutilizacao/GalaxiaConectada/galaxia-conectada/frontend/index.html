@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Galáxia Conectada - Home</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <header class="main-header">
+        <div class="top-bar">
+            <div class="search-bar">
+                <input type="text" placeholder="Pesquisar...">
+                <i class="fas fa-search"></i> </div>
+            <div class="logo-area">
+                <img src="{{ url_for('static', filename='img/logo_galaxia.png') }}" alt="Galáxia Conectada Logo" class="logo">
+                <h1>GALÁXIA CONECTADA</h1>
+                <p>CONHECIMENTO QUE BRILHA COMO AS ESTRELAS</p>
+            </div>
+            <div class="accessibility-and-user-area">
+                <div class="accessibility-bar">
+                    <a href="#" class="accessibility-link">Acessibilidade e Inclusão</a>
+                    <div class="accessibility-options">
+                        <i class="fas fa-font" title="Fonte para Dislexia"></i>
+                        <i class="fas fa-text-height" title="Ajustar Tamanho da Fonte"></i>
+                        <i class="fas fa-volume-up" title="Ativar Leitor de Tela"></i>
+                    </div>
+                </div>
+                <div class="user-actions">
+                    {% if logged_in %}
+                        <span>Olá, {{ current_user }}! ({{ user_type }})</span>
+                        <a href="{{ url_for('user_profile') }}">Perfil</a>
+                        <a href="{{ url_for('user_notifications') }}" class="notification-bell">
+                            <i class="fas fa-bell"></i>
+                            {% if unread_notifications_count > 0 %}
+                                <span class="notification-count">{{ unread_notifications_count }}</span>
+                            {% endif %}
+                        </a>
+                        <a href="/logout">Sair</a>
+                    {% else %}
+                        <a href="/entrar">Entrar</a>
+                        <a href="/cadastrar">Cadastrar</a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <nav class="main-menu">
+            <ul>
+                <li><a href="{{ url_for('home') }}" class="active"><img src="{{ url_for('static', filename='img/icon_rocket.png') }}" alt="Home"> Home</a></li>
+                <li><a href="{{ url_for('conhecimento_home') }}"><i class="fas fa-book-reader"></i> Conhecimento</a></li>
+                <li><a href="#"><i class="fas fa-gamepad"></i> Jogos</a></li>
+                <li><a href="#"><i class="fas fa-video"></i> Animações</a></li>
+                <li><a href="#"><i class="fas fa-satellite-dish"></i> Científico</a></li>
+                <li><a href="#"><i class="fas fa-calendar-alt"></i> Agenda Astronômica</a></li>
+                <li><a href="{{ url_for('forum_home') }}"><i class="fas fa-users"></i> Fórum</a></li>
+                <li><a href="#"><i class="fas fa-shopping-cart"></i> Promoções</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <section class="hero-section">
+            <h2>Bem-vindo ao universo das descobertas</h2>
+            <p>Você acaba de chegar na galáxia das grandes ideias.</p>
+            <p>Pronto para explorar?</p>
+        </section>
+
+        <section class="real-time-discoveries dynamic-section">
+            <h3>Sintonize seu telescópio: Descobertas em tempo real</h3>
+            
+            <div class="carousel-container">
+                <button class="prev-btn news-prev-btn">&lt;</button>
+
+                <div class="news-carousel item-carousel">
+                    <div class="news-item item-card">
+                        <img src="https://via.placeholder.com/250x150/0000FF/FFFFFF?text=Noticia+1" alt="Notícia 1">
+                        <h4>Missões</h4>
+                        <p>A missão Lucy passará por um asteroide</p>
+                        <span class="news-source">NASA</span>
+                    </div>
+                    <div class="news-item item-card">
+                        <img src="https://via.placeholder.com/250x150/FF0000/FFFFFF?text=Noticia+2" alt="Notícia 2">
+                        <h4>Ciência e tecnologia</h4>
+                        <p>IA em Órbita: Robôs espaciais com IA já auxiliam missões fora da Terra</p>
+                        <span class="news-source">NASA</span>
+                    </div>
+                    <div class="news-item item-card">
+                        <img src="https://via.placeholder.com/250x150/00FF00/FFFFFF?text=Noticia+3" alt="Notícia 3">
+                        <h4>Descobertas</h4>
+                        <p>Planeta Promissor: Astrônomos identificam exoplaneta com potencial de vida</p>
+                        <span class="news-source">NASA</span>
+                    </div>
+                    <div class="news-item item-card">
+                        <img src="https://via.placeholder.com/250x150/FFFF00/000000?text=Noticia+4" alt="Notícia 4">
+                        <h4>Missões</h4>
+                        <p>Red Horizon: SpaceX envia nova missão rumo a Marte</p>
+                        <span class="news-source">NASA</span>
+                    </div>
+                </div>
+
+                <button class="next-btn news-next-btn">&gt;</button>
+            </div>
+        </section>
+
+        <section class="star-trails dynamic-section">
+            <h3>Trilhas estelares: cursos em alta rotação</h3>
+            
+            <div class="carousel-container">
+                <button class="prev-btn trails-prev-btn">&lt;</button>
+
+                <div class="trails-carousel item-carousel">
+                    <div class="trail-item item-card">
+                        <img src="https://via.placeholder.com/250x150/800080/FFFFFF?text=Trilha+1" alt="Trilha 1">
+                        <h4>Trilhas estelares: <br> <strong>Astronomia para Iniciantes</strong></h4>
+                        <p>Dê os primeiros passos para entender o universo – do zero ao céu!</p>
+                    </div>
+                    <div class="trail-item item-card">
+                        <img src="https://via.placeholder.com/250x150/008080/FFFFFF?text=Trilha+2" alt="Trilha 2">
+                        <h4>Trilhas estelares: <br> <strong>Observação do Céu Noturno</strong></h4>
+                        <p>Aprenda a identificar planetas, estrelas e constelações com olhos de astrônomo.</p>
+                    </div>
+                    <div class="trail-item item-card">
+                        <img src="https://via.placeholder.com/250x150/808000/FFFFFF?text=Trilha+3" alt="Trilha 3">
+                        <h4>Trilhas estelares: <br> <strong>Astrofísica Descomplicada</strong></h4>
+                        <p>Entenda as forças invisíveis que movem o cosmos com leveza e clareza.</p>
+                    </div>
+                    <div class="trail-item item-card">
+                        <img src="https://via.placeholder.com/250x150/A0522D/FFFFFF?text=Trilha+4" alt="Trilha 4">
+                        <h4>Trilhas estelares: <br> <strong>Astronomia na Cultura Pop</strong></h4>
+                        <p>Filmes, séries e livros: como o espaço inspirou você a ficção (e vice-versa).</p>
+                    </div>
+                </div>
+
+                <button class="next-btn trails-next-btn">&gt;</button>
+            </div>
+        </section>
+
+        <section class="about-us-section">
+            <h3>Quem somos? Somos a ponte entre você e as estrelas.</h3>
+            <div class="about-us-content">
+                <div class="about-us-item">
+                    <img src="https://via.placeholder.com/80x80/4682B4/FFFFFF?text=Time" alt="Ícone Responsáveis">
+                    <h4>Responsáveis:</h4>
+                    <p>Nossa tripulação é formada por educadores, desenvolvedores e amantes do cosmos. Estamos aqui para transformar o conhecimento em algo acessível e fora deste mundo.</p>
+                </div>
+                <div class="about-us-item">
+                    <img src="https://via.placeholder.com/80x80/4682B4/FFFFFF?text=Missão" alt="Ícone Missão">
+                    <h4>Missão:</h4>
+                    <p>Navegamos pelo universo do conhecimento com um objetivo claro: tornar o aprendizado acessível, empolgante e universal. Nossa missão é acender a curiosidade de quem olha para o céu e quer entender o que há além.</p>
+                </div>
+                <div class="about-us-item">
+                    <img src="https://via.placeholder.com/80x80/4682B4/FFFFFF?text=Contribuir" alt="Ícone Contribua">
+                    <h4>Contribua na nave:</h4>
+                    <p>Tem uma ideia genial? Quer colaborar com o conteúdo ou sugerir novos rumos? Aperte o botão de comunicação e envie a sua mensagem. Aqui todo tripulante tem voz!</p>
+                    <button class="action-btn">Enviar Mensagem</button>
+                </div>
+                <div class="about-us-item">
+                    <img src="https://via.placeholder.com/80x80/4682B4/FFFFFF?text=SaibaMais" alt="Ícone Saiba Mais">
+                    <h4>Saiba mais sobre o projeto:</h4>
+                    <p>Quer conhecer os bastidores da nossa missão intergalática? Descubra como surgiu o Galáxia Conectada, os valores que impulsionaram e os sonhos que ainda queremos alcançar.</p>
+                    <button class="action-btn">Descobrir Mais</button>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="main-footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h4>Nosso github:</h4>
+                <a href="https://github.com/UnBArqDsw2025-1-Turma02?q=galaxia&type=all&language=&sort=" target="_blank" class="github-link">
+                    <img src="{{ url_for('static', filename='img/GitHub-Mark.png') }}" alt="GitHub Logo" class="github-icon">
+                </a>
+            </div>
+            <div class="footer-section">
+                <h4>Contato</h4>
+                <ul>
+                    <li><a href="#">Central de ajuda</a></li>
+                    <li><a href="#">Comunidade de apoio</a></li>
+                    <li><a href="#">Compartilhe sua história</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>Sobre</h4>
+                <ul>
+                    <li><a href="#">Nossa Equipe</a></li>
+                    <li><a href="#">Nossos especialistas em conteúdo</a></li>
+                </ul>
+            </div>
+            <div class="footer-section donate-section">
+                <p>A Galáxia Conectada é uma organização sem fins lucrativos. Faça uma <a href="#">doação</a> ou seja <a href="#">voluntário</a> hoje mesmo!</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+</body>
+</html>

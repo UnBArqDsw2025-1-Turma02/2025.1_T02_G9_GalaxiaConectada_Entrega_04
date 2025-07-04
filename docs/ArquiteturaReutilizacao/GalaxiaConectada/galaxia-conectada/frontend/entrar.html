@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Galáxia Conectada - Entrar</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        /* Estilos específicos para a página de entrar/cadastrar */
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh; /* Garante que o body ocupe a altura total da viewport */
+            margin: 0;
+            padding: 0;
+            /* background-image será definido no style.css externo */
+            font-family: 'Montserrat', sans-serif;
+            color: #E0E0E0;
+        }
+
+        .auth-container {
+            display: flex;
+            background-color: rgba(10, 10, 42, 0.95); /* Azul escuro semi-transparente */
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            max-width: 900px; /* Ajuste para o tamanho do contêiner */
+            width: 90%;
+            overflow: hidden; /* Para esconder o que passar da borda arredondada */
+        }
+
+        .auth-image-side {
+            flex: 1; /* Ocupa metade do espaço */
+            /* background-image será definido no style.css externo */
+            background-size: cover;
+            background-position: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start; /* Alinha o botão "Voltar" no topo */
+            align-items: flex-start; /* Alinha o botão "Voltar" à esquerda */
+            padding: 20px;
+        }
+
+        .auth-image-side .back-button {
+            background-color: rgba(70, 70, 150, 0.8);
+            color: #FFFFFF;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1em;
+            text-decoration: none;
+            transition: background-color 0.3s ease;
+        }
+        .auth-image-side .back-button:hover {
+            background-color: #5A5AC0;
+        }
+
+        .auth-form-side {
+            flex: 1; /* Ocupa a outra metade */
+            padding: 40px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .auth-form-side h2 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 2em;
+            color: #FFD700;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .auth-form-side h2 i {
+            font-size: 1.2em; /* Tamanho do ícone no título */
+        }
+
+        .social-login-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            width: 100%;
+            max-width: 300px; /* Limita a largura dos botões sociais */
+            margin-bottom: 20px;
+        }
+
+        .social-login-buttons button {
+            background-color: rgba(70, 70, 150, 0.8);
+            color: #FFFFFF;
+            border: 1px solid #BBBBFF;
+            padding: 12px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            transition: background-color 0.3s ease, border-color 0.3s ease;
+        }
+
+        .social-login-buttons button:hover {
+            background-color: #5A5AC0;
+            border-color: #FFD700;
+        }
+
+        .social-login-buttons button img {
+            width: 20px;
+            height: 20px;
+        }
+        .social-login-buttons button .fab {
+            font-size: 1.2em;
+        }
+
+
+        .form-group {
+            width: 100%;
+            max-width: 300px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-size: 0.9em;
+            color: #BBBBFF;
+        }
+
+        .form-group input[type="email"],
+        .form-group input[type="text"],
+        .form-group input[type="password"] {
+            width: 100%;
+            padding: 10px 15px;
+            border: 1px solid rgba(70, 70, 150, 0.7);
+            border-radius: 5px;
+            background-color: rgba(20, 20, 50, 0.9);
+            color: #E0E0E0;
+            font-size: 1em;
+            outline: none;
+            transition: border-color 0.3s ease;
+        }
+
+        .form-group input[type="email"]:focus,
+        .form-group input[type="text"]:focus,
+        .form-group input[type="password"]:focus {
+            border-color: #FFD700;
+        }
+
+        .auth-button {
+            background-color: #FFD700;
+            color: #0A0A2A;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1.1em;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            width: 100%;
+            max-width: 300px;
+            margin-top: 20px;
+        }
+        .auth-button:hover {
+            background-color: #E0C000;
+            transform: translateY(-2px);
+        }
+
+        .auth-link {
+            font-size: 0.9em;
+            color: #BBBBFF;
+            text-decoration: none;
+            margin-top: 15px;
+        }
+        .auth-link:hover {
+            text-decoration: underline;
+        }
+
+        .flash-messages {
+            list-style: none;
+            padding: 0;
+            width: 100%;
+            max-width: 300px;
+            text-align: center;
+            margin-top: 10px;
+        }
+        .flash-messages li {
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 5px;
+            font-size: 0.9em;
+            font-weight: bold;
+        }
+        .flash-messages .success {
+            background-color: rgba(0, 128, 0, 0.7);
+            color: #FFFFFF;
+        }
+        .flash-messages .danger {
+            background-color: rgba(255, 0, 0, 0.7);
+            color: #FFFFFF;
+        }
+        .flash-messages .info {
+            background-color: rgba(0, 0, 255, 0.7);
+            color: #FFFFFF;
+        }
+
+
+        /* Responsividade para telas menores */
+        @media (max-width: 768px) {
+            .auth-container {
+                flex-direction: column;
+                width: 95%;
+                max-width: 400px;
+            }
+            .auth-image-side {
+                display: none;
+            }
+            .auth-form-side {
+                padding: 30px 20px;
+            }
+            .auth-form-side h2 {
+                font-size: 1.6em;
+                margin-bottom: 15px;
+            }
+            .social-login-buttons,
+            .form-group,
+            .auth-button {
+                max-width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="auth-container">
+        <div class="auth-image-side">
+            <a href="/" class="back-button">Voltar</a>
+        </div>
+        <div class="auth-form-side">
+            <h2>Entrar <i class="fas fa-rocket"></i></h2>
+            
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    <ul class="flash-messages">
+                        {% for category, message in messages %}
+                            <li class="{{ category }}">{{ message }}</li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+            {% endwith %}
+
+            <div class="social-login-buttons">
+                <button><i class="fab fa-google"></i> Continuar com o Google</button>
+                <button><i class="fab fa-windows"></i> Continuar com o Outlook</button>
+                <button><i class="fab fa-apple"></i> Continuar com a Apple</button>
+            </div>
+
+            <form method="POST">
+                <div class="form-group">
+                    <label for="email_or_username">E-mail ou nome do usuário</label>
+                    <input type="text" id="email_or_username" name="email_or_username" required>
+                </div>
+                <div class="form-group">
+                    <label for="password">Senha:</label>
+                    <input type="password" id="password" name="password" required>
+                </div>
+                <button type="submit" class="auth-button">ENTRAR</button>
+            </form>
+            <a href="/cadastrar" class="auth-link">Não tem uma conta? Cadastre-se</a>
+        </div>
+    </div>
+</body>
+</html>

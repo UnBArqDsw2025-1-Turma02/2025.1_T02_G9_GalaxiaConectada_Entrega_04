@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Galáxia Conectada - Meu Perfil de Instrutor</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <header class="main-header">
+        <div class="top-bar">
+            <div class="search-bar">
+                <input type="text" placeholder="Pesquisar...">
+                <i class="fas fa-search"></i> </div>
+            <div class="logo-area">
+                <img src="{{ url_for('static', filename='img/logo_galaxia.png') }}" alt="Galáxia Conectada Logo" class="logo">
+                <h1>GALÁXIA CONECTADA</h1>
+                <p>MEU PERFIL DE INSTRUTOR</p>
+            </div>
+            <div class="accessibility-and-user-area">
+                <div class="accessibility-bar">
+                    <a href="#" class="accessibility-link">Acessibilidade e Inclusão</a>
+                    <div class="accessibility-options">
+                        <i class="fas fa-font" title="Fonte para Dislexia"></i>
+                        <i class="fas fa-text-height" title="Ajustar Tamanho da Fonte"></i>
+                        <i class="fas fa-volume-up" title="Ativar Leitor de Tela"></i>
+                    </div>
+                </div>
+                <div class="user-actions">
+                    {% if logged_in %}
+                        <span>Olá, {{ current_user }}! ({{ user_type }})</span>
+                        <a href="{{ url_for('user_profile') }}">Perfil</a>
+                        <a href="/logout">Sair</a>
+                    {% else %}
+                        <a href="/entrar">Entrar</a>
+                        <a href="/cadastrar">Cadastrar</a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <nav class="main-menu">
+            <ul>
+                <li><a href="{{ url_for('home') }}"><img src="{{ url_for('static', filename='img/icon_rocket.png') }}" alt="Home"> Home</a></li>
+                <li><a href="{{ url_for('instrutor_profile') }}" class="active"><i class="fas fa-chalkboard-teacher"></i> Meu Perfil</a></li>
+                <li><a href="#"><i class="fas fa-plus-square"></i> Criar Conteúdo</a></li>
+                <li><a href="#"><i class="fas fa-list-alt"></i> Meus Cursos</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main class="profile-main-content">
+        <section class="profile-dashboard-section">
+            <h2 class="section-title"><i class="fas fa-user-circle"></i> Meu Perfil de Instrutor</h2>
+            
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    <ul class="flash-messages">
+                        {% for category, message in messages %}
+                            <li class="{{ category }}">{{ message }}</li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+            {% endwith %}
+
+            <div class="profile-summary">
+                <h3>Informações do Usuário</h3>
+                {% if user and profile %}
+                    <div class="profile-details">
+                        <p><strong>Nome Completo:</strong> {{ user.nome_completo }}</p>
+                        <p><strong>Nome de Usuário:</strong> {{ user.nome_usuario }}</p>
+                        <p><strong>E-mail:</strong> {{ user.email }}</p>
+                        <p><strong>Tipo de Usuário:</strong> {{ user.tipo_usuario }}</p>
+                        <p><strong>Nível:</strong> {{ profile.nivel }}</p>
+                        <p><strong>XP:</strong> {{ profile.xp }}</p>
+                        <p><strong>Bio:</strong> {{ profile.bio }}</p>
+                        <p><strong>Biografia Curta:</strong> {{ profile.biografia_curta if profile.biografia_curta else 'N/A' }}</p>
+                        <p><strong>Avaliação Média:</strong> {{ "%.1f" % profile.avaliacao_media }}</p>
+                        <p><strong>Especialidades:</strong> 
+                            {% if profile.especialidades %}
+                                {{ profile.especialidades|join(', ') }}
+                            {% else %}
+                                N/A
+                            {% endif %}
+                        </p>
+                    </div>
+                {% else %}
+                    <p>Não foi possível carregar os dados do seu perfil.</p>
+                {% endif %}
+            </div>
+            <!-- Outras seções específicas para instrutor podem ser adicionadas aqui -->
+        </section>
+    </main>
+
+    <footer class="main-footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h4>Nosso github:</h4>
+                <a href="https://github.com/UnBArqDsw2025-1-Turma02?q=galaxia&type=all&language=&sort=" target="_blank" class="github-link">
+                    <img src="https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png" alt="GitHub Logo" class="github-icon">
+                </a>
+            </div>
+            <div class="footer-section">
+                <h4>Contato</h4>
+                <ul>
+                    <li><a href="#">Central de ajuda</a></li>
+                    <li><a href="#">Comunidade de apoio</a></li>
+                    <li><a href="#">Compartilhe sua história</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>Sobre</h4>
+                <ul>
+                    <li><a href="#">Nossa Equipe</a></li>
+                    <li><a href="#">Nossos especialistas em conteúdo</a></li>
+                </ul>
+            </div>
+            <div class="footer-section donate-section">
+                <p>A Galáxia Conectada é uma organização sem fins lucrativos. Faça uma <a href="#">doação</a> ou seja <a href="#">voluntário</a> hoje mesmo!</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+</body>
+</html>
