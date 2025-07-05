@@ -207,25 +207,83 @@ Finalmente, a organização desses pacotes e subsistemas se deu em **camadas**, 
 
 ## Estilo Arquitetural N-Camadas
 
-Para melhor compreensão, abaixo se encontra um diagrama referente ao estilo arquitetural de N-Camadas.
+O estilo arquitetural **N-Camadas** (ou N-Tier, N-Layered), segundo [Layered (N-Layer) Architecture](https://medium.com/design-microservices-architecture-with-patterns/layered-n-layer-architecture-e15ffdb7fa42), é um padrão fundamental para organizar sistemas em camadas de abstração sobrepostas, onde cada camada oferece um conjunto de serviços e depende apenas das camadas diretamente abaixo dela (arquitetura restrita) ou de algumas camadas inferiores (arquitetura relaxada). Com isso, essa abordagem visa promover a **separação de preocupações**, a **manutenibilidade** e a **reutilização**, minimizando o impacto de alterações em uma única camada.
 
+No contexto do **Galáxia Conectada**, um site educacional sobre astronomia, foi adotada uma variação deste estilo para estruturar a aplicação ao mapear as suas funcionalidades complexas e interações em um modelo de 7 camadas, similar ao Modelo OSI, mas adaptado para o domínio de software web, como ilustrado no diagrama fornecido abaixo. Essa decomposição permite gerenciar a complexidade do sistema ao focar em responsabilidades específicas em cada nível.
+
+A seguir, foi detalhado como cada uma das 7 camadas se manifesta no projeto Galáxia Conectada:
 
 <div align="center">
     Figura 1: Estilo N-Camadas
     <br>
-    <img src="" width="1200">
+    <img src="https://raw.githubusercontent.com/UnBArqDsw2025-1-Turma02/2025.1_T02_G9_GalaxiaConectada_Entrega_04/a3b919250af81bb9e0045d693b25783c4171117a/docs/ArquiteturaReutilizacao/GalaxiaConectada/Imagem/PadraoNCamadas.png" width="1300">
     <br>
     <b>Autora:</b> <a href="https://github.com/SkywalkerSupreme">Larissa Stéfane</a>.
     <br>
 </div>
 
+#### **Aplicação (Camada 7: Usuário-Aplicação)**
 
+* **Noção:** Esta é a camada mais próxima do usuário final, responsável por fornecer a interface e os protocolos para a interação direta com o software. No contexto de um site, ela representa a experiência visível e interativa.
+* **Aplicação no Galáxia Conectada:** Abrange os **componentes visuais e a lógica de interação do *frontend*** que o usuário acessa através do navegador. É aqui que a interface do usuário se conecta aos serviços do *backend*.
+    * **Elementos:** Módulos e páginas do site (`index.html`, `entrar.html`, `cadastrar.html`), componentes de interface para **Trilhas**, **Fórum**, **Notícias** e **Jogos**. As requisições e ações do usuário são iniciadas nesta camada.
+    * **Impacto:** Essencial para a **usabilidade (RNF06)** e o **engajamento do usuário**.
+
+#### **Apresentação (Camada 6: Formatação de Dados)**
+
+* **Noção:** Lida com a formatação e a representação dos dados de maneira compreensível para a camada de aplicação ou para o transporte. Garante que os dados sejam estruturados adequadamente para a transmissão e exibição.
+* **Aplicação no Galáxia Conectada:** Responsável pela **serialização/desserialização de dados** (ex: JSON para HTML, para exibir no navegador), pela **tradução de textos** para múltiplos idiomas e pela **adaptação visual para acessibilidade**.
+    * **Elementos:** Lógica de *templating* (Jinja2 no Flask para renderizar HTML), *scripts* JS para manipulação do DOM e estilos CSS (`style.css`), e o `Serviço de Localização` (para `i18n` e acessibilidade como fonte disléxica).
+    * **Impacto:** Crucial para a **compatibilidade (RNF09)**, **acessibilidade (RNF05)** e **desempenho (RNF02)** da interface.
+
+#### **Sessão (Camada 5: Gerenciamento de Conexão)**
+
+* **Noção:** Estabelece, gerencia e finaliza as sessões de comunicação entre as aplicações ao garantir que as informações trocadas sejam corretamente atribuídas a uma sessão específica.
+* **Aplicação no Galáxia Conectada:** Gerencia as **sessões de usuário** (login), mantendo o estado de autenticação entre as requisições HTTP.
+    * **Elementos:** Módulos de **Autenticação/Autorização** (parte do `GerenciamentoUsuarios`), uso de **cookies/tokens (JWT)** para manter a sessão, e o controle de estado do usuário (`session` no Flask).
+    * **Impacto:** Fundamental para a **segurança (RNF03)** do sistema e para a **personalização da experiência** do usuário logado.
+
+#### **Transporte (Camada 4: Entrega de Dados Segmentados)**
+
+* **Noção:** Segmenta os dados em pacotes e garante a entrega confiável e ordenada entre os pontos finais da comunicação. Lida com o controle de fluxo e a recuperação de erros em um nível mais abstrato.
+* **Aplicação no Galáxia Conectada:** Assegura que as **requisições e respostas HTTP** (que transportam os dados da aplicação) sejam segmentadas e entregues de forma confiável. Inclui mecanismos de otimização de dados.
+    * **Elementos:** Protocolo **HTTP/HTTPS** como base para requisições/respostas. Pode incluir o **Serviço de Cache** (`ServicoCache`) para otimizar a entrega de dados frequentemente acessados, reduzindo a carga no *backend* e banco de dados.
+    * **Impacto:** Diretamente relacionado ao **desempenho (RNF02)** e à **confiabilidade (RNF04)** da comunicação da aplicação.
+
+#### **Rede (Camada 3: Roteamento e Endereçamento)**
+
+* **Noção:** Escolhe a rota mais eficiente para os pacotes de dados do remetente ao destinatário em diferentes redes. Responsável pelo endereçamento lógico.
+* **Aplicação no Galáxia Conectada:** Lida com o **roteamento das requisições web** para os servidores corretos e o gerenciamento dos endereços.
+    * **Elementos:** O **API Gateway** (`APIGateway`) que roteia as requisições para os serviços internos do *backend*. Pode envolver **Load Balancers** e **DNS** para direcionamento de tráfego.
+    * **Impacto:** Afeta a **escalabilidade (RNF07)** e a **disponibilidade (RNF04)** do sistema, garantindo que as requisições cheguem ao destino certo.
+
+#### **Ligação ou Enlace de Dados (Camada 2: Controle de Erros e Fluxo Físico)**
+
+* **Noção:** Detecta e corrige erros nas sequências de bits transmitidas, garantindo a integridade dos dados antes da transmissão física. Também gerencia o controle de acesso ao meio físico.
+* **Aplicação no Galáxia Conectada:** Em um nível de software, esta camada pode ser associada à **validação de dados** para garantir que as informações enviadas e recebidas estejam corretas e seguras.
+    * **Elementos:** Lógica de **validação de inputs** nos formulários do *backend* (ex: verificação de e-mails, senhas, dados de postagem no fórum) e mecanismos de **segurança de dados em trânsito** (criptografia SSL/TLS, *checksums*). O *middleware* de segurança pode atuar aqui.
+    * **Impacto:** Fundamental para a **integridade dos dados (RNF04)** e a **segurança (RNF03)** das transações no sistema.
+
+#### **Física (Camada 1: Hardware e Meio de Transmissão)**
+
+* **Noção:** Define as características físicas do meio de transmissão e a transmissão bruta de bits. É a camada mais baixa, referente ao hardware.
+* **Aplicação no Galáxia Conectada:** Representa os **servidores físicos** ou as instâncias de nuvem onde o software está implantado, o **banco de dados** físico e os **dispositivos do usuário** que acessam a aplicação.
+    * **Elementos:** Servidores Web, Servidores de Aplicação, Servidor de Banco de Dados (`galaxia.db` em SQLite ou instância PostgreSQL), e os navegadores rodando nos PCs/celulares dos usuários.
+    * **Impacto:** As características desta camada influenciam diretamente a **performance (RNF02)**, **disponibilidade (RNF04)** e **escalabilidade (RNF07)** global do sistema.
+
+
+#### Vantagens do Estilo N-Camadas para o Galáxia Conectada:
+
+* **Reutilização de Camadas:** Serviços como Notificações (em Serviços Compartilhados) podem ser usados por diversas partes da aplicação.
+* **Manutenibilidade:** Alterações em uma camada (ex: mudar o banco de dados na camada Física/Infraestrutura) têm impacto mínimo nas camadas superiores, desde que as interfaces sejam mantidas.
+* **Flexibilidade:** Permite organizar diferentes níveis de abstração, o que facilita a substituição de tecnologias em camadas específicas (ex: trocar o framework de *frontend* sem afetar o *backend*).
+* **Gerenciamento da Complexidade:** Divide um sistema complexo em partes menores e mais focadas, tornando o desenvolvimento e a depuração mais gerenciáveis.
 
 
 
 ## Metas e Restrições Arquiteturais
 
-As metas e restrições arquiteturais guiam as decisões de design do Galáxia Conectada, garantindo que o sistema não apenas atenda aos requisitos funcionais, mas também às qualidades essenciais para sua operação e evolução.
+As metas e restrições arquiteturais guiam as decisões de design do Galáxia Conectada ao garantir que o sistema não apenas atenda aos requisitos funcionais, mas também às qualidades essenciais para sua operação e evolução.
 
 **Metas Arquiteturais:**
 
@@ -246,13 +304,10 @@ As metas e restrições arquiteturais guiam as decisões de design do Galáxia C
 * **Dependência de APIs/Fontes Externas:** A integração com APIs externas (ex: para notícias e eventos astronômicos) e o *scraping* de promoções podem apresentar instabilidades ou alterações que exigem adaptações na arquitetura ([Diagrama de Ishikawa: Foco no Projeto - Dificuldade na validação científica](https://unbarqdsw2025-1-turma02.github.io/2025.1-T02-_G9_GalaxiaConectada_Entre01/#/Base/ArtefatoGeneralista/DiagramasIshikawa), [Estimativas: Planos de Risco - R12, R13](https://unbarqdsw2025-1-turma02.github.io/2025.1-T02-_G9_GalaxiaConectada_Entre01/#/Base/ArtefatoGeneralista/Estimativas)).
 * **Conhecimento Técnico da Equipe:** A experiência individual da desenvolvedora pode influenciar a escolha de tecnologias e a profundidade de certas implementações ([Diagrama de Ishikawa: Foco no Projeto - Mão de Obra](https://unbarqdsw2025-1-turma02.github.io/2025.1-T02-_G9_GalaxiaConectada_Entre01/#/Base/ArtefatoGeneralista/DiagramasIshikawa), [Estimativas: Planos de Risco - R3](https://unbarqdsw2025-1-turma02.github.io/2025.1-T02-_G9_GalaxiaConectada_Entre01/#/Base/ArtefatoGeneralista/Estimativas)).
 
----
 
-### 3. Visão Lógica
+### Visão Lógica
 
-#### 3.1 Visão Geral
-
-Essa **Visão Lógica** do Galáxia Conectada descreve a decomposição funcional do sistema sob uma perspectiva de design, focando nas suas classes mais importantes, sua organização em pacotes e subsistemas, e a hierarquia desses elementos em camadas. Como explica a documentação da IBM, a Visão Lógica "representa o design do sistema em termos de objetos e classes e suas interações" [3]. Esta visão se preocupa em detalhar as principais realizações de caso de uso, ao ilustrar como as funcionalidades essenciais são suportadas pela estrutura de design. O objetivo é fornecer uma **organização clara e modular** que facilite a compreensão, o desenvolvimento e a manutenção do software, sendo o [Diagrama de Pacotes](https://unbarqdsw2025-1-turma02.github.io/2025.1_T02_G9_GalaxiaConectada_Entre02/#/Modelagem/ModelagemOrganizacional/DiagramaPacotes) o principal artefato visual que representa essa decomposição.
+Essa **Visão Lógica** do Galáxia Conectada descreve a decomposição funcional do sistema sob uma perspectiva de design ao focar nas suas classes mais importantes, sua organização em pacotes e subsistemas, e a hierarquia desses elementos em camadas. Como explica a documentação da [IBM - Visão geral arquitetural](https://www.ibm.com/docs/pt-br/psfoa/1.1.0?topic=information-architectural-overview), a Visão Lógica "representa o design do sistema em termos de objetos e classes e suas interações". Esta visão se preocupa em detalhar as principais realizações de caso de uso, ao ilustrar como as funcionalidades essenciais são suportadas pela estrutura de design. O objetivo é fornecer uma **organização clara e modular** que facilite a compreensão, o desenvolvimento e a manutenção do software, sendo o [Diagrama de Pacotes](https://unbarqdsw2025-1-turma02.github.io/2025.1_T02_G9_GalaxiaConectada_Entre02/#/Modelagem/ModelagemOrganizacional/DiagramaPacotes) o principal artefato visual que representa essa decomposição.
 
 #### 3.2 Pacotes de Design Arquiteturalmente Significativos
 
@@ -299,20 +354,9 @@ Os pacotes de design a seguir representam os agrupamentos lógicos mais signific
             * **Relacionamentos:** Fornece serviços à camada de `Aplicacao` e `ServicosCompartilhados`.
 
 
-### Representação Arquitetural
+## Visão de Casos de Uso
 
-Para o sistema **Galáxia Conectada**, a arquitetura de software é concebida como uma estrutura em camadas, baseada em um design modular que promove a separação de preocupações e a manutenibilidade. A arquitetura é representada através de múltiplas **visões arquiteturais da UML**, cada uma fornecendo uma perspectiva específica do sistema. Para este documento, as visões apresentadas são a **Visão de Casos de Uso** e a **Visão Lógica**, conforme solicitado.
-
-* **Visão de Casos de Uso:** Essencial para descrever a funcionalidade do sistema do ponto de vista do usuário final e de outros sistemas externos. Ela contém os **Atores** (usuários e sistemas) e os **Casos de Uso** (funcionalidades), ilustrando o que o sistema faz.
-    * **Artefato Visual:** [Diagrama de Casos de Uso](https://unbarqdsw2025-1-turma02.github.io/2025.1_T02_G9_GalaxiaConectada_Entre02/#/Modelagem/ModelagemOrganizacional/DiagramaCasosUso)
-* **Visão Lógica:** Descreve a decomposição funcional do sistema em módulos, subsistemas e pacotes de design, bem como suas classes e relacionamentos mais importantes. Foca na organização do código em um nível conceitual, como as funcionalidades são agrupadas.
-    * **Artefatos Visuais:** [Diagrama de Classes](https://unbarqdsw2025-1-turma02.github.io/2025.1_T02_G9_GalaxiaConectada_Entre02/#/Modelagem/ModelagemEstatica/DiagramaClasses), [Diagrama de Pacotes](https://unbarqdsw2025-1-turma02.github.io/2025.1_T02_G9_GalaxiaConectada_Entre02/#/Modelagem/ModelagemOrganizacional/DiagramaPacotes)
-
-As demais visões (Processo, Implementação, Implantação e Dados) serão detalhadas em documentos específicos, mas suas contribuições para a arquitetura geral são consideradas ao longo deste DAS.
-
-### Visão de Casos de Uso
-
-As realizações de casos de uso ilustram como os elementos do modelo de design da Visão Lógica colaboram para entregar as funcionalidades mais importantes do sistema. Elas servem como cenários concretos que demonstram a interação entre classes e pacotes.
+As realizações de casos de uso ilustram como os elementos do modelo de design da Visão Lógica colaboram para entregar as funcionalidades mais importantes do sistema. Sendo assim, elas servem como cenários concretos que demonstram a interação entre classes e pacotes.
 
 Dois cenários arquiteturalmente representativos são:
 
@@ -347,7 +391,7 @@ Os principais atores que interagem com o sistema e os casos de uso arquiteturalm
 
 Para uma representação visual detalhada dos casos de uso e seus atores, consulte o **Diagrama de Casos de Uso** completo do projeto, disponível em [Diagrama de Casos de Uso](https://unbarqdsw2025-1-turma02.github.io/2025.1_T02_G9_GalaxiaConectada_Entre02/#/Modelagem/ModelagemOrganizacional/DiagramaCasosUso).
 
-Alguns dos casos de uso arquiteturalmente significativos incluem:
+Alguns dos casos de uso arquiteturalmente significativos de acordo com os requisitos elicitados incluem:
 
 * **Autenticação e Perfil:**
     * `Realizar Cadastro` (RF04)
@@ -390,7 +434,7 @@ As realizações dos casos de uso ilustram como os elementos do modelo de design
 
 ### Visão de Processo
 
-A **Visão de Processo** descreve a decomposição do sistema em unidades de controle de execução (processos e *threads*) e como elas interagem. Esta visão é crucial para sistemas com concorrência significativa, focando nas dependências de tempo, sincronização e comunicação entre as partes ativas do sistema. Embora o Galáxia Conectada seja inicialmente implementado como uma aplicação monolítica, as responsabilidades de processo já estão bem delineadas, permitindo escalabilidade futura para um modelo distribuído.
+A **Visão de Processo** descreve a decomposição do sistema em unidades de controle de execução (processos e *threads*) e como elas interagem. Desse modo, esta visão é crucial para sistemas com concorrência significativa ao focar nas dependências de tempo, de sincronização e de comunicação entre as partes ativas do sistema. Embora o Galáxia Conectada seja inicialmente implementada como uma aplicação monolítica, as responsabilidades de processo já estão bem delineadas o que permite a escalabilidade futura para um modelo distribuído.
 
 Os processos e *threads* no Galáxia Conectada podem ser agrupados e descritos da seguinte forma:
 
@@ -480,7 +524,7 @@ A estrutura de camadas de implementação do Galáxia Conectada segue o modelo d
 
 ###  Qualidade
 
-Esta seção detalha como a **arquitetura lógica** do Galáxia Conectada contribui para as diversas qualidades (não funcionais) do sistema, essenciais para sua usabilidade, confiabilidade e longevidade.
+Esta seção detalha como a **arquitetura** do Galáxia Conectada contribui para as diversas qualidades (não funcionais) do sistema, essenciais para sua usabilidade, confiabilidade e longevidade.
 
 * **Extensibilidade (RNF08):**
     * **Modularidade:** A divisão clara em módulos lógicos e pacotes (como visto no [Diagrama de Pacotes](https://unbarqdsw2025-1-turma02.github.io/2025.1_T02_G9_GalaxiaConectada_Entre02/#/Modelagem/ModelagemOrganizacional/DiagramaPacotes)) permite a adição de novas funcionalidades ou módulos (**ex: um novo tipo de jogo, uma nova categoria de trilha**) sem impactar significativamente outras partes do sistema.
@@ -609,7 +653,9 @@ if __name__ == '__main__':
  - [1] INFNET. **O que é o documento de Arquitetura de Software?**. Disponível em: <https://blog.infnet.com.br/arquitetura_software/documento-de-arquitetura-de-software/>. Acesso em: 19 jun. 2025.
  - [2] ELEMAR JR. **Documentação Arquitetural na Medida Certa**. Disponível em: <https://elemarjr.com/livros/arquiteturadesoftware/volume-1/documentacao-arquitetural-na-medida-certa/>. Acesso em: 19 jun. 2025.
  - [3] IBM. **Diagramas de classe**. Disponível em: <https://www.ibm.com/docs/pt-br/rsm/7.5.0?topic=uml-class-diagrams>. Acesso em: 19 jun. 2025.
- - [4] RD STATION. **Blueprint: o que é, para que serve e como construir o seu**. Disponível em: <https://www.rdstation.com/blog/agencias/blueprint/>. Acesso em: 19 jun. 2025.
+ - [4] IBM. **Visão geral arquitetural**. Disponível em: <https://www.ibm.com/docs/pt-br/psfoa/1.1.0?topic=information-architectural-overview>. Acesso em: 19 jun. 2025.
+ - [5] RD STATION. **Blueprint: o que é, para que serve e como construir o seu**. Disponível em: <https://www.rdstation.com/blog/agencias/blueprint/>. Acesso em: 19 jun. 2025.
+ - [6] MEDIUM. **https://medium.com/design-microservices-architecture-with-patterns/layered-n-layer-architecture-e15ffdb7fa42/**. Disponível em <https://medium.com/design-microservices-architecture-with-patterns/layered-n-layer-architecture-e15ffdb7fa42>. Acesso em: 03 de  jul. 2025.
 
 
 ## Histórico de Versões
