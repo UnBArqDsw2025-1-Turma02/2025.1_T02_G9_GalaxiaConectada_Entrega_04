@@ -544,7 +544,98 @@ Esta seção detalha como a **arquitetura** do Galáxia Conectada contribui para
 
 ## Padrões e Estilos Arquiteturais em Código
 
+Esta seção demonstra como os padrões e estilos arquiteturais são aplicados no código-fonte do Galáxia Conectada ao evidenciar a reutilização de camadas e componentes, além da flexibilidade e manutenibilidade.
 
+#### Visão Geral e Aplicação de Padrões Criacionais GoF
+
+No desenvolvimento do Galáxia Conectada, a aplicação de **Padrões de Projeto Criacionais GoF (Gang of Four)** foi fundamental para gerenciar a complexidade da instanciação de objetos. Os padrões utilizados incluem:
+
+* **Factory Method:** Aplicado para a criação flexível de diferentes tipos de **Conteúdo** (Artigo, Vídeo, Quiz, Jogo) e **Papéis de Usuário** (Aluno, Instrutor, Administrador, etc.). Isso permite adicionar novos tipos de conteúdo ou papéis sem modificar o código cliente que os cria.
+    * **Artefatos de Suporte:** [Documento do Padrão Factory Method](https://unbarqdsw2025-1-turma02.github.io/2025.1_T02_G9_GalaxiaConectada_Entre03/#/PadroesDeProjeto/GoFsCriacionais/Factory%20Method) | [Vídeo Explicação/Execução (Conteúdo)](https://www.youtube.com/embed/33qP-mh3vfc) | [Vídeo Explicação/Execução (Usuários)](https://www.youtube.com/embed/ubeEgPUcccQ)
+
+* **Builder:** Utilizado para a construção passo a passo de objetos complexos como **Módulos** (agrupamentos de conteúdos) e **Trilhas Educacionais**. Permite criar diversas configurações de módulos e trilhas de forma mais legível e controlada.
+    * **Artefatos de Suporte:** [Documento do Padrão Builder](https://unbarqdsw2025-1-turma02.github.io/2025.1_T02_G9_GalaxiaConectada_Entre03/#/PadroesDeProjeto/GoFsCriacionais/Builder) | [Vídeo Explicação/Execução (Módulo)](https://www.youtube.com/embed/t6IU4vyFwkE) | [Vídeo Explicação/Execução (Trilhas)](https://www.youtube.com/embed/U6YGJTvpZlw)
+
+* **Prototype:** Implementado para criar novas instâncias de **Conquistas** e **Notificações** através da clonagem de objetos existentes. Isso é eficiente para criar cópias personalizadas de modelos pré-definidos sem acoplamento direto às suas classes.
+    * **Artefato de Suporte:** [Documento do Padrão Prototype](https://unbarqdsw2025-1-turma02.github.io/2025.1_T02_G9_GalaxiaConectada_Entre03/#/PadroesDeProjeto/GoFsCriacionais/Prototype) | [Vídeo Explicação/Execução (Conquistas)](https://www.youtube.com/embed/2_ONmRJvRkw) | [Vídeo Explicação/Execução (Notificações)](https://www.youtube.com/embed/i-DBm39kKwM)
+
+* **Singleton:** Aplicado à classe `Forum` para garantir que haja apenas uma instância global do fórum principal na aplicação. Isso centraliza o gerenciamento das discussões e previne duplicações acidentais.
+    * **Artefato de Suporte:** [Documento do Padrão Singleton](https://unbarqdsw2025-1-turma02.github.io/2025.1_T02_G9_GalaxiaConectada_Entre03/#/PadroesDeProjeto/GoFsCriacionais/Singleton) | [Vídeo Explicação/Execução (Fórum)](https://www.youtube.com/embed/NS2kunMM120)
+
+#### Reutilização de Camadas e Componentes (Exemplo de Código Comprobatório)
+
+A arquitetura em N-Camadas do Galáxia Conectada promove a reutilização de componentes e serviços, especialmente aqueles que são transversais e agnósticos à lógica de negócio específica.
+
+Um exemplo claro de **reutilização e aplicação de um padrão arquitetural** é o **Serviço de Notificações (`ServicoNotificacoes`)**.
+
+Este serviço reside na camada de `Serviços Compartilhados` e é responsável por enviar alertas, e-mails ou notificações *push* aos usuários. Sua natureza genérica permite que ele seja reutilizado por múltiplos módulos da camada de `Aplicação` sem que cada módulo precise implementar sua própria lógica de envio de notificações.
+
+**Cenários de Reutilização do Serviço de Notificações:**
+
+* **Módulo de Aprendizagem (`Servidor.Aplicacao.Aprendizagem`):** Após a conclusão de uma `TrilhaEducacional` ou o desbloqueio de uma `Conquista`, este módulo pode chamar o `ServicoNotificacoes` para informar o `Usuário` sobre seu progresso ou prêmio.
+* **Módulo de Comunidade (`Servidor.Aplicacao.Comunidade`):** Quando há uma nova resposta em um `Tópico` que o `Usuário` está seguindo, ou se um `Comentário` é denunciado para moderação, o `ModuloForum` pode usar o `ServicoNotificacoes` para alertar os `Usuários` ou `Moderadores`.
+* **Módulo de Integrações (`Servidor.Aplicacao.Integracao`):** Após a descoberta de uma `Promoção Externa` relevante por um `Bot Importador`, este módulo pode utilizar o `ServicoNotificacoes` para enviar um alerta personalizado ao `Usuário`.
+
+Essa reutilização reduz a duplicação de código, centraliza a lógica de notificações e facilita a manutenção, pois qualquer mudança na forma como as notificações são enviadas (ex: mudança de provedor de e-mail) precisa ser feita apenas em um único lugar.
+
+#### Código Comprobatório e Execução
+
+Para evidenciar a aplicação do padrão de **Reutilização de Camadas e o estilo arquitetural N-Camadas**, demonstraremos um trecho de código Python que simula o uso do `ServicoNotificacoes` por diferentes partes da aplicação.
+
+**Exemplo de Aplicação (Python - Pseudocódigo/Conceitual):**
+
+Assumindo a estrutura de classes e pacotes definida na Visão Lógica e modelada no [Diagrama de Classes](https://unbarqdsw2025-1-turma02.github.io/2025.1_T02_G9_GalaxiaConectada_Entre02/#/Modelagem/ModelagemEstatica/DiagramaClasses) e [Diagrama de Pacotes](https://unbarqdsw2025-1-turma02.github.io/2025.1_T02_G9_GalaxiaConectada_Entre02/#/Modelagem/ModelagemOrganizacional/DiagramaPacotes):
+
+```python
+
+class ServicoNotificacoes:
+    def __init__(self, db_connection_manager, email_client):
+        self.db = db_connection_manager # Exemplo de dependência da Infraestrutura
+        self.email_client = email_client # Exemplo de dependência de Cliente Externo
+        print("ServicoNotificacoes inicializado.")
+
+    def enviar_email(self, destinatario_email, assunto, corpo):
+        # Lógica para enviar email via cliente externo
+        print(f"DEBUG: Enviando email para {destinatario_email}: Assunto='{assunto}'")
+        # self.email_client.send(destinatario_email, assunto, corpo)
+        # self.db.log_notification_event("email", destinatario_email, assunto) # Loga evento na Infraestrutura
+        return True
+
+    def enviar_push(self, usuario_id, mensagem):
+        # Lógica para enviar notificação push
+        print(f"DEBUG: Enviando push para usuario {usuario_id}: '{mensagem}'")
+        # self.db.log_notification_event("push", usuario_id, mensagem)
+        return True
+
+
+class ModuloAprendizagem:
+    def __init__(self, servico_notificacoes):
+        self.notificacoes = servico_notificacoes
+        print("ModuloAprendizagem inicializado.")
+
+    def concluir_modulo(self, usuario_id, modulo_titulo):
+        # Lógica de negócio: marcar módulo como concluído, calcular XP, etc.
+        print(f"DEBUG: Modulo '{modulo_titulo}' concluído por usuario {usuario_id}.")
+        # Reutilizando o serviço de notificações
+        self.notificacoes.enviar_email(f"usuario_{usuario_id}@email.com", "Módulo Concluído!", f"Parabéns! Você concluiu o módulo '{modulo_titulo}'.")
+        self.notificacoes.enviar_push(usuario_id, f"Parabéns! Módulo {modulo_titulo} concluído!")
+        return True
+
+
+class ModuloComunidade:
+    def __init__(self, servico_notificacoes):
+        self.notificacoes = servico_notificacoes
+        print("ModuloComunidade inicializado.")
+
+    def criar_novo_topico(self, usuario_id, titulo_topico):
+        # Lógica de negócio: criar tópico, validar, persistir
+        print(f"DEBUG: Novo tópico '{titulo_topico}' criado por usuario {usuario_id}.")
+        # Reutilizando o serviço de notificações
+        self.notificacoes.enviar_email(f"moderador_admin@email.com", "Novo Tópico para Moderação", f"Usuário {usuario_id} criou o tópico: {titulo_topico}")
+        self.notificacoes.enviar_push(usuario_id, f"Seu tópico '{titulo_topico}' foi criado com sucesso!")
+        return True
+
+```
 
 ## Referências
 
