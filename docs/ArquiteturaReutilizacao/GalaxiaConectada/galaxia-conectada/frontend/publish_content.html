@@ -6,157 +6,11 @@
     <title>Galáxia Conectada - Publicar Conteúdo</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <style>
-        /* Estilos específicos para a página de publicação */
-        .publish-content-main-content {
-            max-width: 900px;
-            margin: 50px auto;
-            padding: 30px;
-            background-color: rgba(10, 10, 42, 0.95);
-            border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-        }
-
-        .publish-content-main-content .section-title {
-            font-family: 'Orbitron', sans-serif;
-            font-size: 2.2em;
-            color: #FFD700;
-            text-align: center;
-            margin-bottom: 30px;
-            text-shadow: 0 0 15px rgba(255, 215, 0, 0.5);
-        }
-
-        .publish-form .form-group {
-            margin-bottom: 20px;
-        }
-
-        .publish-form label {
-            display: block;
-            margin-bottom: 8px;
-            font-size: 1.1em;
-            color: #BBBBFF;
-            font-weight: bold;
-        }
-
-        .publish-form input[type="text"],
-        .publish-form input[type="url"],
-        .publish-form textarea,
-        .publish-form select {
-            width: calc(100% - 20px); /* Ajusta para padding */
-            padding: 12px 10px;
-            border: 1px solid rgba(70, 70, 150, 0.7);
-            border-radius: 8px;
-            background-color: rgba(20, 20, 50, 0.9);
-            color: #E0E0E0;
-            font-size: 1em;
-            outline: none;
-            transition: border-color 0.3s ease;
-        }
-
-        .publish-form input[type="text"]:focus,
-        .publish-form input[type="url"]:focus,
-        .publish-form textarea:focus,
-        .publish-form select:focus {
-            border-color: #FFD700;
-        }
-
-        .publish-form textarea {
-            min-height: 150px;
-            resize: vertical;
-        }
-
-        .publish-form .action-btn {
-            display: block;
-            width: 100%;
-            padding: 15px;
-            margin-top: 30px;
-            font-size: 1.1em;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            background-color: #FFD700;
-            color: #0A0A2A;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: background-color 0.3s ease, transform 0.2s ease;
-        }
-        .publish-form .action-btn:hover {
-            background-color: #E0C000;
-            transform: translateY(-2px);
-        }
-
-        /* Responsividade */
-        @media (max-width: 768px) {
-            .publish-content-main-content {
-                padding: 20px;
-                margin: 30px auto;
-            }
-            .publish-content-main-content .section-title {
-                font-size: 1.8em;
-            }
-            .publish-form input[type="text"],
-            .publish-form input[type="url"],
-            .publish-form textarea,
-            .publish-form select {
-                width: 100%;
-            }
-        }
-    </style>
 </head>
 <body>
-    <header class="main-header">
-        <div class="top-bar">
-            <div class="search-bar">
-                <input type="text" placeholder="Pesquisar...">
-                <i class="fas fa-search"></i> </div>
-            <div class="logo-area">
-                <img src="{{ url_for('static', filename='img/logo_galaxia.png') }}" alt="Galáxia Conectada Logo" class="logo">
-                <h1>GALÁXIA CONECTADA</h1>
-                <p>PUBLICAR CONTEÚDO</p>
-            </div>
-            <div class="accessibility-and-user-area">
-                <div class="accessibility-bar">
-                    <a href="#" class="accessibility-link">Acessibilidade e Inclusão</a>
-                    <div class="accessibility-options">
-                        <i class="fas fa-font" title="Fonte para Dislexia"></i>
-                        <i class="fas fa-text-height" title="Ajustar Tamanho da Fonte"></i>
-                        <i class="fas fa-volume-up" title="Ativar Leitor de Tela"></i>
-                    </div>
-                </div>
-                <div class="user-actions">
-                    {% if logged_in %}
-                        <span>Olá, {{ current_user }}! ({{ user_type }})</span>
-                        <a href="{{ url_for('user_profile') }}">Perfil</a>
-                        <a href="{{ url_for('user_notifications') }}" class="notification-bell">
-                            <i class="fas fa-bell"></i>
-                            {% if unread_notifications_count > 0 %}
-                                <span class="notification-count">{{ unread_notifications_count }}</span>
-                            {% endif %}
-                        </a>
-                        <a href="/logout">Sair</a>
-                    {% else %}
-                        <a href="/entrar">Entrar</a>
-                        <a href="/cadastrar">Cadastrar</a>
-                    {% endif %}
-                </div>
-            </div>
-        </div>
+    {% include 'header.html' %}
 
-        <nav class="main-menu">
-            <ul>
-                <li><a href="{{ url_for('home') }}"><img src="{{ url_for('static', filename='img/icon_rocket.png') }}" alt="Home"> Home</a></li>
-                <li><a href="{{ url_for('conhecimento_home') }}" class="active"><i class="fas fa-book-reader"></i> Conhecimento</a></li>
-                <li><a href="#"><i class="fas fa-gamepad"></i> Jogos</a></li>
-                <li><a href="#"><i class="fas fa-video"></i> Animações</a></li>
-                <li><a href="#"><i class="fas fa-satellite-dish"></i> Científico</a></li>
-                <li><a href="#"><i class="fas fa-calendar-alt"></i> Agenda Astronômica</a></li>
-                <li><a href="#"><i class="fas fa-users"></i> Fórum</a></li>
-                <li><a href="#"><i class="fas fa-shopping-cart"></i> Promoções</a></li>
-            </ul>
-        </nav>
-    </header>
-
-    <main class="publish-content-main-content">
+    <main class="form-main-content">
         <h2 class="section-title"><i class="fas fa-plus-circle"></i> Publicar Novo Conteúdo</h2>
         
         {% with messages = get_flashed_messages(with_categories=true) %}
@@ -169,7 +23,7 @@
             {% endif %}
         {% endwith %}
 
-        <form action="{{ url_for('publish_content') }}" method="POST" class="publish-form">
+        <form action="{{ url_for('publish_content') }}" method="POST" class="creation-form">
             <div class="form-group">
                 <label for="title">Título:</label>
                 <input type="text" id="title" name="title" required>
@@ -179,66 +33,79 @@
                 <textarea id="description" name="description" rows="3" required></textarea>
             </div>
             <div class="form-group">
-                <label for="text_html">Conteúdo (em HTML):</label>
-                <textarea id="text_html" name="text_html" rows="15" placeholder="Use tags HTML para formatação (ex: <p>, <strong>, <em>, <ul>, <ol>, <li>)." required></textarea>
-            </div>
-            <div class="form-group">
                 <label for="category">Categoria:</label>
                 <select id="category" name="category" required>
-                    {% for cat in categories %}
-                        <option value="{{ cat }}">{{ cat }}</option>
-                    {% endfor %}
+                    <option value="Astronomia">Astronomia</option>
+                    <option value="Cosmologia">Cosmologia</option>
+                    <option value="Estrelas">Estrelas</option>
+                    <option value="Planetas">Planetas</option>
+                    <option value="Missões Espaciais">Missões Espaciais</option>
+                    <option value="Científico">Científico</option>
+                    <option value="Outros">Outros</option>
                 </select>
             </div>
             <div class="form-group">
                 <label for="image_url">URL da Imagem Principal (Opcional):</label>
-                <input type="url" id="image_url" name="image_url" placeholder="Ex: https://exemplo.com/imagem.jpg">
+                <input type="url" id="image_url" name="image_url" placeholder="https://exemplo.com/imagem.jpg">
             </div>
             <div class="form-group">
                 <label for="fonte_url">URL da Fonte Original (Opcional):</label>
-                <input type="url" id="fonte_url" name="fonte_url" placeholder="Ex: https://www.nasa.gov/noticia-original">
+                <input type="url" id="fonte_url" name="fonte_url" placeholder="https://www.nasa.gov/noticia">
             </div>
+
             <div class="form-group">
                 <label for="content_type">Tipo de Conteúdo:</label>
-                <select id="content_type" name="content_type" required>
-                    {% for type in content_types %}
-                        <option value="{{ type }}">{{ type }}</option>
-                    {% endfor %}
+                <select id="content_type" name="content_type" required onchange="toggleContentTypeFields()">
+                    <option value="Artigo">Artigo</option>
+                    <option value="Video">Vídeo</option>
                 </select>
             </div>
+
+            <!-- Campos Específicos para Artigo -->
+            <div class="content-type-specific-fields" id="artigo-fields">
+                <div class="form-group">
+                    <label for="text_html">Conteúdo do Artigo (em HTML):</label>
+                    <textarea id="text_html" name="text_html" rows="15" placeholder="Use tags HTML como <p>, <strong>, <ul>..."></textarea>
+                </div>
+            </div>
+
+            <!-- Campos Específicos para Vídeo -->
+            <div class="content-type-specific-fields" id="video-fields" style="display: none;">
+                <div class="form-group">
+                    <label for="url_video">URL do Vídeo (YouTube, Vimeo, etc.):</label>
+                    <input type="url" id="url_video" name="url_video" placeholder="https://www.youtube.com/watch?v=...">
+                </div>
+                <div class="form-group">
+                    <label for="duracao_segundos">Duração (em segundos, opcional):</label>
+                    <input type="number" id="duracao_segundos" name="duracao_segundos" min="0">
+                </div>
+                <div class="form-group">
+                    <label for="transcricao">Transcrição (Opcional):</label>
+                    <textarea id="transcricao" name="transcricao" rows="5"></textarea>
+                </div>
+            </div>
+
             <button type="submit" class="action-btn">Publicar Conteúdo</button>
         </form>
     </main>
 
-    <footer class="main-footer">
-        <div class="footer-content">
-            <div class="footer-section">
-                <h4>Nosso github:</h4>
-                <a href="https://github.com/UnBArqDsw2025-1-Turma02?q=galaxia&type=all&language=&sort=" target="_blank" class="github-link">
-                    <img src="{{ url_for('static', filename='img/GitHub-Mark.png') }}" alt="GitHub Logo" class="github-icon">
-                </a>
-            </div>
-            <div class="footer-section">
-                <h4>Contato</h4>
-                <ul>
-                    <li><a href="#">Central de ajuda</a></li>
-                    <li><a href="#">Comunidade de apoio</a></li>
-                    <li><a href="#">Compartilhe sua história</a></li>
-                </ul>
-            </div>
-            <div class="footer-section">
-                <h4>Sobre</h4>
-                <ul>
-                    <li><a href="#">Nossa Equipe</a></li>
-                    <li><a href="#">Nossos especialistas em conteúdo</a></li>
-                </ul>
-            </div>
-            <div class="footer-section donate-section">
-                <p>A Galáxia Conectada é uma organização sem fins lucrativos. Faça uma <a href="#">doação</a> ou seja <a href="#">voluntário</a> hoje mesmo!</p>
-            </div>
-        </div>
-    </footer>
+    {% include 'footer.html' %}
 
-    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+    <script>
+        // Lógica para mostrar/esconder campos específicos do tipo de conteúdo
+        function toggleContentTypeFields() {
+            const contentType = document.getElementById('content_type').value;
+            document.querySelectorAll('.content-type-specific-fields').forEach(fieldDiv => {
+                fieldDiv.style.display = 'none';
+            });
+            if (contentType === 'Artigo') {
+                document.getElementById('artigo-fields').style.display = 'block';
+            } else if (contentType === 'Video') {
+                document.getElementById('video-fields').style.display = 'block';
+            }
+        }
+        // Chamar a função ao carregar a página para definir o estado inicial
+        document.addEventListener('DOMContentLoaded', toggleContentTypeFields);
+    </script>
 </body>
 </html>

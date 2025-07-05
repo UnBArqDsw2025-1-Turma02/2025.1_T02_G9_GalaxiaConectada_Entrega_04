@@ -621,19 +621,89 @@ def visitante_profile():
     return render_template('visitante_profile.html', user=user, profile=profile)
 
 # --- Rotas de Conhecimento (Artigos/Notícias/Blog Posts) ---
+
+
 @app.route('/conhecimento')
 def conhecimento_home():
+    """
+    Exibe a página de conhecimento com funcionalidades avançadas de filtro,
+    busca e ordenação. A notícia mais recente é destacada.
+    """
     conn = get_db_connection()
-    # Obter as últimas 8 notícias/artigos para a home do conhecimento
-    recent_content_data = conn.execute('SELECT c.*, u.nome_usuario AS autor_nome FROM conteudos c JOIN usuarios u ON c.autor_id = u.id ORDER BY c.data_publicacao DESC LIMIT 8').fetchall()
-    recent_content = [Conteudo(**dict(row)) for row in recent_content_data]
 
-    # Obter categorias únicas
+    # Pega os parâmetros da URL (ex: /conhecimento?q=planeta&categoria=Cosmologia)
+    search_query = request.args.get('q', '')
+    category_filter = request.args.get('categoria', 'Todas')
+    sort_order = request.args.get('ordenar', 'recentes')
+
+    # --- Construção da Query SQL Dinâmica ---
+    # Base da query
+    base_query = '''
+        SELECT c.*, u.nome_usuario AS autor_nome, COUNT(l.conteudo_id) as likes_count
+        FROM conteudos c
+        JOIN usuarios u ON c.autor_id = u.id
+        LEFT JOIN curtidas l ON c.id = l.conteudo_id
+    '''
+    
+    # Lista de condições WHERE e parâmetros
+    conditions = []
+    params = []
+
+    # Adiciona filtro de busca por palavra-chave
+    if search_query:
+        conditions.append("(c.titulo LIKE ? OR c.descricao LIKE ?)")
+        params.extend([f'%{search_query}%', f'%{search_query}%'])
+
+    # Adiciona filtro por categoria
+    if category_filter and category_filter != 'Todas':
+        conditions.append("c.categoria = ?")
+        params.append(category_filter)
+    
+    # Junta as condições com 'AND'
+    if conditions:
+        base_query += " WHERE " + " AND ".join(conditions)
+
+    # Agrupamento para contagem de curtidas
+    base_query += " GROUP BY c.id"
+
+    # Define a ordenação
+    if sort_order == 'antigos':
+        base_query += " ORDER BY c.data_publicacao ASC"
+    elif sort_order == 'mais_curtidos':
+        base_query += " ORDER BY likes_count DESC, c.data_publicacao DESC"
+    else: # 'recentes' é o padrão
+        base_query += " ORDER BY c.data_publicacao DESC"
+
+    # Executa a query final
+    all_content_data = conn.execute(base_query, params).fetchall()
+
+    # --- Separa o conteúdo em Destaque e Carrossel ---
+    featured_content = None
+    carousel_content = []
+
+    if all_content_data:
+        # Se a ordenação for por recentes (padrão), o primeiro item é o destaque
+        if sort_order == 'recentes' and not search_query and category_filter == 'Todas':
+            featured_content = all_content_data[0]
+            carousel_content = all_content_data[1:]
+        else:
+            # Em qualquer outro caso (filtro, busca, etc.), todos vão para a lista principal
+            carousel_content = all_content_data
+
+    # Busca todas as categorias para o menu de filtro
     categories_data = conn.execute('SELECT DISTINCT categoria FROM conteudos ORDER BY categoria').fetchall()
     categories = [row['categoria'] for row in categories_data]
-
+    
     conn.close()
-    return render_template('conhecimento_home.html', recent_content=recent_content, categories=categories)
+
+    return render_template(
+        'conhecimento_home.html', 
+        featured_content=featured_content,
+        carousel_content=carousel_content,
+        categories=categories,
+        # Passa os valores atuais dos filtros para manter o estado no formulário
+        current_filters={'q': search_query, 'categoria': category_filter, 'ordenar': sort_order}
+    )
 
 @app.route('/conhecimento/category/<category_name>')
 def conhecimento_by_category(category_name):
@@ -921,7 +991,7 @@ def forum_home():
     return render_template('forum_home.html', subforums=subforums)
 
 @app.route('/forum/create_subforum', methods=['GET', 'POST'])
-@admin_required # Apenas administradores podem criar subfóruns
+@login_required 
 def create_subforum():
     if request.method == 'POST':
         nome = request.form['nome'].strip()
@@ -1104,62 +1174,59 @@ def add_post(topic_id):
 @app.route('/forum/post/<int:post_id>/vote', methods=['POST'])
 @login_required
 def vote_post(post_id):
+    """Processa um upvote ou downvote em uma postagem."""
+    vote_type = request.form.get('vote_type')
     user_id = session['user_id']
-    vote_type = request.form.get('vote_type') # 'upvote' ou 'downvote'
 
     if vote_type not in ['upvote', 'downvote']:
-        return jsonify({'status': 'error', 'message': 'Tipo de voto inválido.'}), 400
-    
+        return jsonify({'status': 'error', 'message': 'Voto inválido.'}), 400
+
     conn = get_db_connection()
     try:
-        post_data = conn.execute('SELECT autor_id, topico_id, upvotes FROM postagens WHERE id = ?', (post_id,)).fetchone()
-        if not post_data:
+        # Verifica se a postagem existe e se o usuário não é o autor
+        post = conn.execute('SELECT autor_id FROM postagens WHERE id = ?', (post_id,)).fetchone()
+        if not post:
             return jsonify({'status': 'error', 'message': 'Postagem não encontrada.'}), 404
-        
-        post_autor_id = post_data['autor_id']
-        topic_id = post_data['topico_id']
-        current_post_upvotes = post_data['upvotes']
-
-        if user_id == post_autor_id:
+        if post['autor_id'] == user_id:
             return jsonify({'status': 'error', 'message': 'Você não pode votar na sua própria postagem.'}), 403
 
+        # Verifica se o usuário já votou nesta postagem
         existing_vote = conn.execute('SELECT tipo_voto FROM votos_postagem WHERE usuario_id = ? AND postagem_id = ?', (user_id, post_id)).fetchone()
-
+        
+        change = 0
         if existing_vote:
-            # Usuário já votou
+            # Se o voto for o mesmo, remove (desvota)
             if existing_vote['tipo_voto'] == vote_type:
-                # Clicou no mesmo voto novamente: remover voto
                 conn.execute('DELETE FROM votos_postagem WHERE usuario_id = ? AND postagem_id = ?', (user_id, post_id))
-                if vote_type == 'upvote':
-                    conn.execute('UPDATE postagens SET upvotes = upvotes - 1 WHERE id = ?', (post_id,))
-                else: # downvote
-                    conn.execute('UPDATE postagens SET upvotes = upvotes + 1 WHERE id = ?', (post_id,)) # Downvote reverte upvote
-                conn.commit()
-                return jsonify({'status': 'success', 'action': 'removed', 'new_upvotes': current_post_upvotes - (1 if vote_type == 'upvote' else -1)}) # Ajustar para downvote
+                change = -1 if vote_type == 'upvote' else 1
+            # Se o voto for diferente, troca
             else:
-                # Clicou no voto oposto: mudar voto
-                conn.execute('UPDATE votos_postagem SET tipo_voto = ?, data_voto = ? WHERE usuario_id = ? AND postagem_id = ?', (vote_type, datetime.now().isoformat(), user_id, post_id))
-                if vote_type == 'upvote':
-                    conn.execute('UPDATE postagens SET upvotes = upvotes + 2 WHERE id = ?', (post_id,)) # De down para up (+1 do voto, +1 por reverter down)
-                else: # downvote
-                    conn.execute('UPDATE postagens SET upvotes = upvotes + 2 WHERE id = ?', (post_id,)) # De up para down (-1 do voto, -1 por reverter up)
-                conn.commit()
-                return jsonify({'status': 'success', 'action': 'changed', 'new_upvotes': current_post_upvotes + (2 if vote_type == 'upvote' else -2)}) # Ajustar
+                conn.execute('UPDATE votos_postagem SET tipo_voto = ? WHERE usuario_id = ? AND postagem_id = ?', (vote_type, user_id, post_id))
+                change = 2 if vote_type == 'upvote' else -2
         else:
-            # Novo voto
-            conn.execute('INSERT INTO votos_postagem (usuario_id, postagem_id, tipo_voto, data_voto) VALUES (?, ?, ?, ?)', (user_id, post_id, vote_type, datetime.now().isoformat()))
-            if vote_type == 'upvote':
-                conn.execute('UPDATE postagens SET upvotes = upvotes + 1 WHERE id = ?', (post_id,))
-            else: # downvote
-                conn.execute('UPDATE postagens SET upvotes = upvotes - 1 WHERE id = ?', (post_id,))
-            conn.commit()
-            return jsonify({'status': 'success', 'action': 'added', 'new_upvotes': current_post_upvotes + (1 if vote_type == 'upvote' else -1)})
+            # Se for um novo voto, insere
+            conn.execute('INSERT INTO votos_postagem (usuario_id, postagem_id, tipo_voto, data_voto) VALUES (?, ?, ?, ?)',
+                         (user_id, post_id, vote_type, datetime.now().isoformat()))
+            change = 1 if vote_type == 'upvote' else -1
 
-    except Exception as e:
-        print(f"DEBUG: Erro ao votar na postagem: {e}")
-        return jsonify({'status': 'error', 'message': f'Erro interno: {e}'}), 500
+        # Aplica a mudança na contagem de votos da postagem
+        if change != 0:
+            conn.execute('UPDATE postagens SET upvotes = upvotes + ? WHERE id = ?', (change, post_id))
+        
+        conn.commit()
+
+        # Busca o novo valor de votos DIRETAMENTE do banco de dados após a alteração.
+        new_votes_data = conn.execute('SELECT upvotes FROM postagens WHERE id = ?', (post_id,)).fetchone()
+        new_votes = new_votes_data['upvotes']
+
+        return jsonify({'status': 'success', 'new_votes': new_votes})
+
+    except sqlite3.Error as e:
+        print(f"DEBUG: Erro de banco de dados ao votar: {e}")
+        return jsonify({'status': 'error', 'message': 'Erro no banco de dados.'}), 500
     finally:
-        conn.close()
+        if conn:
+            conn.close()
 
 # --- Rotas de Moderação do Fórum ---
 @app.route('/forum/topic/<int:topic_id>/toggle_fixed', methods=['POST'])
@@ -1748,6 +1815,78 @@ def complete_content(conteudo_id):
     
     # Redireciona de volta para o módulo ou para o próximo conteúdo
     return redirect(url_for('modulo_detail', trilha_id=modulo_info['trilha_id'], modulo_id=modulo_info['modulo_id']))
+
+# Em app.py, substitua a função cientifico_home por esta:
+
+@app.route('/cientifico')
+def cientifico_home():
+    """
+    Exibe a página de notícias e artigos, com funcionalidades completas de filtro,
+    busca e ordenação.
+    """
+    conn = get_db_connection()
+    
+    # Pega TODOS os parâmetros da URL para os filtros
+    search_query = request.args.get('q', '')
+    category_filter = request.args.get('categoria', 'Todas')
+    sort_order = request.args.get('ordenar', 'recentes')
+
+    # Constrói a query SQL de forma dinâmica
+    # A query base agora inclui um LEFT JOIN com curtidas para poder ordenar por 'mais curtidos'
+    base_query = """
+        SELECT c.*, u.nome_usuario as autor_nome, COUNT(l.conteudo_id) as likes_count
+        FROM conteudos c 
+        JOIN usuarios u ON c.autor_id = u.id 
+        LEFT JOIN curtidas l ON c.id = l.conteudo_id
+        WHERE c.tipo_conteudo IN ('Artigo', 'Video', 'Notícia')
+    """
+    params = []
+    
+    # Adiciona o filtro de busca por palavra-chave se ele existir
+    if search_query:
+        base_query += " AND (c.titulo LIKE ? OR c.descricao LIKE ?)"
+        params.extend([f'%{search_query}%', f'%{search_query}%'])
+    
+    # Adiciona o filtro de categoria se não for 'Todas'
+    if category_filter != 'Todas':
+        base_query += " AND c.categoria = ?"
+        params.append(category_filter)
+
+    # Agrupa os resultados para que a contagem de curtidas (COUNT) funcione corretamente
+    base_query += " GROUP BY c.id"
+
+    # Adiciona a ordenação baseada na escolha do usuário
+    if sort_order == 'antigos':
+        base_query += " ORDER BY c.data_publicacao ASC"
+    elif sort_order == 'mais_curtidos':
+        base_query += " ORDER BY likes_count DESC, c.data_publicacao DESC"
+    else: # 'recentes' é o padrão
+        base_query += " ORDER BY c.data_publicacao DESC"
+        
+    artigos_data = conn.execute(base_query, params).fetchall()
+    
+    # Busca todas as categorias para popular o menu de filtro
+    categories_data = conn.execute("SELECT DISTINCT categoria FROM conteudos WHERE tipo_conteudo IN ('Artigo', 'Video', 'Notícia') ORDER BY categoria").fetchall()
+    categories = [row['categoria'] for row in categories_data]
+    
+    conn.close()
+    
+    # Cria um dicionário com os filtros atuais para enviar de volta ao template
+    # Isso mantém os filtros selecionados pelo usuário visíveis na página
+    current_filters = {
+        'q': search_query,
+        'categoria': category_filter,
+        'ordenar': sort_order
+    }
+    
+    # Renderiza o template, passando os conteúdos, as categorias e os filtros atuais
+    return render_template(
+        'cientifico_home.html', 
+        recent_content=artigos_data, 
+        categories=categories,
+        current_filters=current_filters
+    )
+
 
 
 # --- Rotas de Ranking e Conquistas ---

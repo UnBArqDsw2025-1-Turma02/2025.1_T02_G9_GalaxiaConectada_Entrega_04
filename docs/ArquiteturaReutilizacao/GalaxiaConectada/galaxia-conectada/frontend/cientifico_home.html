@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Galáxia Conectada - Conhecimento</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <!-- O seu cabeçalho e menu principal (main-header) continuam aqui -->
+    {% include 'header.html' %} <!-- É uma boa prática separar o header -->
+
+    <main class="knowledge-main-content">
+        <section class="knowledge-hero-section">
+            <h2 class="section-title"><i class="fas fa-lightbulb"></i> Explore a Galáxia do Conhecimento!</h2>
+            <p>Artigos, notícias e blogs para expandir seus horizontes cósmicos.</p>
+        </section>
+
+        <!-- Barra de Filtros e Busca -->
+        <section class="knowledge-filters">
+            <form method="GET" action="{{ url_for('cientifico_home') }}"></form>
+                <div class="filter-item search-bar">
+                    <i class="fas fa-search"></i>
+                    <input type="search" name="q" placeholder="Buscar por palavra-chave..." value="{{ current_filters.q or '' }}">
+                </div>
+                <div class="filter-item">
+                    <label for="categoria"><i class="fas fa-tags"></i> Categoria:</label>
+                    <select name="categoria" id="categoria">
+                        <option value="Todas" {% if current_filters.categoria == 'Todas' %}selected{% endif %}>Todas</option>
+                        {% for cat in categories %}
+                        <option value="{{ cat }}" {% if current_filters.categoria == cat %}selected{% endif %}>{{ cat }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="filter-item">
+                    <label for="ordenar"><i class="fas fa-sort-amount-down"></i> Ordenar por:</label>
+                    <select name="ordenar" id="ordenar">
+                        <option value="recentes" {% if current_filters.ordenar == 'recentes' %}selected{% endif %}>Mais Recentes</option>
+                        <option value="antigos" {% if current_filters.ordenar == 'antigos' %}selected{% endif %}>Mais Antigos</option>
+                        <option value="mais_curtidos" {% if current_filters.ordenar == 'mais_curtidos' %}selected{% endif %}>Mais Curtidos</option>
+                    </select>
+                </div>
+                <button type="submit" class="action-btn">Filtrar</button>
+            </form>
+            {% if logged_in and ('Administrador' in user_permissions or 'Instrutor' in user_permissions or 'ProfessorVoluntario' in user_permissions) %}
+                <a href="{{ url_for('publish_content') }}" class="action-btn publish-btn"><i class="fas fa-plus-circle"></i> Publicar Conteúdo</a>
+            {% endif %}
+            
+            {% if logged_in and user_type in ['Administrador', 'Instrutor', 'ProfessorVoluntario'] %}
+                <a href="{{ url_for('publish_content') }}" class="action-btn publish-btn">
+                    <i class="fas fa-plus-circle"></i> Publicar Conteúdo
+                </a>
+            {% endif %}
+        
+        </section>
+
+        <!-- Artigo em Destaque -->
+        {% if featured_content %}
+        <section class="featured-article-section">
+            <div class="featured-article-image">
+                <img src="{{ featured_content.imagem_url or url_for('static', filename='img/placeholder_content.png') }}" alt="{{ featured_content.titulo }}">
+            </div>
+            <div class="featured-article-info">
+                <span class="featured-tag">Em Destaque</span>
+                <h3>{{ featured_content.titulo }}</h3>
+                <p class="featured-meta">Por {{ featured_content.autor_nome }} em {{ featured_content.data_publicacao.split('T')[0] }}</p>
+                <p class="featured-desc">{{ featured_content.descricao }}</p>
+                <a href="{{ url_for('content_detail', content_id=featured_content.id) }}" class="action-btn">Saiba Mais</a>
+            </div>
+        </section>
+        {% endif %}
+
+        <!-- Carrossel de Outros Artigos -->
+        <section class="carousel-section dynamic-section">
+            <h3>{% if featured_content %}Outras Descobertas{% else %}Resultados da Busca{% endif %}</h3>
+            {% if carousel_content %}
+                <div class="carousel-container">
+                    <button class="prev-btn articles-prev-btn">&lt;</button>
+                    <div class="articles-carousel item-carousel">
+                        {% for content in carousel_content %}
+                        <div class="article-card-small item-card">
+                            <img src="{{ content.imagem_url or url_for('static', filename='img/placeholder_content.png') }}" alt="{{ content.titulo }}">
+                            <div class="card-body">
+                                <span class="content-type-tag">{{ content.categoria }}</span>
+                                <h4>{{ content.titulo }}</h4>
+                                <a href="{{ url_for('content_detail', content_id=content.id) }}" class="read-more-btn">Ler Mais <i class="fas fa-arrow-right"></i></a>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    <button class="next-btn articles-next-btn">&gt;</button>
+                </div>
+            {% else %}
+                <p style="text-align:center; padding: 20px;">Nenhum outro conteúdo encontrado com os filtros atuais.</p>
+            {% endif %}
+        </section>
+    </main>
+    
+    <!-- O seu rodapé (main-footer) continua aqui -->
+    {% include 'footer.html' %} <!-- É uma boa prática separar o footer -->
+
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+</body>
+</html>

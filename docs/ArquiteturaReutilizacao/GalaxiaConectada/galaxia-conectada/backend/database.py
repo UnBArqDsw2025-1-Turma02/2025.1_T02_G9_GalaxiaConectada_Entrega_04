@@ -412,6 +412,62 @@ def init_db():
         )
     ''')
 
+ # Tabela para Subfóruns
+    cursor.execute('''
+        CREATE TABLE IF NOT EXISTS subforums (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            nome TEXT NOT NULL UNIQUE,
+            descricao TEXT,
+            ordem_exibicao INTEGER DEFAULT 0
+        )
+    ''')
+    conn.commit()
+
+    # Tabela para Tópicos
+    cursor.execute('''
+        CREATE TABLE IF NOT EXISTS topicos (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            subforum_id INTEGER NOT NULL,
+            autor_id INTEGER NOT NULL,
+            titulo TEXT NOT NULL,
+            data_criacao TEXT NOT NULL,
+            data_ult_post TEXT NOT NULL,
+            fixado INTEGER DEFAULT 0 NOT NULL,
+            fechado INTEGER DEFAULT 0 NOT NULL,
+            upvotes INTEGER DEFAULT 0 NOT NULL,
+            FOREIGN KEY (subforum_id) REFERENCES subforums(id) ON DELETE CASCADE,
+            FOREIGN KEY (autor_id) REFERENCES usuarios(id) ON DELETE CASCADE
+        )
+    ''')
+
+    # Tabela para Postagens
+    cursor.execute('''
+        CREATE TABLE IF NOT EXISTS postagens (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            topico_id INTEGER NOT NULL,
+            autor_id INTEGER NOT NULL,
+            texto TEXT NOT NULL,
+            data_postagem TEXT NOT NULL,
+            editado INTEGER DEFAULT 0 NOT NULL,
+            data_edicao TEXT,
+            upvotes INTEGER DEFAULT 0 NOT NULL,
+            FOREIGN KEY (topico_id) REFERENCES topicos(id) ON DELETE CASCADE,
+            FOREIGN KEY (autor_id) REFERENCES usuarios(id) ON DELETE CASCADE
+        )
+    ''')
+
+    # Tabela para Votos em Postagens
+    cursor.execute('''
+        CREATE TABLE IF NOT EXISTS votos_postagem (
+            usuario_id INTEGER NOT NULL,
+            postagem_id INTEGER NOT NULL,
+            tipo_voto TEXT NOT NULL, -- 'upvote' ou 'downvote'
+            data_voto TEXT NOT NULL,
+            PRIMARY KEY (usuario_id, postagem_id),
+            FOREIGN KEY (usuario_id) REFERENCES usuarios(id) ON DELETE CASCADE,
+            FOREIGN KEY (postagem_id) REFERENCES postagens(id) ON DELETE CASCADE
+        )
+    ''')
 
     # Inserir os Pets Base (se não existirem)
     pets_data = [
@@ -1087,29 +1143,22 @@ def init_db():
     if autor_id_bruce:
         news_articles = [
             {
-                'titulo': 'Sonda Voyager 1 Envia Dados Misteriosos do Espaço Interestelar',
+                'titulo': 'NASA descobre cometa interestelar se movendo pelo sistema solar',
                 'descricao': 'A sonda mais distante da Terra continua a surpreender cientistas com leituras anômalas.',
-                'texto_html': '<p>A Voyager 1, lançada em 1977, é a espaçonave mais distante da Terra e a única a operar no espaço interestelar. Recentemente, seus instrumentos têm detectado um "zumbido" persistente, que os cientistas da NASA estão investigando. Este fenômeno pode oferecer novas pistas sobre as condições do meio interestelar.</p><p>Os dados anômalos estão sendo cuidadosamente analisados por equipes de pesquisa, que buscam entender se são causados por interações com partículas desconhecidas ou por fenômenos astrofísicos ainda não compreendidos. A longevidade da missão Voyager é um testemunho da engenharia humana e da nossa incessante busca por conhecimento além das fronteiras.</p>',
-                'categoria': 'Missões Espaciais',
-                'imagem_url': 'https://placehold.co/600x400/00008B/FFFFFF?text=Voyager+1+Misterio',
-                'fonte_url': 'https://www.nasa.gov/voyager-1-mysterious-data-placeholder'
+                'texto_html': '<p>Em 1º de julho, o telescópio de pesquisa ATLAS (Asteroid Terrestrial-impact Last Alert System), financiado pela NASA, em Rio Hurtado, Chile, relatou pela primeira vez observações de um cometa originário do espaço interestelar. Vindo da direção da constelação de Sagitário, o cometa interestelar foi oficialmente denominado 3I/ATLAS. Atualmente, ele está localizado a cerca de 670 milhões de quilômetros de distância.</p><p>Desde esse primeiro relato, observações anteriores à descoberta foram coletadas dos arquivos de três telescópios ATLAS diferentes ao redor do mundo e do Zwicky Transient Facility, no Observatório Palomar, no Condado de San Diego, Califórnia. Essas observações "pré-descoberta" remontam a 14 de junho. Inúmeros telescópios relataram observações adicionais desde que o objeto foi relatado pela primeira vez.</p><p>O cometa não representa nenhuma ameaça à Terra e permanecerá a uma distância de pelo menos 1,6 unidades astronômicas (cerca de 240 milhões de quilômetros). Atualmente, está a cerca de 4,5 UA (cerca de 670 milhões de km) do Sol. O 3I/ATLAS atingirá sua maior aproximação do Sol por volta de 30 de outubro, a uma distância de 1,4 UA (cerca de 210 milhões de km) — logo dentro da órbita de Marte.</p><p>O tamanho e as propriedades físicas do cometa interestelar estão sendo investigados por astrônomos em todo o mundo. O 3I/ATLAS deve permanecer visível a telescópios terrestres até setembro, após o qual passará muito perto do Sol para ser observado. Espera-se que reapareça do outro lado do Sol no início de dezembro, permitindo novas observações.</p>',
+                'categoria': 'Atronomia',
+                'imagem_url': 'https://assets.science.nasa.gov/dynamicimage/assets/science/psd/planetary-defense/3I_interstellar%20comet%20orbit.jpg?w=1840&h=1200&fit=clip&crop=faces%2Cfocalpoint',
+                'fonte_url': 'https://science.nasa.gov/blogs/planetary-defense/2025/07/02/nasa-discovers-interstellar-comet-moving-through-solar-system/'
             },
             {
                 'titulo': 'Descoberta de Nova Supernova Próxima Promete Revelações Cósmicas',
                 'descricao': 'Astrônomos observam a explosão de uma estrela em uma galáxia vizinha, fornecendo dados valiosos.',
                 'texto_html': '<p>Uma supernova recentemente detectada na galáxia M82, apelidada de "Galáxia do Charuto", está gerando grande entusiasmo na comunidade astronômica. A proximidade relativa do evento permite observações detalhadas, que podem aprimorar nossa compreensão sobre a morte de estrelas massivas e a formação de elementos pesados no universo.</p><p>A explosão estelar, visível até mesmo com telescópios amadores mais potentes, está sendo monitorada por observatórios em todo o mundo. Os dados coletados ajudarão a refinar modelos de evolução estelar e a entender melhor os processos que enriquecem o cosmos com os elementos necessários para a vida.</p>',
                 'categoria': 'Estrelas',
-                'imagem_url': 'https://placehold.co/600x400/8B0000/FFFFFF?text=Supernova+M82',
-                'fonte_url': 'https://www.nasa.gov/supernova-m82-discovery-placeholder'
+                'imagem_url': 'https://assets.science.nasa.gov/dynamicimage/assets/science/cds/open-science/article-media/RCW36.jpg?w=3406&h=1684&fit=clip&crop=faces%2Cfocalpoint',
+                'fonte_url': 'https://science.nasa.gov/open-science/spherex-universe-map/'
             },
-            {
-                'titulo': 'Telescópio James Webb Revela Imagens Sem Precedentes do Universo Primitivo',
-                'descricao': 'Novas observações do JWST mostram galáxias formadas logo após o Big Bang, desafiando teorias existentes.',
-                'texto_html': '<p>O Telescópio Espacial James Webb (JWST) continua a entregar descobertas revolucionárias. Suas últimas imagens revelam galáxias que se formaram muito mais cedo na história do universo do que se pensava, algumas apenas algumas centenas de milhões de anos após o Big Bang. Estes dados estão forçando os cosmólogos a reavaliar os modelos de formação e evolução galáctica.</p><p>As imagens infravermelhas de alta resolução do JWST permitem que os cientistas olhem para trás no tempo, observando a luz de objetos que viajaram por quase toda a idade do universo. Essa capacidade sem precedentes está abrindo uma nova janela para o cosmos primordial e redefinindo nossa compreensão de como o universo evoluiu.</p>',
-                'categoria': 'Cosmologia',
-                'imagem_url': 'https://placehold.co/600x400/4B0082/FFFFFF?text=JWST+Universo+Primitivo',
-                'fonte_url': 'https://www.nasa.gov/jwst-early-universe-placeholder'
-            }
+            
         ]
 
         for article_data in news_articles:

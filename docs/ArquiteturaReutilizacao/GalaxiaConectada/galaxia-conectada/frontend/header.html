@@ -1,0 +1,54 @@
+<header class="main-header">
+    <div class="top-bar">
+        <div class="search-bar">
+            <form action="{{ url_for('cientifico_home') }}" method="get">
+                <input type="search" name="q" placeholder="Pesquisar notícias...">
+                <button type="submit" style="background:none; border:none; color: #BBBBFF; cursor:pointer;"><i class="fas fa-search"></i></button>
+            </form>
+        </div>
+        <div class="logo-area">
+            <a href="{{ url_for('home') }}">
+                <img src="{{ url_for('static', filename='img/logo_galaxia.png') }}" alt="Galáxia Conectada Logo" class="logo">
+                <h1>GALÁXIA CONECTADA</h1>
+            </a>
+        </div>
+        <div class="accessibility-and-user-area">
+            <div class="accessibility-bar">
+                <a href="#" class="accessibility-link">Acessibilidade e Inclusão</a>
+                <div class="accessibility-options">
+                    <i class="fas fa-font" title="Fonte para Dislexia"></i>
+                    <i class="fas fa-text-height" title="Ajustar Tamanho da Fonte"></i>
+                    <i class="fas fa-volume-up" title="Ativar Leitor de Tela"></i>
+                </div>
+            </div>
+            <div class="user-actions">
+                {% if logged_in %}
+                    <span>Olá, {{ current_user }}!</span>
+                    <a href="{{ url_for('user_profile') }}">Perfil</a>
+                    <a href="{{ url_for('user_notifications') }}" class="notification-bell">
+                        <i class="fas fa-bell"></i>
+                        {% if unread_notifications_count > 0 %}
+                            <span class="notification-count">{{ unread_notifications_count }}</span>
+                        {% endif %}
+                    </a>
+                    <a href="{{ url_for('logout') }}">Sair</a>
+                {% else %}
+                    <a href="{{ url_for('entrar') }}">Entrar</a>
+                    <a href="{{ url_for('cadastrar') }}">Cadastrar</a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <nav class="main-menu">
+        <ul>
+            <li><a href="{{ url_for('home') }}"><i class="fas fa-rocket"></i> Home</a></li>
+            <li><a href="{{ url_for('trilhas_home') }}"><i class="fas fa-route"></i> Conhecimento (Trilhas)</a></li>
+            <li><a href="{{ url_for('cientifico_home') }}"><i class="fas fa-satellite-dish"></i> Científico (Notícias)</a></li>
+            <li><a href="{{ url_for('forum_home') }}"><i class="fas fa-users"></i> Fórum</a></li>
+            <li><a href="#"><i class="fas fa-gamepad"></i> Jogos</a></li>
+            <li><a href="#"><i class="fas fa-video"></i> Animações</a></li>
+            <li><a href="#"><i class="fas fa-calendar-alt"></i> Agenda Astronômica</a></li>
+        </ul>
+    </nav>
+</header>

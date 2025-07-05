@@ -8,57 +8,9 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 <body>
-    <header class="main-header">
-        <div class="top-bar">
-            <div class="search-bar">
-                <input type="text" placeholder="Pesquisar...">
-                <i class="fas fa-search"></i> </div>
-            <div class="logo-area">
-                <img src="{{ url_for('static', filename='img/logo_galaxia.png') }}" alt="Galáxia Conectada Logo" class="logo">
-                <h1>GALÁXIA CONECTADA</h1>
-                <p>CONHECIMENTO QUE BRILHA COMO AS ESTRELAS</p>
-            </div>
-            <div class="accessibility-and-user-area">
-                <div class="accessibility-bar">
-                    <a href="#" class="accessibility-link">Acessibilidade e Inclusão</a>
-                    <div class="accessibility-options">
-                        <i class="fas fa-font" title="Fonte para Dislexia"></i>
-                        <i class="fas fa-text-height" title="Ajustar Tamanho da Fonte"></i>
-                        <i class="fas fa-volume-up" title="Ativar Leitor de Tela"></i>
-                    </div>
-                </div>
-                <div class="user-actions">
-                    {% if logged_in %}
-                        <span>Olá, {{ current_user }}! ({{ user_type }})</span>
-                        <a href="{{ url_for('user_profile') }}">Perfil</a>
-                        <a href="{{ url_for('user_notifications') }}" class="notification-bell">
-                            <i class="fas fa-bell"></i>
-                            {% if unread_notifications_count > 0 %}
-                                <span class="notification-count">{{ unread_notifications_count }}</span>
-                            {% endif %}
-                        </a>
-                        <a href="/logout">Sair</a>
-                    {% else %}
-                        <a href="/entrar">Entrar</a>
-                        <a href="/cadastrar">Cadastrar</a>
-                    {% endif %}
-                </div>
-            </div>
-        </div>
-
-        <nav class="main-menu">
-            <ul>
-                <li><a href="{{ url_for('home') }}" class="active"><img src="{{ url_for('static', filename='img/icon_rocket.png') }}" alt="Home"> Home</a></li>
-                <li><a href="{{ url_for('conhecimento_home') }}"><i class="fas fa-book-reader"></i> Conhecimento</a></li>
-                <li><a href="#"><i class="fas fa-gamepad"></i> Jogos</a></li>
-                <li><a href="#"><i class="fas fa-video"></i> Animações</a></li>
-                <li><a href="#"><i class="fas fa-satellite-dish"></i> Científico</a></li>
-                <li><a href="#"><i class="fas fa-calendar-alt"></i> Agenda Astronômica</a></li>
-                <li><a href="{{ url_for('forum_home') }}"><i class="fas fa-users"></i> Fórum</a></li>
-                <li><a href="#"><i class="fas fa-shopping-cart"></i> Promoções</a></li>
-            </ul>
-        </nav>
-    </header>
+    
+    <!-- O cabeçalho e o menu agora são carregados de um arquivo separado -->
+    {% include 'header.html' %}
 
     <main>
         <section class="hero-section">
@@ -166,34 +118,8 @@
         </section>
     </main>
 
-    <footer class="main-footer">
-        <div class="footer-content">
-            <div class="footer-section">
-                <h4>Nosso github:</h4>
-                <a href="https://github.com/UnBArqDsw2025-1-Turma02?q=galaxia&type=all&language=&sort=" target="_blank" class="github-link">
-                    <img src="{{ url_for('static', filename='img/GitHub-Mark.png') }}" alt="GitHub Logo" class="github-icon">
-                </a>
-            </div>
-            <div class="footer-section">
-                <h4>Contato</h4>
-                <ul>
-                    <li><a href="#">Central de ajuda</a></li>
-                    <li><a href="#">Comunidade de apoio</a></li>
-                    <li><a href="#">Compartilhe sua história</a></li>
-                </ul>
-            </div>
-            <div class="footer-section">
-                <h4>Sobre</h4>
-                <ul>
-                    <li><a href="#">Nossa Equipe</a></li>
-                    <li><a href="#">Nossos especialistas em conteúdo</a></li>
-                </ul>
-            </div>
-            <div class="footer-section donate-section">
-                <p>A Galáxia Conectada é uma organização sem fins lucrativos. Faça uma <a href="#">doação</a> ou seja <a href="#">voluntário</a> hoje mesmo!</p>
-            </div>
-        </div>
-    </footer>
+    <!-- O rodapé agora também é carregado de um arquivo separado -->
+    {% include 'footer.html' %}
 
     <script src="{{ url_for('static', filename='js/script.js') }}"></script>
 </body>
