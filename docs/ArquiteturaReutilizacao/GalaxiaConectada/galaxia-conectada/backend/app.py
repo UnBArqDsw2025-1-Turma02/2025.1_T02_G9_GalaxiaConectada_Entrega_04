@@ -6,9 +6,9 @@ from datetime import datetime
 import json
 from functools import wraps
 
-# --- CORREÇÃO APLICADA AQUI: PROJECT_ROOT definido no escopo global ---
+
 PROJECT_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
-# --- FIM DA CORREÇÃO ---
+
 
 app = Flask(__name__,
             template_folder=os.path.join(PROJECT_ROOT, 'frontend'),
@@ -19,7 +19,7 @@ print(f"DEBUG: Flask Template Folder: {app.template_folder}")
 print(f"DEBUG: Flask Static Folder: {app.static_folder}")
 
 
-# Configurações do banco de dados
+
 DB_DIR = os.path.join(PROJECT_ROOT, 'backend', 'db_data')
 DATABASE = os.path.join(DB_DIR, 'galaxia.db')
 print(f"DEBUG: Database Path: {DATABASE}")
@@ -27,7 +27,7 @@ print(f"DEBUG: Database Path: {DATABASE}")
 # Chave secreta para sessões
 app.secret_key = 'uma_chave_secreta_muito_segura_e_longa_para_o_galaxia_conectada' 
 
-# Importar models aqui para evitar problemas de importação circular
+
 from .models import Usuario, Perfil, PetBase, UserPet, PetItem, Conteudo, Artigo, Video, Quiz, Jogo, QuestaoQuiz, AlternativaQuiz, TentativaQuiz, RespostaQuiz, Curtida, Comentario, Notificacao, InscricaoCategoria, TrilhaEducacional, Modulo, ConteudoModulo, ProgressoUsuarioTrilha, ProgressoModulo, ProgressoConteudo, Conquista, UsuarioConquista, Subforum, Topico, Postagem, VotoPostagem
 
 # Função auxiliar para conectar ao banco de dados
@@ -72,7 +72,7 @@ def publisher_required(f):
         return f(*args, **kwargs)
     return decorated_function
 
-def content_creator_required(f): # Para criar/manter trilhas/módulos/conteúdos
+def content_creator_required(f): 
     @wraps(f)
     def decorated_function(*args, **kwargs):
         if 'user_id' not in session:
@@ -561,7 +561,7 @@ def equip_item():
     return redirect(url_for('aluno_profile'))
 
 
-# --- Rotas básicas para outros tipos de perfil (expansível) ---
+# --- Rotas básicas para outros tipos de perfil ---
 @app.route('/instrutor/profile')
 @login_required
 def instrutor_profile():
@@ -631,7 +631,7 @@ def conhecimento_home():
     """
     conn = get_db_connection()
 
-    # Pega os parâmetros da URL (ex: /conhecimento?q=planeta&categoria=Cosmologia)
+    # Pega os parâmetros da URL 
     search_query = request.args.get('q', '')
     category_filter = request.args.get('categoria', 'Todas')
     sort_order = request.args.get('ordenar', 'recentes')
@@ -645,7 +645,6 @@ def conhecimento_home():
         LEFT JOIN curtidas l ON c.id = l.conteudo_id
     '''
     
-    # Lista de condições WHERE e parâmetros
     conditions = []
     params = []
 
@@ -682,15 +681,13 @@ def conhecimento_home():
     carousel_content = []
 
     if all_content_data:
-        # Se a ordenação for por recentes (padrão), o primeiro item é o destaque
+
         if sort_order == 'recentes' and not search_query and category_filter == 'Todas':
             featured_content = all_content_data[0]
             carousel_content = all_content_data[1:]
-        else:
-            # Em qualquer outro caso (filtro, busca, etc.), todos vão para a lista principal
+
             carousel_content = all_content_data
 
-    # Busca todas as categorias para o menu de filtro
     categories_data = conn.execute('SELECT DISTINCT categoria FROM conteudos ORDER BY categoria').fetchall()
     categories = [row['categoria'] for row in categories_data]
     
@@ -701,7 +698,7 @@ def conhecimento_home():
         featured_content=featured_content,
         carousel_content=carousel_content,
         categories=categories,
-        # Passa os valores atuais dos filtros para manter o estado no formulário
+       
         current_filters={'q': search_query, 'categoria': category_filter, 'ordenar': sort_order}
     )
 
@@ -727,10 +724,9 @@ def content_detail(content_id):
         flash('Conteúdo não encontrado.', 'danger')
         abort(404)
     
-    # Cria a instância da classe Conteudo base
+   
     content = Conteudo(**dict(content_base_data))
 
-    # Busca os dados específicos do tipo de conteúdo
     specific_content_data = None
     if content.tipo_conteudo == 'Artigo':
         specific_content_data = conn.execute('SELECT * FROM artigos WHERE conteudo_id = ?', (content_id,)).fetchone()
@@ -760,7 +756,7 @@ def content_detail(content_id):
     comments_data = conn.execute('SELECT co.*, u.nome_usuario FROM comentarios co JOIN usuarios u ON co.usuario_id = u.id WHERE co.conteudo_id = ? ORDER BY co.data_comentario ASC', (content_id,)).fetchall()
     comments = [Comentario(**dict(row)) for row in comments_data]
 
-    # Verificar se o usuário está inscrito nesta categoria
+    
     user_subscriptions = []
     if 'user_id' in session:
         subs_data = conn.execute('SELECT categoria FROM inscricoes_categoria WHERE usuario_id = ?', (session['user_id'],)).fetchall()
@@ -1136,7 +1132,7 @@ def topic_detail(topic_id):
     return render_template('topic_detail.html', topic=topic, posts=posts)
 
 @app.route('/forum/topic/<int:topic_id>/post', methods=['POST'])
-@login_required # Qualquer usuário logado pode postar
+@login_required 
 def add_post(topic_id):
     conn = get_db_connection()
     topic_data = conn.execute('SELECT id, fechado FROM topicos WHERE id = ?', (topic_id,)).fetchone()
@@ -1160,7 +1156,7 @@ def add_post(topic_id):
     try:
         conn.execute('INSERT INTO postagens (topico_id, autor_id, texto, data_postagem) VALUES (?, ?, ?, ?)',
                      (topic_id, autor_id, post_text, data_agora))
-        # Atualiza a data do último post no tópico
+        
         conn.execute('UPDATE topicos SET data_ult_post = ? WHERE id = ?', (data_agora, topic_id))
         conn.commit()
         flash('Postagem adicionada com sucesso!', 'success')
@@ -1183,39 +1179,39 @@ def vote_post(post_id):
 
     conn = get_db_connection()
     try:
-        # Verifica se a postagem existe e se o usuário não é o autor
+        
         post = conn.execute('SELECT autor_id FROM postagens WHERE id = ?', (post_id,)).fetchone()
         if not post:
             return jsonify({'status': 'error', 'message': 'Postagem não encontrada.'}), 404
         if post['autor_id'] == user_id:
             return jsonify({'status': 'error', 'message': 'Você não pode votar na sua própria postagem.'}), 403
 
-        # Verifica se o usuário já votou nesta postagem
+        
         existing_vote = conn.execute('SELECT tipo_voto FROM votos_postagem WHERE usuario_id = ? AND postagem_id = ?', (user_id, post_id)).fetchone()
         
         change = 0
         if existing_vote:
-            # Se o voto for o mesmo, remove (desvota)
+            
             if existing_vote['tipo_voto'] == vote_type:
                 conn.execute('DELETE FROM votos_postagem WHERE usuario_id = ? AND postagem_id = ?', (user_id, post_id))
                 change = -1 if vote_type == 'upvote' else 1
-            # Se o voto for diferente, troca
+            
             else:
                 conn.execute('UPDATE votos_postagem SET tipo_voto = ? WHERE usuario_id = ? AND postagem_id = ?', (vote_type, user_id, post_id))
                 change = 2 if vote_type == 'upvote' else -2
         else:
-            # Se for um novo voto, insere
+            
             conn.execute('INSERT INTO votos_postagem (usuario_id, postagem_id, tipo_voto, data_voto) VALUES (?, ?, ?, ?)',
                          (user_id, post_id, vote_type, datetime.now().isoformat()))
             change = 1 if vote_type == 'upvote' else -1
 
-        # Aplica a mudança na contagem de votos da postagem
+        
         if change != 0:
             conn.execute('UPDATE postagens SET upvotes = upvotes + ? WHERE id = ?', (change, post_id))
         
         conn.commit()
 
-        # Busca o novo valor de votos DIRETAMENTE do banco de dados após a alteração.
+        
         new_votes_data = conn.execute('SELECT upvotes FROM postagens WHERE id = ?', (post_id,)).fetchone()
         new_votes = new_votes_data['upvotes']
 
