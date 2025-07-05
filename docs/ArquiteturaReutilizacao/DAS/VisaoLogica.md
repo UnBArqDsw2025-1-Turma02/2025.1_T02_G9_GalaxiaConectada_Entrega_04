@@ -11,10 +11,13 @@
 - [Estilo Arquitetural N-Camadas](Estilo-Arquitetural-N-Camadas)
 - [Metas e Restrições Arquiteturais](#Metas-e-Restrições-Arquiteturais)
 - [Visão Lógica](#Visão-Lógica)
-- [Visão Geral da Visão Lógica](#Visão-Geral-da-Visão-Lógica)
-- [Pacotes de Design Arquiteturalmente Significativos](#Pacotes-de-Design-Arquiteturalmente-Significativos)
-- [Realizações de Casos de Uso Significativas](#Realizações-de-Casos-de-Uso-Significativas)
+- [Visão de Casos de Uso](#Visão-de-Casos-de-Uso)
+- [Visão de Processo](#Visão-de-Processo)
+- [Visão de Implantação](#Visão-de-Implantação)
 - [Qualidade](#Qualidade)
+- [Padrões e Estilos Arquiteturais em Código](#Padrões-e-Estilos-Arquiteturais-em-Código)
+- [Referências](#Referências)
+- [Histórico de Versões](#Histórico-de-Versões)
 
 
 
@@ -539,114 +542,9 @@ Esta seção detalha como a **arquitetura** do Galáxia Conectada contribui para
     * **Separação de Responsabilidades:** Facilita a escrita de testes unitários para as classes da camada de `Domínio` (regras de negócio) e testes de integração para os serviços da camada de `Aplicacao`, pois as dependências são controladas.
 
 
-### Padrões e Estilos Arquiteturais em Código
+## Padrões e Estilos Arquiteturais em Código
 
 
-Esta seção demonstra como os padrões e estilos arquiteturais são aplicados no código-fonte do Galáxia Conectada ao evidenciar a reutilização de camadas e componentes.
-
-####  Reutilização de Camadas e Componentes
-
-A arquitetura em N-Camadas do Galáxia Conectada promove a reutilização de componentes e serviços, especialmente aqueles que são transversais e agnósticos à lógica de negócio específica.
-
-Um exemplo claro de **reutilização e aplicação de um padrão arquitetural** é o **Serviço de Notificações (`ServicoNotificacoes`)**. Este serviço reside na camada de `Serviços Compartilhados` e é responsável por enviar alertas, e-mails ou notificações *push* aos usuários. Sua natureza genérica permite que ele seja reutilizado por múltiplos módulos da camada de `Aplicação` sem que cada módulo precise implementar sua própria lógica de envio de notificações.
-
-**Cenários de Reutilização do Serviço de Notificações:**
-
-* **Módulo de Aprendizagem (`Servidor.Aplicacao.Aprendizagem`):** Após a conclusão de uma `TrilhaEducacional` ou o desbloqueio de uma `Conquista`, este módulo pode chamar o `ServicoNotificacoes` para informar o `Usuário` sobre seu progresso ou prêmio.
-* **Módulo de Comunidade (`Servidor.Aplicacao.Comunidade`):** Quando há uma nova resposta em um `Tópico` que o `Usuário` está seguindo, ou se um `Comentário` é denunciado para moderação, o `ModuloForum` pode usar o `ServicoNotificacoes` para alertar os `Usuários` ou `Moderadores`.
-* **Módulo de Integrações (`Servidor.Aplicacao.Integracao`):** Após a descoberta de uma `Promoção Externa` relevante por um `Bot Importador`, este módulo pode utilizar o `ServicoNotificacoes` para enviar um alerta personalizado ao `Usuário`.
-
-Essa reutilização reduz a duplicação de código, centraliza a lógica de notificações e facilita a manutenção, pois qualquer mudança na forma como as notificações são enviadas (ex: mudança de provedor de e-mail) precisa ser feita apenas em um único lugar.
-
-#### 12.2 Código Comprobatório e Execução
-
-Para evidenciar a aplicação do padrão de **Reutilização de Camadas e o estilo arquitetural N-Camadas**, demonstraremos um trecho de código Python que simula o uso do `ServicoNotificacoes` por diferentes partes da aplicação.
-
-**Exemplo de Aplicação**
-
-Assumindo a estrutura de classes e pacotes definida na Visão Lógica e modelada no [Diagrama de Classes](https://unbarqdsw2025-1-turma02.github.io/2025.1_T02_G9_GalaxiaConectada_Entre02/#/Modelagem/ModelagemEstatica/DiagramaClasses) e [Diagrama de Pacotes](https://unbarqdsw2025-1-turma02.github.io/2025.1_T02_G9_GalaxiaConectada_Entre02/#/Modelagem/ModelagemOrganizacional/DiagramaPacotes):
-
-```python
-# backend/servicos_compartilhados/notificacoes.py (Camada de Serviços Compartilhados)
-class ServicoNotificacoes:
-    def __init__(self, db_connection_manager, email_client):
-        self.db = db_connection_manager # Exemplo de dependência da Infraestrutura
-        self.email_client = email_client # Exemplo de dependência de Cliente Externo
-        print("ServicoNotificacoes inicializado.")
-
-    def enviar_email(self, destinatario_email, assunto, corpo):
-        # Lógica para enviar email via cliente externo
-        print(f"DEBUG: Enviando email para {destinatario_email}: Assunto='{assunto}'")
-        # self.email_client.send(destinatario_email, assunto, corpo)
-        # self.db.log_notification_event("email", destinatario_email, assunto) # Loga evento na Infraestrutura
-        return True
-
-    def enviar_push(self, usuario_id, mensagem):
-        # Lógica para enviar notificação push
-        print(f"DEBUG: Enviando push para usuario {usuario_id}: '{mensagem}'")
-        # self.db.log_notification_event("push", usuario_id, mensagem)
-        return True
-
-# backend/aplicacao/aprendizagem.py (Camada de Aplicação - Módulo de Aprendizagem)
-class ModuloAprendizagem:
-    def __init__(self, servico_notificacoes):
-        self.notificacoes = servico_notificacoes
-        print("ModuloAprendizagem inicializado.")
-
-    def concluir_modulo(self, usuario_id, modulo_titulo):
-        # Lógica de negócio: marcar módulo como concluído, calcular XP, etc.
-        print(f"DEBUG: Modulo '{modulo_titulo}' concluído por usuario {usuario_id}.")
-        # Reutilizando o serviço de notificações
-        self.notificacoes.enviar_email(f"usuario_{usuario_id}@email.com", "Módulo Concluído!", f"Parabéns! Você concluiu o módulo '{modulo_titulo}'.")
-        self.notificacoes.enviar_push(usuario_id, f"Parabéns! Módulo {modulo_titulo} concluído!")
-        return True
-
-# backend/aplicacao/comunidade.py (Camada de Aplicação - Módulo de Comunidade)
-class ModuloComunidade:
-    def __init__(self, servico_notificacoes):
-        self.notificacoes = servico_notificacoes
-        print("ModuloComunidade inicializado.")
-
-    def criar_novo_topico(self, usuario_id, titulo_topico):
-        # Lógica de negócio: criar tópico, validar, persistir
-        print(f"DEBUG: Novo tópico '{titulo_topico}' criado por usuario {usuario_id}.")
-        # Reutilizando o serviço de notificações
-        self.notificacoes.enviar_email(f"moderador_admin@email.com", "Novo Tópico para Moderação", f"Usuário {usuario_id} criou o tópico: {titulo_topico}")
-        self.notificacoes.enviar_push(usuario_id, f"Seu tópico '{titulo_topico}' foi criado com sucesso!")
-        return True
-
-# --- Simulação de Configuração e Uso (exemplo em app.py ou um script de teste) ---
-if __name__ == '__main__':
-    # Simulação de dependências de infraestrutura
-    class MockDBConnection:
-        def log_notification_event(self, type, recipient, message):
-            print(f"MOCK_DB: Logged notification: {type} to {recipient}")
-
-    class MockEmailClient:
-        def send(self, to, subject, body):
-            print(f"MOCK_EMAIL: Sending email to {to}, Subject: {subject}")
-
-    mock_db_manager = MockDBConnection()
-    mock_email_client = MockEmailClient()
-
-    # 1. Instanciando o Serviço Compartilhado
-    servico_notificacoes_global = ServicoNotificacoes(mock_db_manager, mock_email_client)
-
-    # 2. Injetando o Serviço nos Módulos da Camada de Aplicação
-    modulo_aprendizagem = ModuloAprendizagem(servico_notificacoes_global)
-    modulo_comunidade = ModuloComunidade(servico_notificacoes_global)
-
-    print("\n--- Demonstração de Reutilização ---")
-
-    # Cenário de Aprendizagem: Módulo concluído
-    print("\nCenário 1: Conclusão de Módulo")
-    modulo_aprendizagem.concluir_modulo(usuario_id=101, modulo_titulo="Introdução à Cosmologia")
-
-    # Cenário de Comunidade: Novo tópico no fórum
-    print("\nCenário 2: Criação de Tópico no Fórum")
-    modulo_comunidade.criar_novo_topico(usuario_id=202, titulo_topico="Dúvidas sobre Buracos Negros")
-
-```
 
 ## Referências
 
