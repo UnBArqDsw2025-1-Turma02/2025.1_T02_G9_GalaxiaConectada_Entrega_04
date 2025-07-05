@@ -1,4 +1,4 @@
-# Documento de Arquitetura de Software - Visão Lógica
+# Documento de Arquitetura de Software
 
 ## Sumário
 
@@ -7,7 +7,8 @@
 - [Escopo](#Escopo)
 - [Definições, Acrônimos e Abreviações](#Definições-Acrônimos-e-Abreviações)
 - [Documentação Lógica do Projeto Galáxia Conectada](#Documentação-Lógica-do-Projeto-Galáxia-Conectada)
-- [Visão Geral do Sistema](#Visão-Geral-do-Sistema)
+- [Visão Geral](#Visão-Geral-do-Sistema)
+- [Estilo Arquitetural N-Camadas](Estilo-Arquitetural-N-Camadas)
 - [Metas e Restrições Arquiteturais](#Metas-e-Restrições-Arquiteturais)
 - [Visão Lógica](#Visão-Lógica)
 - [Visão Geral da Visão Lógica](#Visão-Geral-da-Visão-Lógica)
@@ -19,15 +20,15 @@
 
 ## Introdução
 
-A Visão Lógica do **Galáxia Conectada** descreve a decomposição funcional do sistema sob uma perspectiva de design ao focar nas suas classes mais importantes, na sua organização em pacotes e nos seus subsistemas, além da hierarquia desses elementos em camadas, como pode ser observado em [O que é o documento de Arquitetura de Software?](https://blog.infnet.com.br/arquitetura_software/documento-de-arquitetura-de-software/). Sendo assim, este documento se preocupa em detalhar as funcionalidades suportadas e a lógica geral no sistema. Com isso, ele detalha as classes de design mais importantes, sua estruturação em pacotes e subsistemas, e a hierarquia desses elementos em camadas. Além disso, ele foca nas principais realizações de casos de uso ao ilustrar como as funcionalidades essenciais são suportadas pela estrutura de design.
+A documentação do **Galáxia Conectada** descreve a decomposição funcional do sistema sob uma perspectiva de design ao focar nas suas classes mais importantes, na sua organização em pacotes e nos seus subsistemas, além da hierarquia desses elementos em camadas, como pode ser observado em [O que é o documento de Arquitetura de Software?](https://blog.infnet.com.br/arquitetura_software/documento-de-arquitetura-de-software/). Sendo assim, este documento se preocupa em detalhar as funcionalidades suportadas e a lógica geral no sistema. Com isso, ele detalha as classes de design mais importantes, sua estruturação em pacotes e subsistemas, e a hierarquia desses elementos em camadas. Além disso, ele foca nas principais realizações de casos de uso ao ilustrar como as funcionalidades essenciais são suportadas pela estrutura de design.
 
 ## Propósito
 
-O propósito deste documento é formalizar e comunicar o design lógico da **Galáxia Conectada**. Segundo [O que é o documento de Arquitetura de Software?](https://blog.infnet.com.br/arquitetura_software/documento-de-arquitetura-de-software/), o Documento de Arquitetura de Software (DAS) atua como a "planta baixa" do sistema ao servir como um guia para a equipe de desenvolvimento. Especificamente, esta Visão Lógica visa proporcionar uma compreensão clara das **responsabilidades e interações entre os componentes de software** ao definir como as entidades e as regras de negócio são organizadas.
+O propósito deste documento é formalizar e comunicar a arquitetura da **Galáxia Conectada**. Segundo [O que é o documento de Arquitetura de Software?](https://blog.infnet.com.br/arquitetura_software/documento-de-arquitetura-de-software/), o Documento de Arquitetura de Software (DAS) atua como a "planta baixa" do sistema ao servir como um guia para a equipe de desenvolvimento. Especificamente, esta Visão visa proporcionar uma compreensão clara das **responsabilidades e interações entre os componentes de software** ao definir como as entidades e as regras de negócio são organizadas.
 
 ## Escopo
 
-O escopo deste **Documento de Arquitetura de Software - Visão Lógica** abrange o design interno e conceitual do sistema **Galáxia Conectada**. Dessa forma, ele delimita a estrutura funcional, a organização das classes e pacotes de design, e o fluxo lógico das interações mais significativas. Em [Capítulo 1.3 - Documentação arquitetural na medida certa](https://elemarjr.com/livros/arquiteturadesoftware/volume-1/documentacao-arquitetural-na-medida-certa/), Elemar Jr. sugere que a documentação arquitetural deve ser "na medida certa" ao fornecer detalhes suficientes para que as partes interessadas compreendam as escolhas de design que impactam diretamente os requisitos funcionais e a qualidade do software.
+O escopo deste **Documento de Arquitetura de Software** abrange o design interno e conceitual do sistema **Galáxia Conectada**. Dessa forma, ele delimita a estrutura funcional, a organização das classes e pacotes de design, e o fluxo lógico das interações mais significativas. Em [Capítulo 1.3 - Documentação arquitetural na medida certa](https://elemarjr.com/livros/arquiteturadesoftware/volume-1/documentacao-arquitetural-na-medida-certa/), Elemar Jr. sugere que a documentação arquitetural deve ser "na medida certa" ao fornecer detalhes suficientes para que as partes interessadas compreendam as escolhas de design que impactam diretamente os requisitos funcionais e a qualidade do software.
 
 ## Definições, Acrônimos e Abreviações
 
@@ -198,13 +199,31 @@ Tabela 4: Léxicos do Tipo Estado
 
 ## Visão Geral
 
-A **Visão Lógica** da arquitetura do Galáxia Conectada é o [blueprint](https://www.rdstation.com/blog/agencias/blueprint/) conceitual do sistema, pois foca em como as funcionalidades são organizadas e como as partes do software interagem para entregar valor ao usuário final. Com isso, como já foi explicado, ela contém as **classes de design mais importantes** do projeto, que representam as entidades e regras de negócio centrais, como `Usuário`, `TrilhaEducacional` e `Jogo`. Essas classes são a base para a funcionalidade do sistema e são essenciais para entender o "o quê" o sistema faz, e como ele lida com os dados e processos internos.
+A **Visão Lógica geral** da arquitetura do Galáxia Conectada é o [blueprint](https://www.rdstation.com/blog/agencias/blueprint/) conceitual do sistema, pois foca em como as funcionalidades são organizadas e como as partes do software interagem para entregar valor ao usuário final. Com isso, como já foi explicado, ela contém as **classes de design mais importantes** do projeto, que representam as entidades e regras de negócio centrais, como `Usuário`, `TrilhaEducacional` e `Jogo`. Essas classes são a base para a funcionalidade do sistema e são essenciais para entender o "o quê" o sistema faz, e como ele lida com os dados e processos internos.
 
 Para estruturar essas classes de forma clara e escalável, o sistema foi organizado em **pacotes e subsistemas**. Consequentemente, essa organização modular foi fundamental para a manutenibilidade e extensibilidade do projeto ao permitir que diferentes partes do sistema fossem desenvolvidas e mantidas de forma independente. Por exemplo, o pacote de `Servidor.Dominio.Aprendizagem` agrupa todas as classes e regras relacionadas às trilhas e aos jogos, enquanto o pacote de `Servidor.Dominio.Comunidade` cuida do fórum e da gamificação. Essa divisão espelha as áreas de funcionalidade do projeto ao facilitar a navegação no código e a atribuição de responsabilidades.
 
 Finalmente, a organização desses pacotes e subsistemas se deu em **camadas**, como a camada de `Apresentação`, `Aplicação`, `Domínio`, `Infraestrutura` e `Serviços Compartilhados`. Essa estrutura em camadas promoveu uma separação das preocupações, onde cada camada tem um papel bem definido e interage com as outras de maneira controlada. Por exemplo, a camada de `Apresentação` se preocupa apenas com a interface do usuário, enquanto a camada de `Domínio` foca nas regras de negócio, e a `Infraestrutura` lida com o banco de dados. Essa abordagem em camadas não só facilitou o desenvolvimento, mas também garantiu que o sistema fosse robusto e adaptável a futuras mudanças e evoluções.
 
-### Metas e Restrições Arquiteturais
+## Estilo Arquitetural N-Camadas
+
+Para melhor compreensão, abaixo se encontra um diagrama referente ao estilo arquitetural de N-Camadas.
+
+
+<div align="center">
+    Figura 1: Estilo N-Camadas
+    <br>
+    <img src="" width="1200">
+    <br>
+    <b>Autora:</b> <a href="https://github.com/SkywalkerSupreme">Larissa Stéfane</a>.
+    <br>
+</div>
+
+
+
+
+
+## Metas e Restrições Arquiteturais
 
 As metas e restrições arquiteturais guiam as decisões de design do Galáxia Conectada, garantindo que o sistema não apenas atenda aos requisitos funcionais, mas também às qualidades essenciais para sua operação e evolução.
 
