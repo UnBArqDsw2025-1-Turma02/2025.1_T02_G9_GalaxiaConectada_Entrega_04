@@ -148,9 +148,37 @@ As imagens 1, 2 e 3 mostram um pouco do frontend do site:
 </div>
 
 <div align="center">
-    Figura 3: Trilhas de Aprendizado
+    Figura 3: Trilas Aprendizado 2
     <br>
-    <img src="https://raw.githubusercontent.com/UnBArqDsw2025-1-Turma02/2025.1_T02_G9_GalaxiaConectada_Entrega_04/b5a8f8a8856cb25fb62b4af1a57a67c557e222a9/docs/ArquiteturaReutilizacao/GalaxiaConectada/Imagem/Screenshot%20from%202025-07-04%2003-09-56.png" width="1200">
+    <img src="https://raw.githubusercontent.com/UnBArqDsw2025-1-Turma02/2025.1_T02_G9_GalaxiaConectada_Entrega_04/084cba06f7913be195540f1a5ac2797c275c86d1/docs/ArquiteturaReutilizacao/GalaxiaConectada/Imagem/Screenshot%20from%202025-07-04%2022-42-15.png" width="1200">
+    <br>
+    <b>Autora:</b> <a href="https://github.com/SkywalkerSupreme">Larissa Stéfane</a>.
+    <br>
+</div>
+
+<div align="center">
+    Figura 4: Aba Científico
+    <br>
+    <img src="https://raw.githubusercontent.com/UnBArqDsw2025-1-Turma02/2025.1_T02_G9_GalaxiaConectada_Entrega_04/084cba06f7913be195540f1a5ac2797c275c86d1/docs/ArquiteturaReutilizacao/GalaxiaConectada/Imagem/Screenshot%20from%202025-07-04%2022-42-30.png" width="1200">
+    <br>
+    <b>Autora:</b> <a href="https://github.com/SkywalkerSupreme">Larissa Stéfane</a>.
+    <br>
+</div>
+
+<div align="center">
+    Figura 5: Fórum 
+    <br>
+    <img src="https://raw.githubusercontent.com/UnBArqDsw2025-1-Turma02/2025.1_T02_G9_GalaxiaConectada_Entrega_04/084cba06f7913be195540f1a5ac2797c275c86d1/docs/ArquiteturaReutilizacao/GalaxiaConectada/Imagem/Screenshot%20from%202025-07-04%2022-42-46.png" width="1200">
+    <br>
+    <b>Autora:</b> <a href="https://github.com/SkywalkerSupreme">Larissa Stéfane</a>.
+    <br>
+</div>
+
+
+<div align="center">
+    Figura 6: Tópicos no Fórum
+    <br>
+    <img src="https://raw.githubusercontent.com/UnBArqDsw2025-1-Turma02/2025.1_T02_G9_GalaxiaConectada_Entrega_04/084cba06f7913be195540f1a5ac2797c275c86d1/docs/ArquiteturaReutilizacao/GalaxiaConectada/Imagem/Screenshot%20from%202025-07-04%2022-43-04.png" width="1200">
     <br>
     <b>Autora:</b> <a href="https://github.com/SkywalkerSupreme">Larissa Stéfane</a>.
     <br>
