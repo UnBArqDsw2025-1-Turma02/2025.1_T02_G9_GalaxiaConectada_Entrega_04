@@ -4,17 +4,6 @@ from datetime import datetime
 from werkzeug.security import generate_password_hash
 import json
 
-# --- INSTRUÇÕES CRUCIAIS ---
-# SE VOCÊ ESTÁ VENDO O ERRO "table 'pontuacoes_jogo' has more than one primary key"
-# OU QUALQUER OUTRO ERRO DE TABELA JÁ EXISTENTE/INCORRETA:
-# 1. SALVE ESTE ARQUIVO (backend/database.py) COM TODO O CONTEÚDO ABAIXO.
-# 2. VÁ PARA A PASTA 'galaxia_conectada/backend/db_data/' NO SEU TERMINAL.
-# 3. DELETE O ARQUIVO 'galaxia.db'.
-#    Ex: rm galaxia.db (Linux/macOS) ou del galaxia.db (Windows CMD)
-# 4. VOLTE PARA A PASSTA 'galaxia_conectada/backend/' NO SEU TERMINAL.
-# 5. RODE: python database.py
-# ISSO GARANTIRÁ QUE O BANCO DE DADOS SEJA RECRIADO DO ZERO COM A ESTRUTURA CORRETA.
-# --- FIM DAS INSTRUÇÕES CRUCIAIS ---
 
 # Define o caminho para a pasta db_data e o arquivo do banco de dados
 DB_DIR = os.path.join(os.path.dirname(__file__), 'db_data')
@@ -232,7 +221,6 @@ def init_db():
     ''')
 
     # Tabela para Pontuações de Jogo (melhores pontuações para ranking)
-    # CORREÇÃO APLICADA AQUI: Removido 'id INTEGER PRIMARY KEY AUTOINCREMENT,'
     cursor.execute('''
         CREATE TABLE IF NOT EXISTS pontuacoes_jogo (
             usuario_id INTEGER NOT NULL,
@@ -245,7 +233,7 @@ def init_db():
         )
     ''')
 
-    # Tabela para Curtidas em Conteúdos (já existe, mas reconfirmando)
+    # Tabela para Curtidas em Conteúdos 
     cursor.execute('''
         CREATE TABLE IF NOT EXISTS curtidas (
             usuario_id INTEGER NOT NULL,
@@ -257,7 +245,7 @@ def init_db():
         )
     ''')
 
-    # Tabela para Comentários (já existe, mas reconfirmando)
+    # Tabela para Comentários 
     cursor.execute('''
         CREATE TABLE IF NOT EXISTS comentarios (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -279,7 +267,7 @@ def init_db():
         )
     ''')
 
-    # Tabela para Notificações (já existe, mas reconfirmando)
+    # Tabela para Notificações
     cursor.execute('''
         CREATE TABLE IF NOT EXISTS notificacoes (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -292,7 +280,7 @@ def init_db():
         )
     ''')
 
-    # Tabela para Inscrições em Categorias (para notificações, já existe)
+    # Tabela para Inscrições em Categorias 
     cursor.execute('''
         CREATE TABLE IF NOT EXISTS inscricoes_categoria (
             usuario_id INTEGER NOT NULL,
@@ -343,7 +331,6 @@ def init_db():
     ''')
 
     # Tabela de Progresso do Usuário em Trilhas
-    # CORREÇÃO APLICADA AQUI: Removido 'id INTEGER PRIMARY KEY AUTOINCREMENT,'
     cursor.execute('''
         CREATE TABLE IF NOT EXISTS progresso_usuario_trilha (
             usuario_id INTEGER NOT NULL,
@@ -358,7 +345,6 @@ def init_db():
     ''')
 
     # Tabela de Progresso do Usuário em Módulos
-    # CORREÇÃO APLICADA AQUI: Removido 'id INTEGER PRIMARY KEY AUTOINCREMENT,'
     cursor.execute('''
         CREATE TABLE IF NOT EXISTS progresso_modulo (
             progresso_trilha_id INTEGER NOT NULL,
@@ -372,7 +358,6 @@ def init_db():
     ''')
 
     # Tabela de Progresso do Usuário em Conteúdos
-    # CORREÇÃO APLICADA AQUI: Removido 'id INTEGER PRIMARY KEY AUTOINCREMENT,'
     cursor.execute('''
         CREATE TABLE IF NOT EXISTS progresso_conteudo (
             progresso_modulo_id INTEGER NOT NULL,
@@ -505,7 +490,7 @@ def init_db():
         else:
             print(f"Pet base '{nome}' já existe.")
 
-    # Inserir Itens de Personalização (se não existirem)
+    # Inserir Itens de Personalização 
     item_data = [
         ('Óculos de Sol', 'Óculos escuros para o Lumio.', 'Sol', 'https://placehold.co/50x50/000000/FFFFFF?text=Oculos', 80),
         ('Chapéu de Explorador', 'Um chapéu estiloso para aventuras.', 'Sol', 'https://placehold.co/50x50/8B4513/FFFFFF?text=Chapeu', 120),
@@ -567,7 +552,7 @@ def init_db():
     except Exception as e:
         print(f"Erro inesperado ao inicializar DB: {e}")
     finally:
-        pass # Não fechar a conexão ainda, pois vamos adicionar mais usuários
+        pass
 
     # --- Adicionar novos usuários ---
     users_to_add = [
@@ -741,7 +726,7 @@ def init_db():
     except Exception as e:
         print(f"Erro ao inserir dados do fórum: {e}")
     finally:
-        pass # Não fechar a conexão ainda, pois vamos adicionar mais dados
+        pass 
 
     # --- Inserir Trilhas de Aprendizado ---
     autor_id_snape = user_ids.get('Professor Snape')
