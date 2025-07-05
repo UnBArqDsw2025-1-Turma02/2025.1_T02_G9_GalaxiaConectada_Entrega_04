@@ -7,13 +7,13 @@
 
 - [Introdução](#Introdução)
 - [Sobre o Projeto](#Sobre-o-Projeto)
+- [Como Rodar o Projeto Localmente](#Como-Rodar-o-Projeto-Localmente)
+- [Apresentação da Plataforma](#Apresentação-da-Plataforma)
 - [Funcionalidades Desenvolvidas](#Funcionalidades-Desenvolvidas)
 - [Estrutura do Projeto](#Estrutura-do-Projeto)
 - [Backend (Servidor Flask e Banco de Dados)](#Backend-Servidor-Flask-e-Banco-de-Dados)
 - [Frontend (Interface do Usuário)](#Frontend-Interface-do-Usuário)
 - [Usuários Cadastrados para Teste](#Usuários-Cadastrados-para-Teste)
-- [Como Rodar o Projeto Localmente](#Como-Rodar-o-Projeto-Localmente)
-- [Apresentação da Plataforma](#Apresentação-da-Plataforma)
 - [Próximos Passos](#Próximos-Passos)
 - [Conclusão](#conclusão)
 - [Histórico de Versão](#Histórico-de-Versão)
@@ -37,6 +37,20 @@ O projeto "Galáxia Conectada" está sendo desenvolvido como parte da disciplina
 - Notícias e Artigos Científicos: Atualizações e aprofundamentos no mundo da astronomia.
 
 - Sistema de Gamificação: XP, níveis, conquistas e mascotes evolutivos para motivar o usuário.
+
+
+
+## Vídeo para rodar:
+
+Abaixo o video 1 mostra como rodar o site localmente:
+
+<iframe width="1321" height="743" src="https://www.youtube.com/embed/7RF_dZAXg3E" title="Como rodar o Galáxia Conectada Localmente" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+
+## Apresentação da Plataforma
+
+Abaixo o video 2 mostra como o site se encontra:
+
+<iframe width="1321" height="743" src="https://www.youtube.com/embed/rBa4Pqxj1Qc" title="Apresentando a Plataforma: Galáxia Conectada" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
 
 
 ## Funcionalidades Desenvolvidas
@@ -289,18 +303,6 @@ Para configurar e rodar a "Galáxia Conectada" em sua máquina local, siga estes
 
 7.  **Acesse o Site**:
     Abra seu navegador e vá para `http://127.0.0.1:5000/`.
-
-## Vídeo para rodar:
-
-Abaixo o video 1 mostra como rodar o site localmente:
-
-<iframe width="1321" height="743" src="https://www.youtube.com/embed/7RF_dZAXg3E" title="Como rodar o Galáxia Conectada Localmente" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
-
-## Apresentação da Plataforma
-
-Abaixo o video 2 mostra como o site se encontra:
-
-<iframe width="1321" height="743" src="https://www.youtube.com/embed/rBa4Pqxj1Qc" title="Apresentando a Plataforma: Galáxia Conectada" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
 
 
 ## Próximos Passos
