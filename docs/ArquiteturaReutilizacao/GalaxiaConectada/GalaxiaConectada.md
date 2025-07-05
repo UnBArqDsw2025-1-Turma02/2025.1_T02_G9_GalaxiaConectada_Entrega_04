@@ -294,9 +294,13 @@ Para configurar e rodar a "Galáxia Conectada" em sua máquina local, siga estes
 
 Abaixo o video 1 mostra como rodar o site localmente:
 
+
+
 ## Apresentação da Plataforma
 
 Abaixo o video 2 mostra como o site se encontra:
+
+<iframe width="1321" height="743" src="https://www.youtube.com/embed/rBa4Pqxj1Qc" title="Apresentando a Plataforma: Galáxia Conectada" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
 
 
 ## Próximos Passos
