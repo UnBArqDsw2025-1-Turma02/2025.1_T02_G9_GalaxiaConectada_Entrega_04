@@ -141,7 +141,7 @@ O projeto segue uma arquitetura modular, separando as responsabilidades de backe
 
 ## Frontend (Interface do Usuário)
 
-As imagens 1, 2 e 3 mostram um pouco do frontend do site:
+As imagens 1 a 6 mostram um pouco do frontend do site:
 
 <div align="center">
     Figura 1: Home
