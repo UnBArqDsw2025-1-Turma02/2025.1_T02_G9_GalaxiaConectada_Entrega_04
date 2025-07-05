@@ -551,16 +551,16 @@ Esta seção demonstra como os padrões e estilos arquiteturais são aplicados n
 No desenvolvimento do Galáxia Conectada, a aplicação de **Padrões de Projeto Criacionais GoF (Gang of Four)** foi fundamental para gerenciar a complexidade da instanciação de objetos. Os padrões utilizados incluem:
 
 * **Factory Method:** Aplicado para a criação flexível de diferentes tipos de **Conteúdo** (Artigo, Vídeo, Quiz, Jogo) e **Papéis de Usuário** (Aluno, Instrutor, Administrador, etc.). Isso permite adicionar novos tipos de conteúdo ou papéis sem modificar o código cliente que os cria.
-    * **Artefatos de Suporte:** [Documento do Padrão Factory Method](https://unbarqdsw2025-1-turma02.github.io/2025.1_T02_G9_GalaxiaConectada_Entre03/#/PadroesDeProjeto/GoFsCriacionais/Factory%20Method) | [Vídeo Explicação/Execução (Conteúdo)](https://www.youtube.com/embed/33qP-mh3vfc) | [Vídeo Explicação/Execução (Usuários)](https://www.youtube.com/embed/ubeEgPUcccQ)
+    * **Artefatos de Suporte:** [Documento do Padrão Factory Method](https://unbarqdsw2025-1-turma02.github.io/2025.1_T02_G9_GalaxiaConectada_Entrega03/#/PadroesDeProjeto/GoFsCriacionais/FactoryMethod) |
 
 * **Builder:** Utilizado para a construção passo a passo de objetos complexos como **Módulos** (agrupamentos de conteúdos) e **Trilhas Educacionais**. Permite criar diversas configurações de módulos e trilhas de forma mais legível e controlada.
-    * **Artefatos de Suporte:** [Documento do Padrão Builder](https://unbarqdsw2025-1-turma02.github.io/2025.1_T02_G9_GalaxiaConectada_Entre03/#/PadroesDeProjeto/GoFsCriacionais/Builder) | [Vídeo Explicação/Execução (Módulo)](https://www.youtube.com/embed/t6IU4vyFwkE) | [Vídeo Explicação/Execução (Trilhas)](https://www.youtube.com/embed/U6YGJTvpZlw)
-
+    * **Artefatos de Suporte:** [Documento do Padrão Builder](https://unbarqdsw2025-1-turma02.github.io/2025.1_T02_G9_GalaxiaConectada_Entrega03/#/PadroesDeProjeto/GoFsCriacionais/Builder) |
+    
 * **Prototype:** Implementado para criar novas instâncias de **Conquistas** e **Notificações** através da clonagem de objetos existentes. Isso é eficiente para criar cópias personalizadas de modelos pré-definidos sem acoplamento direto às suas classes.
-    * **Artefato de Suporte:** [Documento do Padrão Prototype](https://unbarqdsw2025-1-turma02.github.io/2025.1_T02_G9_GalaxiaConectada_Entre03/#/PadroesDeProjeto/GoFsCriacionais/Prototype) | [Vídeo Explicação/Execução (Conquistas)](https://www.youtube.com/embed/2_ONmRJvRkw) | [Vídeo Explicação/Execução (Notificações)](https://www.youtube.com/embed/i-DBm39kKwM)
+    * **Artefato de Suporte:** [Documento do Padrão Prototype](https://unbarqdsw2025-1-turma02.github.io/2025.1_T02_G9_GalaxiaConectada_Entrega03/#/PadroesDeProjeto/GoFsCriacionais/Prototype) | 
 
 * **Singleton:** Aplicado à classe `Forum` para garantir que haja apenas uma instância global do fórum principal na aplicação. Isso centraliza o gerenciamento das discussões e previne duplicações acidentais.
-    * **Artefato de Suporte:** [Documento do Padrão Singleton](https://unbarqdsw2025-1-turma02.github.io/2025.1_T02_G9_GalaxiaConectada_Entre03/#/PadroesDeProjeto/GoFsCriacionais/Singleton) | [Vídeo Explicação/Execução (Fórum)](https://www.youtube.com/embed/NS2kunMM120)
+    * **Artefato de Suporte:** [Documento do Padrão Singleton](https://unbarqdsw2025-1-turma02.github.io/2025.1_T02_G9_GalaxiaConectada_Entrega03/#/PadroesDeProjeto/GoFsCriacionais/Singleton) | 
 
 #### Reutilização de Camadas e Componentes (Exemplo de Código Comprobatório)
 
@@ -584,7 +584,7 @@ Para evidenciar a aplicação do padrão de **Reutilização de Camadas e o esti
 
 **Exemplo de Aplicação (Python - Pseudocódigo/Conceitual):**
 
-Assumindo a estrutura de classes e pacotes definida na Visão Lógica e modelada no [Diagrama de Classes](https://unbarqdsw2025-1-turma02.github.io/2025.1_T02_G9_GalaxiaConectada_Entre02/#/Modelagem/ModelagemEstatica/DiagramaClasses) e [Diagrama de Pacotes](https://unbarqdsw2025-1-turma02.github.io/2025.1_T02_G9_GalaxiaConectada_Entre02/#/Modelagem/ModelagemOrganizacional/DiagramaPacotes):
+Assumindo a estrutura de classes e pacotes definida na Visão Lógica e modelada no [Diagrama de Classes](https://unbarqdsw2025-1-turma02.github.io/2025.1_T02_G9_GalaxiaConectada_Entrega02/#/Modelagem/ModelagemEstatica/DiagramaClasses) e [Diagrama de Pacotes](https://unbarqdsw2025-1-turma02.github.io/2025.1_T02_G9_GalaxiaConectada_Entrega02/#/Modelagem/ModelagemOrganizacional/DiagramaPacotes):
 
 ```python
 
