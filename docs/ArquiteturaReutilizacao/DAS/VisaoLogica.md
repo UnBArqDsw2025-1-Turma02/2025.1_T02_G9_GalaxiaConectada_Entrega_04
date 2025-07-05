@@ -446,12 +446,12 @@ Os processos e *threads* no Galáxia Conectada podem ser agrupados e descritos d
     * **Sub-unidades de Controle (Threads):** Múltiplas *threads* são criadas para lidar com as requisições HTTP concorrentes dos usuários (ex: uma *thread* para cada requisição de página, login, postagem no fórum).
     * **Alocação de Classes/Pacotes Lógicos:** Praticamente todos os pacotes das camadas de `Aplicação`, `Domínio` e `Serviços Compartilhados` são executados dentro deste processo.
     * **Modos de Comunicação:** Principalmente chamadas de procedimento/método interno e acesso a banco de dados via `Infraestrutura.Persistencia`.
-    * **Artefatos Visuais de Suporte:** [Diagrama de Atividades](https://unbarqdsw2025-1-turma02.github.io/2025.1_T02_G9_GalaxiaConectada_Entre02/#/Modelagem/ModelagemDinamica/DiagramaAtividades) (para fluxos sequenciais de ações), [Diagrama de Comunicação](https://unbarqdsw2025-1-turma02.github.io/2025.1_T02_G9_GalaxiaConectada_Entre02/#/Modelagem/ModelagemDinamica/DiagramaComunica%C3%A7%C3%A3o) (para interações entre objetos em cenários).
+    * **Artefatos Visuais de Suporte:** [Diagrama de Atividades](https://unbarqdsw2025-1-turma02.github.io/2025.1_T02_G9_GalaxiaConectada_Entrega02/#/Modelagem/ModelagemDinamica/DiagramaAtividades), [Diagrama de Comunicação](https://unbarqdsw2025-1-turma02.github.io/2025.1_T02_G9_GalaxiaConectada_Entrega02/#/Modelagem/ModelagemDinamica/DiagramaComunicacao).
 * **Processos de Bots de Integração:**
     * **Descrição:** Processos ou *jobs* em *background* dedicados a interagir com sistemas externos para coletar e importar dados (notícias, promoções). Eles operam de forma assíncrona ao processo principal da web.
     * **Alocação de Classes/Pacotes Lógicos:** Principalmente os componentes `BotImportadorNoticias` e `BotImportadorPromocoes` (do pacote `Servidor.Infraestrutura.ClientesExternos`) e partes da `Servidor.Aplicacao.Integracao`.
     * **Modos de Comunicação:** Chamadas HTTP/API para serviços externos, e acesso a banco de dados para persistir dados. Podem usar filas de mensagens internamente para desacoplar a ingestão do processamento principal.
-    * **Artefatos Visuais de Suporte:** [Diagrama de Atividades - Importação de Notícias (a ser criado)], [Diagrama de Estados - Promoção](https://unbarqdsw2025-1-turma02.github.io/2025.1_T02_G9_GalaxiaConectada_Entre02/#/Modelagem/ModelagemDinamica/DiagramaEstados) (para o ciclo de vida de uma promoção importada).
+    * **Artefatos Visuais de Suporte:** [Diagrama de Atividades](https://unbarqdsw2025-1-turma02.github.io/2025.1_T02_G9_GalaxiaConectada_Entrega02/#/Modelagem/ModelagemDinamica/DiagramaAtividades), [Diagrama de Estados - Promoção](https://unbarqdsw2025-1-turma02.github.io/2025.1_T02_G9_GalaxiaConectada_Entre02/#/Modelagem/ModelagemDinamica/DiagramaEstados).
 * **Processo do Sistema de Banco de Dados:**
     * **Descrição:** O processo dedicado do SGBD (SQLite localmente, mas pode ser PostgreSQL em produção) que gerencia a persistência, recuperação e integridade dos dados.
     * **Alocação de Classes/Pacotes Lógicos:** A interface `Infraestrutura.Persistencia` é quem se comunica com este processo.
@@ -461,7 +461,7 @@ Os processos e *threads* no Galáxia Conectada podem ser agrupados e descritos d
 
 A **Visão de Implantação** do Galáxia Conectada descreve a configuração física de hardware e software sobre a qual o sistema será implantado e executado. Ela mostra os nós físicos (computadores, servidores, dispositivos) e suas interconexões, e como os processos da Visão de Processo são alocados a esses nós. Embora o ambiente de desenvolvimento seja local, esta visão projeta uma configuração mais realista para um ambiente de produção.
 
-Para uma representação visual detalhada dos nós físicos e o mapeamento dos componentes, consulte o **Diagrama de Implantação** completo do projeto, disponível em [Diagrama de Implantação](https://unbarqdsw2025-1-turma02.github.io/2025.1_T02_G9_GalaxiaConectada_Entre02/#/Modelagem/ModelagemEstatica/DiagramaImplantacao).
+Para uma representação visual detalhada dos nós físicos e o mapeamento dos componentes, consulte o **Diagrama de Implantação** completo do projeto, disponível em [Diagrama de Implantação](https://unbarqdsw2025-1-turma02.github.io/2025.1_T02_G9_GalaxiaConectada_Entrega02/#/Modelagem/ModelagemEstatica/DiagramaImplantacao).
 
 Os principais nós físicos e seus artefatos/processos implantados incluem:
 
@@ -499,30 +499,30 @@ A estrutura de camadas de implementação do Galáxia Conectada segue o modelo d
         * `index.html`, `entrar.html`, `cadastrar.html` (estrutura das páginas)
         * `css/style.css` (estilos visuais)
         * `js/script.js` (interatividade frontend)
-    * **Artefato Visual de Suporte:** [Diagrama de Componentes](https://unbarqdsw2025-1-turma02.github.io/2025.1_T02_G9_GalaxiaConectada_Entre02/#/Modelagem/ModelagemEstatica/DiagramaComponentes) (representa `WebUI`).
+    * **Artefato Visual de Suporte:** [Diagrama de Componentes](https://unbarqdsw2025-1-turma02.github.io/2025.1_T02_G9_GalaxiaConectada_Entrega02/#/Modelagem/ModelagemEstatica/DiagramaComponentes) (representa `WebUI`).
 * **Camada de Aplicação (`backend/` - lógica de negócio principal):**
     * **Descrição:** Abriga a lógica de negócio principal da aplicação, orquestrando as operações que implementam os casos de uso.
     * **Sub-Componentes Implementados:**
         * `backend/app.py` (rotas da API, orquestração de requisições)
         * Pacotes/Módulos implícitos para: `Gerenciamento de Usuários`, `Conteúdo Interativo`, `Comunidade`, `Integrações`.
-    * **Artefato Visual de Suporte:** [Diagrama de Componentes](https://unbarqdsw2025-1-turma02.github.io/2025.1_T02_G9_GalaxiaConectada_Entre02/#/Modelagem/ModelagemEstatica/DiagramaComponentes) (representa `APIGateway` e os módulos `ModuloEducacional`, `ModuloDivulgacao`, etc.).
+    * **Artefato Visual de Suporte:** [Diagrama de Componentes](https://unbarqdsw2025-1-turma02.github.io/2025.1_T02_G9_GalaxiaConectada_Entrega02/#/Modelagem/ModelagemEstatica/DiagramaComponentes) (representa `APIGateway` e os módulos `ModuloEducacional`, `ModuloDivulgacao`, etc.).
 * **Camada de Domínio (`backend/models.py` e estruturas de dados):**
     * **Descrição:** Contém as classes que representam as entidades do negócio (`Usuario`, `Trilha`, `Topico`, etc.) e as regras de negócio puras, independentes de tecnologia.
     * **Sub-Componentes Implementados:**
         * `backend/models.py` (definição das classes de modelo)
-    * **Artefato Visual de Suporte:** [Diagrama de Classes](https://unbarqdsw2025-1-turma02.github.io/2025.1_T02_G9_GalaxiaConectada_Entre02/#/Modelagem/ModelagemEstatica/DiagramaClasses).
+    * **Artefato Visual de Suporte:** [Diagrama de Classes](https://unbarqdsw2025-1-turma02.github.io/2025.1_T02_G9_GalaxiaConectada_Entrega02/#/Modelagem/ModelagemEstatica/DiagramaClasses).
 * **Camada de Serviços Compartilhados/Transversais (integrados ao `backend/app.py` ou módulos específicos):**
     * **Descrição:** Serviços que fornecem funcionalidades reutilizáveis e genéricas, como notificações, busca, *cache*, monitoramento e configurações.
     * **Sub-Componentes Implementados:**
         * Classes de serviço (ex: `ServicoNotificacoes` em `backend/servicos_compartilhados/`) que podem ser importadas e utilizadas por outros módulos.
-    * **Artefato Visual de Suporte:** [Diagrama de Componentes](https://unbarqdsw2025-1-turma02.github.io/2025.1_T02_G9_GalaxiaConectada_Entre02/#/Modelagem/ModelagemEstatica/DiagramaComponentes) (representa `ServicoNotificacoes`, `ServicoBusca`, etc.).
+    * **Artefato Visual de Suporte:** [Diagrama de Componentes](https://unbarqdsw2025-1-turma02.github.io/2025.1_T02_G9_GalaxiaConectada_Entrega02/#/Modelagem/ModelagemEstatica/DiagramaComponentes) (representa `ServicoNotificacoes`, `ServicoBusca`, etc.).
 * **Camada de Infraestrutura (`backend/database.py`, `backend/db_data/`, dependências externas):**
     * **Descrição:** Contém as implementações concretas e os detalhes técnicos de baixo nível, como acesso a banco de dados e comunicação com serviços externos.
     * **Sub-Componentes Implementados:**
         * `backend/database.py` (criação e manipulação do DB)
         * `backend/db_data/galaxia.db` (arquivo físico do banco de dados)
         * Módulos de clientes HTTP para APIs externas, *drivers* de banco de dados (bibliotecas como `sqlite3`, `Flask-SQLAlchemy` se usar).
-    * **Artefato Visual de Suporte:** [Diagrama de Implantação](https://unbarqdsw2025-1-turma02.github.io/2025.1_T02_G9_GalaxiaConectada_Entre02/#/Modelagem/ModelagemEstatica/DiagramaImplantacao) (representa `BancoDeDados`, `APIs/Sites Externos`).
+    * **Artefato Visual de Suporte:** [Diagrama de Implantação](https://unbarqdsw2025-1-turma02.github.io/2025.1_T02_G9_GalaxiaConectada_Entrega02/#/Modelagem/ModelagemEstatica/DiagramaImplantacao) (representa `BancoDeDados`, `APIs/Sites Externos`).
 
 
 ###  Qualidade
@@ -530,10 +530,10 @@ A estrutura de camadas de implementação do Galáxia Conectada segue o modelo d
 Esta seção detalha como a **arquitetura** do Galáxia Conectada contribui para as diversas qualidades (não funcionais) do sistema, essenciais para sua usabilidade, confiabilidade e longevidade.
 
 * **Extensibilidade (RNF08):**
-    * **Modularidade:** A divisão clara em módulos lógicos e pacotes (como visto no [Diagrama de Pacotes](https://unbarqdsw2025-1-turma02.github.io/2025.1_T02_G9_GalaxiaConectada_Entre02/#/Modelagem/ModelagemOrganizacional/DiagramaPacotes)) permite a adição de novas funcionalidades ou módulos (**ex: um novo tipo de jogo, uma nova categoria de trilha**) sem impactar significativamente outras partes do sistema.
+    * **Modularidade:** A divisão clara em módulos lógicos e pacotes (como visto no [Diagrama de Pacotes](https://unbarqdsw2025-1-turma02.github.io/2025.1_T02_G9_GalaxiaConectada_Entrega02/#/Modelagem/ModelagemOrganizacional/DiagramaPacotes)) permite a adição de novas funcionalidades ou módulos (**ex: um novo tipo de jogo, uma nova categoria de trilha**) sem impactar significativamente outras partes do sistema.
     * **Separação de Preocupações:** A organização em camadas (Apresentação, Aplicação, Domínio, Infraestrutura) garante que alterações em uma camada (ex: mudança no banco de dados na `Infraestrutura`) tenham impacto mínimo nas outras (ex: `Dominio` ou `Aplicacao`).
 * **Manutenibilidade:**
-    * **Coerência de Design:** A adesão a padrões arquiteturais de camadas e a documentação clara (este DAS, e os [Diagramas de Classes](https://unbarqdsw2025-1-turma02.github.io/2025.1_T02_G9_GalaxiaConectada_Entre02/#/Modelagem/ModelagemEstatica/DiagramaClasses), [Pacotes](https://unbarqdsw2025-1-turma02.github.io/2025.1_T02_G9_GalaxiaConectada_Entre02/#/Modelagem/ModelagemOrganizacional/DiagramaPacotes)) facilitam a compreensão do sistema por novos desenvolvedores ou em manutenções futuras.
+    * **Coerência de Design:** A adesão a padrões arquiteturais de camadas e a documentação clara (este DAS, e os [Diagramas de Classes](https://unbarqdsw2025-1-turma02.github.io/2025.1_T02_G9_GalaxiaConectada_Entrega02/#/Modelagem/ModelagemEstatica/DiagramaClasses), [Pacotes](https://unbarqdsw2025-1-turma02.github.io/2025.1_T02_G9_GalaxiaConectada_Entrega02/#/Modelagem/ModelagemOrganizacional/DiagramaPacotes)) facilitam a compreensão do sistema por novos desenvolvedores ou em manutenções futuras.
     * **Baixo Acoplamento:** As classes e pacotes interagem por meio de interfaces bem definidas, o que reduz a dependência entre eles. Isso significa que mudanças em um módulo são menos propensas a quebrar outros módulos, simplificando a depuração e o desenvolvimento.
 * **Reusabilidade:**
     * **Serviços Compartilhados:** A criação de pacotes para `ServicosCompartilhados` (como Notificações, Busca, Cache) na Visão Lógica permite que essas funcionalidades sejam reutilizadas por diferentes partes da aplicação ou até mesmo em futuros projetos.
